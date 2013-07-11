@@ -1,7 +1,12 @@
 language: ruby
+
 rvm:
   - 2.0.0
   - 1.9.3
   - jruby-19mode
   - jruby-20mode
   - rbx-19mode
+
+gemfile:
+  - gemfiles/activemodel3.gemfile
+  - gemfiles/activemodel4.gemfile
