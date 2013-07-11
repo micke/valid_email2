@@ -1,6 +1,8 @@
 # ValidEmail2
+[![Build Status](https://travis-ci.org/lisinge/valid_email2.png?branch=master)](https://travis-ci.org/lisinge/valid_email2)
 
-TODO: Write a gem description
+Validate with the help of the `mail` gem and MX server lookup.
+Optionally validate against a list of disposable email domains.
 
 ## Installation
 
