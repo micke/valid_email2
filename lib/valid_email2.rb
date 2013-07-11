@@ -16,7 +16,13 @@ class EmailValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return unless value.present?
     options = default_options.merge(self.options)
-    email = Mail::Address.new(value)
+
+    begin
+      email = Mail::Address.new(value)
+    rescue Mail::Field::ParseError
+      error(record, attribute)
+      return
+    end
 
     if email.domain && email.address == value
       tree = email.send(:tree)
