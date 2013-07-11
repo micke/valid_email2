@@ -20,7 +20,7 @@ class EmailValidator < ActiveModel::EachValidator
     begin
       email = Mail::Address.new(value)
     rescue Mail::Field::ParseError
-      error(record, attribute)
+      error(record, attribute) && return
       return
     end
 
@@ -29,15 +29,15 @@ class EmailValidator < ActiveModel::EachValidator
 
       # Valid email needs to have a dot in the domain
       unless tree.domain.dot_atom_text.elements.size > 1
-        error(record, attribute)
+        error(record, attribute) && return
       end
     else
-      error(record, attribute)
+      error(record, attribute) && return
     end
 
     if options[:disposable]
       if self.class.disposable_emails.include?(email.domain)
-        error(record, attribute)
+        error(record, attribute) && return
       end
     end
 
@@ -49,7 +49,7 @@ class EmailValidator < ActiveModel::EachValidator
       end
 
       unless mx.any?
-        error(record, attribute)
+        error(record, attribute) && return
       end
     end
   end
