@@ -30,11 +30,6 @@ describe ValidEmail2 do
       Mail::Address.stub(:new).and_raise(Mail::Field::ParseError.new(nil, nil, nil))
       user.valid?.should be_false
     end
-
-    it "blah" do
-      user = TestUserMX.new(email: "invalid_email.com")
-      user.valid?.should be_false
-    end
   end
 
   describe "disposable emails" do
