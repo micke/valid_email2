@@ -1,6 +1,7 @@
 # ValidEmail2
 [![Build Status](https://travis-ci.org/lisinge/valid_email2.png?branch=master)](https://travis-ci.org/lisinge/valid_email2)
 [![Coverage Status](https://coveralls.io/repos/lisinge/valid_email2/badge.png)](https://coveralls.io/r/lisinge/valid_email2)
+[![Code Climate](https://codeclimate.com/github/lisinge/valid_email2.png)](https://codeclimate.com/github/lisinge/valid_email2)
 
 Validate emails without regexp but with the help of the `mail` gem and MX server lookup.  
 Optionally validate against a list of disposable email domains.
