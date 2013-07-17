@@ -38,8 +38,13 @@ module ValidEmail2
 
       mx = []
 
-      Resolv::DNS.open do |dns|
-        mx.concat dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+      begin
+        Resolv::DNS.open do |dns|
+          dns.timeouts = 2
+          mx.concat dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+        end
+      rescue Resolv::ResolvTimeout
+        return false
       end
 
       mx.any?

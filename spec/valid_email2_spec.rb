@@ -54,5 +54,11 @@ describe ValidEmail2 do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
       user.valid?.should be_false
     end
+
+    it "should be invalid if ResolvTimeout is thrown" do
+      Resolv::DNS.any_instance.stub(:getresources).and_raise(Resolv::ResolvTimeout)
+      user = TestUserMX.new(email: "foo@gmail.com")
+      user.valid?.should be_false
+    end
   end
 end
