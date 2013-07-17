@@ -39,7 +39,7 @@ describe ValidEmail2 do
     end
 
     it "should be invalid when email is in the list of disposable emails" do
-      user = TestUserDisallowDisposable.new(email: "foo@#{EmailValidator.disposable_emails.first}")
+      user = TestUserDisallowDisposable.new(email: "foo@#{ValidEmail2.disposable_emails.first}")
       user.valid?.should be_false
     end
   end
