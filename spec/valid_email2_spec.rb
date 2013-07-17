@@ -20,6 +20,11 @@ describe ValidEmail2 do
       user.valid?.should be_true
     end
 
+    it "should not be valid when domain is missing" do
+      user = TestUser.new(email: "foo")
+      user.valid?.should be_false
+    end
+
     it "should be invalid when email is malformed" do
       user = TestUser.new(email: "foo@bar")
       user.valid?.should be_false
