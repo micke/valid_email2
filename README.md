@@ -46,7 +46,7 @@ validates :email, email: { disposable: true }
 
 All together:  
 ```ruby
-validates :email, email: { mx: true, disposable: true }
+validates :email, email: { mx: true, disposable: true }
 ```
 
 > Note that this gem will let an empty email pass through so you will need to
