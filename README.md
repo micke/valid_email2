@@ -30,24 +30,27 @@ Or install it yourself as:
 If you just want to validate that it is a valid email address:
 ```ruby
 class User < ActiveRecord::Base
-  validate :email, email: true
+  validates :email, presence: true, email: true
 end
 ```
 
 To validate that the domain has a MX record:  
 ```ruby
-validate :email, email: { mx: true }
+validates :email, email: { mx: true }
 ```
 
 To validate that the domain is not a disposable email:  
 ```ruby
-validate :email, email: { disposable: true }
+validates :email, email: { disposable: true }
 ```
 
 All together:  
 ```ruby
-validate :email, email: { mx: true, disposable: true }
+validates :email, email: { mx: true, disposable: true }
 ```
+
+> Note that this gem will let an empty email pass through so you will need to
+> add `presence: true` if you require an email
 
 ### Use without ActiveModel
 
