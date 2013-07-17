@@ -5,13 +5,15 @@
 [![Dependency Status](https://gemnasium.com/lisinge/valid_email2.png)](https://gemnasium.com/lisinge/valid_email2)
 
 Validate emails without regexp but with the help of the `mail` gem and MX server lookup.  
-Optionally validate against a list of disposable email domains.
+Optionally validate against a static [list of disposable email domains](vendor/disposable_emails.yml).
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'valid_email2'
+```ruby
+gem "valid_email2"
+```
 
 And then execute:
 
@@ -23,7 +25,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Use with ActiveModel
+
+If you just want to validate that it is a valid email address:
+```ruby
+class User < ActiveRecord::Base
+  validate :email, email: true
+end
+```
+
+To validate that the domain has a MX record:  
+`validate :email, email: { mx: true }`
+
+To validate that the domain is not a disposable email:  
+`validate :email, email: { disposable: true }`
+
+All together:  
+`validate :email, email: { mx: true, disposable: true }`
+
+### Use without ActiveModel
+
+```
+address = ValidEmail2::Address.new("lisinge@gmail.com")
+address.valid? => true
+address.disposable? => false
+address.valid_mx? => true
+```
 
 ## Contributing
 
