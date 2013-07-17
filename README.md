@@ -35,17 +35,23 @@ end
 ```
 
 To validate that the domain has a MX record:  
-`validate :email, email: { mx: true }`
+```ruby
+validate :email, email: { mx: true }
+```
 
 To validate that the domain is not a disposable email:  
-`validate :email, email: { disposable: true }`
+```ruby
+validate :email, email: { disposable: true }
+```
 
 All together:  
-`validate :email, email: { mx: true, disposable: true }`
+```ruby
+validate :email, email: { mx: true, disposable: true }
+```
 
 ### Use without ActiveModel
 
-```
+```ruby
 address = ValidEmail2::Address.new("lisinge@gmail.com")
 address.valid? => true
 address.disposable? => false
