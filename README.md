@@ -61,6 +61,15 @@ address.disposable? => false
 address.valid_mx? => true
 ```
 
+## Requirements
+
+This gem requires Rails 3.2 or 4.0. It is tested against both versions under:
+* Ruby-1.9
+* Ruby-2.0
+* JRuby-1.9
+* JRuby-2.0
+* Rubinius-1.9
+
 ## Contributing
 
 1. Fork it
