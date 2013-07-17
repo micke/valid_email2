@@ -21,7 +21,6 @@ class EmailValidator < ActiveModel::EachValidator
       email = Mail::Address.new(value)
     rescue Mail::Field::ParseError
       error(record, attribute) && return
-      return
     end
 
     if email.domain && email.address == value
