@@ -6,7 +6,7 @@ require "mail"
 
 class EmailValidator < ActiveModel::EachValidator
   def self.disposable_emails
-    @@disposable_emails ||= YAML.load_file(File.expand_path("../../disposable_emails.yml",__FILE__))
+    @@disposable_emails ||= YAML.load_file(File.expand_path("../../vendor/disposable_emails.yml",__FILE__))
   end
 
   def default_options
