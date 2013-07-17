@@ -7,9 +7,9 @@ module ValidEmail2
 
     def initialize(address)
       @parse_error = false
+      @raw_address = address
 
       begin
-        @raw_address = address
         @address = Mail::Address.new(address)
       rescue Mail::Field::ParseError
         @parse_error = true
