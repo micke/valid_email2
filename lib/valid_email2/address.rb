@@ -1,3 +1,4 @@
+require "valid_email2"
 require "resolv"
 require "mail"
 
