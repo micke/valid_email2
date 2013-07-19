@@ -4,8 +4,19 @@
 [![Code Climate](https://codeclimate.com/github/lisinge/valid_email2.png)](https://codeclimate.com/github/lisinge/valid_email2)
 [![Dependency Status](https://gemnasium.com/lisinge/valid_email2.png)](https://gemnasium.com/lisinge/valid_email2)
 
-Validate emails without regexp but with the help of the `mail` gem and MX server lookup.  
-Optionally validate against a static [list of disposable email domains](vendor/disposable_emails.yml).
+Validate emails with the help of the `mail` gem instead of some cluncy regexp.
+Aditionally validate that the domain has a MX record.  
+Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
+
+
+### Why?
+
+There are lots of other gems and libraries that validates email adresses but most of them use some cluncy regexp.  
+I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
+
+### Is it production ready?
+
+Yes, it is used in several production apps.
 
 ## Installation
 
