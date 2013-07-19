@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/lisinge/valid_email2.png)](https://codeclimate.com/github/lisinge/valid_email2)
 [![Dependency Status](https://gemnasium.com/lisinge/valid_email2.png)](https://gemnasium.com/lisinge/valid_email2)
 
-Validate emails with the help of the `mail` gem instead of some cluncy regexp.
+Validate emails with the help of the `mail` gem instead of some cluncy regexp.  
 Aditionally validate that the domain has a MX record.  
 Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
 
