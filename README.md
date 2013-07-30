@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)  
 # ValidEmail2
 [![Build Status](https://travis-ci.org/lisinge/valid_email2.png?branch=master)](https://travis-ci.org/lisinge/valid_email2)
 [![Gem Version](https://badge.fury.io/rb/valid_email2.png)](http://badge.fury.io/rb/valid_email2)
