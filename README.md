@@ -1,10 +1,10 @@
-[![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)  
 # ValidEmail2
 [![Build Status](https://travis-ci.org/lisinge/valid_email2.png?branch=master)](https://travis-ci.org/lisinge/valid_email2)
 [![Gem Version](https://badge.fury.io/rb/valid_email2.png)](http://badge.fury.io/rb/valid_email2)
 [![Coverage Status](https://coveralls.io/repos/lisinge/valid_email2/badge.png)](https://coveralls.io/r/lisinge/valid_email2)
 [![Code Climate](https://codeclimate.com/github/lisinge/valid_email2.png)](https://codeclimate.com/github/lisinge/valid_email2)
 [![Dependency Status](https://gemnasium.com/lisinge/valid_email2.png)](https://gemnasium.com/lisinge/valid_email2)
+[![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)  
 
 Validate emails with the help of the `mail` gem instead of some cluncy regexp.  
 Aditionally validate that the domain has a MX record.  
