@@ -19,6 +19,10 @@ class EmailValidator < ActiveModel::EachValidator
       error(record, attribute) && return if address.disposable?
     end
 
+    if options[:blacklist]
+      error(record, attribute) && return if address.blacklisted?
+    end
+
     if options[:mx]
       error(record, attribute) && return unless address.valid_mx?
     end
