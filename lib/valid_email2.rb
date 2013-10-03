@@ -4,4 +4,10 @@ module ValidEmail2
   def self.disposable_emails
     @@disposable_emails ||= YAML.load_file(File.expand_path("../../vendor/disposable_emails.yml",__FILE__))
   end
+
+  def self.blacklist
+  	blacklist_file = "vendor/blacklist.yml"
+  	return @@blacklist if @@blacklist
+  	@@blacklist = File.exists?(blacklist_file) ? YAML.load_file(File.expand_path(blacklist_file)) : []
+  end
 end

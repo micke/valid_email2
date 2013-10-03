@@ -34,6 +34,10 @@ module ValidEmail2
       valid? && ValidEmail2.disposable_emails.include?(address.domain)
     end
 
+    def blacklisted?
+      valid? && ValidEmail2.blacklist.include?(address.domain)
+    end
+
     def valid_mx?
       return false unless valid?
 
