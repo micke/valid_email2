@@ -7,6 +7,7 @@ module ValidEmail2
 
   def self.blacklist
   	blacklist_file = "vendor/blacklist.yml"
+  	return @@blacklist if @@blacklist
   	@@blacklist = File.exists?(blacklist_file) ? YAML.load_file(File.expand_path(blacklist_file)) : []
   end
 end
