@@ -12,6 +12,10 @@ class TestUserDisallowDisposable < TestModel
   validates :email, email: { disposable: true }
 end
 
+class TestUserDisallowBlacklisted < TestModel
+  validates :email, email: { blacklist: true }
+end
+
 describe ValidEmail2 do
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
@@ -45,6 +49,18 @@ describe ValidEmail2 do
 
     it "should be invalid when email is in the list of disposable emails" do
       user = TestUserDisallowDisposable.new(email: "foo@#{ValidEmail2.disposable_emails.first}")
+      user.valid?.should be_false
+    end
+  end
+
+  describe "blacklisted emails" do
+    it "should be valid when email is not in the blacklist" do
+      user = TestUserDisallowBlacklisted.new(email: "foo@gmail.com")
+      user.valid?.should be_true
+    end
+
+    it "should be invalid when email is in the blacklist" do
+      user = TestUserDisallowBlacklisted.new(email: "foo@#{ValidEmail2.blacklist.first}")
       user.valid?.should be_false
     end
   end

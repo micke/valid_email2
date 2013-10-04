@@ -57,6 +57,11 @@ To validate that the domain is not a disposable email:
 validates :email, email: { disposable: true }
 ```
 
+To validate that the domain is not blacklisted (under vendor/blacklist.yml):  
+```ruby
+validates :email, email: { blacklist: true }
+```
+
 All together:  
 ```ruby
 validates :email, email: { mx: true, disposable: true }
