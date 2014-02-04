@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec", "~> 2.14.1"
   spec.add_development_dependency "coveralls"
-  spec.add_runtime_dependency "mail"
+  spec.add_runtime_dependency "mail", '2.5.4'
   spec.add_runtime_dependency "activemodel"
 end
