@@ -4,17 +4,15 @@
 [![Coverage Status](https://coveralls.io/repos/lisinge/valid_email2/badge.png)](https://coveralls.io/r/lisinge/valid_email2)
 [![Code Climate](https://codeclimate.com/github/lisinge/valid_email2.png)](https://codeclimate.com/github/lisinge/valid_email2)
 [![Dependency Status](https://gemnasium.com/lisinge/valid_email2.png)](https://gemnasium.com/lisinge/valid_email2)
-[![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)  
+[![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)
 
-Validate emails with the help of the `mail` gem instead of some cluncy regexp.  
-Aditionally validate that the domain has a MX record.  
-Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
+Validate emails with the help of the `mail` gem instead of some clunky regexp.
+Aditionally validate that the domain has a MX record. Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
 
 
 ### Why?
 
-There are lots of other gems and libraries that validates email adresses but most of them use some cluncy regexp.  
-I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
+There are lots of other gems and libraries that validates email adresses but most of them use some clunky regexp. I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
 
 ### Is it production ready?
 
@@ -47,22 +45,22 @@ class User < ActiveRecord::Base
 end
 ```
 
-To validate that the domain has a MX record:  
+To validate that the domain has a MX record:
 ```ruby
 validates :email, email: { mx: true }
 ```
 
-To validate that the domain is not a disposable email:  
+To validate that the domain is not a disposable email:
 ```ruby
 validates :email, email: { disposable: true }
 ```
 
-To validate that the domain is not blacklisted (under vendor/blacklist.yml):  
+To validate that the domain is not blacklisted (under vendor/blacklist.yml):
 ```ruby
 validates :email, email: { blacklist: true }
 ```
 
-All together:  
+All together:
 ```ruby
 validates :email, email: { mx: true, disposable: true }
 ```
@@ -78,6 +76,14 @@ address.valid? => true
 address.disposable? => false
 address.valid_mx? => true
 ```
+
+### Test environment
+
+If you are validating `mx` then your specs will fail without an internet connection. It is a good idea to stub out that validation in your test environment. Do so by adding this in your `spec_helper`:
+
+    config.before(:each) do
+      ValidEmail2::Address.any_instance.stub(:valid_mx?) { true }
+    end
 
 ## Requirements
 
