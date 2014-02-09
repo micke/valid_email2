@@ -81,11 +81,14 @@ address.valid_mx? => true
 
 ### Test environment
 
-If you are validating `mx` then your specs will fail without an internet connection. It is a good idea to stub out that validation in your test environment. Do so by adding this in your `spec_helper`:
-
-    config.before(:each) do
-      ValidEmail2::Address.any_instance.stub(:valid_mx?) { true }
-    end
+If you are validating `mx` then your specs will fail without an internet connection.
+It is a good idea to stub out that validation in your test environment.  
+Do so by adding this in your `spec_helper`:
+```ruby
+config.before(:each) do
+  allow_any_instance_of(ValidEmail2::Address).to receive(:valid_mx?) { true }
+end
+```
 
 ## Requirements
 
