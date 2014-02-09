@@ -7,12 +7,14 @@
 [![Stories in Ready](https://badge.waffle.io/lisinge/valid_email2.png)](http://waffle.io/lisinge/valid_email2)
 
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
-Aditionally validate that the domain has a MX record. Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
+Aditionally validate that the domain has a MX record.
+Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
 
 
 ### Why?
 
-There are lots of other gems and libraries that validates email adresses but most of them use some clunky regexp. I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
+There are lots of other gems and libraries that validates email adresses but most of them use some clunky regexp.
+I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
 
 ### Is it production ready?
 
