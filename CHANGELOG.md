@@ -1,3 +1,7 @@
+## Version 1.1.5
+Be more lenient on the mail gem version dependency to allow people to use v2.6.
+Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/14 and https://github.com/lisinge/valid_email2/pull/15)
+
 ## Version 1.1.4
 Added more disposable email domains (https://github.com/lisinge/valid_email2/commit/aedb51fadd5a05461d7f5ef7ea6942d7769f0c58)
 
