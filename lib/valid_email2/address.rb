@@ -21,10 +21,8 @@ module ValidEmail2
       return false if @parse_error
 
       if address.domain && address.address == @raw_address
-        tree = address.send(:tree)
-
         # Valid address needs to have a dot in the domain
-        tree.domain.dot_atom_text.elements.size > 1
+        !!address.domain.match(/\./)
       else
         false
       end
