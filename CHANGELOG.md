@@ -1,3 +1,7 @@
+## Version 1.1.6
+Fix a regression which changed validation on domains that caused domains with
+multiple consecutive dots to be valid.
+
 ## Version 1.1.5
 Be more lenient on the mail gem version dependency to allow people to use v2.6.
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/14 and https://github.com/lisinge/valid_email2/pull/15)
