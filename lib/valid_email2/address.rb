@@ -21,8 +21,9 @@ module ValidEmail2
       return false if @parse_error
 
       if address.domain && address.address == @raw_address
+        domain = address.domain
         # Valid address needs to have a dot in the domain
-        !!address.domain.match(/\./)
+        !!domain.match(/\./) && !domain.match(/\.{2,}/)
       else
         false
       end
