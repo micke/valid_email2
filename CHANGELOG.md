@@ -1,3 +1,6 @@
+## Version 1.1.17
+Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/18 and https://github.com/lisinge/valid_email2/pull/19)
+
 ## Version 1.1.6
 Fix a regression which changed validation on domains that caused domains with
 multiple consecutive dots to be valid.
