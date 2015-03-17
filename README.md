@@ -92,6 +92,7 @@ This gem requires Rails 3.2 or 4.0. It is tested against both versions using:
 * Ruby-1.9
 * Ruby-2.0
 * Ruby-2.1
+* Ruby-2.2
 * JRuby-1.9
 
 ## Contributing
