@@ -9,7 +9,7 @@ Optionally validate against a static [list of disposable email services](vendor/
 
 ### Why?
 
-There are lots of other gems and libraries that validates email adresses but most of them use some clunky regexp.
+There are lots of other gems and libraries that validates email addresses but most of them use some clunky regexp.
 I also saw a need to be able to validate that the email address is not coming from a "disposable email" provider.
 
 ### Is it production ready?
