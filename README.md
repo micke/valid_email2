@@ -102,3 +102,5 @@ This gem requires Rails 3.2 or 4.0. It is tested against both versions using:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Please don't remove any outdated domains from disposable_emails.yml, move them to disposable_emails_deleted.yml.
