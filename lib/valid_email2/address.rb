@@ -48,5 +48,9 @@ module ValidEmail2
 
       mx.any?
     end
+
+    def whitelisted?
+      valid? && ValidEmail2.whitelist.include?(address.domain)
+    end
   end
 end
