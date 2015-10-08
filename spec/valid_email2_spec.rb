@@ -86,7 +86,7 @@ describe ValidEmail2 do
     end
   end
 
-  describe "should alow" do
+  describe "whitelist" do
     it "should be valid if email is in the whitelist" do
       domain = ValidEmail2.whitelist.first
       user = TestUserAllowWhitelisted.new(email: "foo@#{domain}")
