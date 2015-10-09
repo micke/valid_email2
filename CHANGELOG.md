@@ -1,3 +1,8 @@
+## Version 1.1.11
+Removed poczta.onet.pl from the disposable_emails list (https://github.com/lisinge/valid_email2/issues/34)
+Added a whitelist to the internal pull_mailchecker_emails so that poczta.onet.pl
+can't sneak back in again.
+
 ## Version 1.1.10
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/32)
 Added script that pulls disposable emails (https://github.com/lisinge/valid_email2/pull/33)
