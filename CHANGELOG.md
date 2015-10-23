@@ -1,3 +1,6 @@
+## Version 1.1.12
+Removed fastmail.fm from the disposable email list (https://github.com/lisinge/valid_email2/pull/37)
+
 ## Version 1.1.11
 Removed poczta.onet.pl from the disposable_emails list (https://github.com/lisinge/valid_email2/issues/34)
 Added a whitelist to the internal pull_mailchecker_emails so that poczta.onet.pl
