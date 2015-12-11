@@ -5,7 +5,7 @@ require "yaml"
 require "json"
 require "net/http"
 
-whitelisted_emails = %w(poczta.onet.pl fastmail.fm)
+whitelisted_emails = %w(poczta.onet.pl fastmail.fm hushmail.com naver.com)
 
 existing_emails = YAML.load_file("vendor/disposable_emails.yml")
 
