@@ -1,3 +1,6 @@
+## Version 1.1.13
+Removed husmail.com and nevar.com from the disposable email list (https://github.com/lisinge/valid_email2/pull/38)
+
 ## Version 1.1.12
 Removed fastmail.fm from the disposable email list (https://github.com/lisinge/valid_email2/pull/37)
 
