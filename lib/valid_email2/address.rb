@@ -30,17 +30,11 @@ module ValidEmail2
     end
 
     def disposable?
-      valid? &&
-      ValidEmail2.disposable_emails.select { |domain|
-        address.domain =~ (/^(.*\.)*#{domain}$/i)
-      }.any?
+      valid? && domain_is_in?(ValidEmail2.disposable_emails)
     end
 
     def blacklisted?
-      valid? &&
-      ValidEmail2.blacklist.select { |domain|
-        address.domain =~ (/^(.*\.)*#{domain}$/i)
-      }.any?
+      valid? && domain_is_in?(ValidEmail2.blacklist)
     end
 
     def valid_mx?
@@ -53,6 +47,12 @@ module ValidEmail2
       end
 
       mx.any?
+    end
+
+    private def domain_is_in?(domain_list)
+      domain_list.select { |domain|
+        address.domain =~ (/^(.*\.)*#{domain}$/i)
+      }.any?
     end
   end
 end
