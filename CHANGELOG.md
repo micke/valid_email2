@@ -1,3 +1,8 @@
+## Version 1.2.0
+Disposable email providers have started to use random subdomains so valid_email2
+will now correctly match against subdomains https://github.com/lisinge/valid_email2/issues/40  
+Updated list of disposable email providers.
+
 ## Version 1.1.13
 Removed husmail.com and nevar.com from the disposable email list (https://github.com/lisinge/valid_email2/pull/38)
 
