@@ -49,7 +49,9 @@ module ValidEmail2
       mx.any?
     end
 
-    private def domain_is_in?(domain_list)
+    private
+
+    def domain_is_in?(domain_list)
       domain_list.select { |domain|
         address.domain =~ (/^(.*\.)*#{domain}$/i)
       }.any?
