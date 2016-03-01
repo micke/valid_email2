@@ -47,13 +47,18 @@ describe ValidEmail2 do
   end
 
   describe "disposable emails" do
-    it "should be valid when email is not in the list of disposable emails" do
+    it "should be valid when the domain is not in the list of disposable email providers" do
       user = TestUserDisallowDisposable.new(email: "foo@gmail.com")
       user.valid?.should be_true
     end
 
-    it "should be invalid when email is in the list of disposable emails" do
+    it "should be invalid when domain is in the list of disposable email providers" do
       user = TestUserDisallowDisposable.new(email: "foo@#{ValidEmail2.disposable_emails.first}")
+      user.valid?.should be_false
+    end
+
+    it "should be invalid when domain is a subdomain of a disposable domain" do
+      user = TestUserDisallowDisposable.new(email: "foo@bar.#{ValidEmail2.disposable_emails.first}")
       user.valid?.should be_false
     end
   end
