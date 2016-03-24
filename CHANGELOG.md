@@ -1,3 +1,5 @@
+## Version 1.2.1
+Added more sisposable email domains (https://github.com/lisinge/valid_email2/pull/41, https://github.com/lisinge/valid_email2/pull/42 and https://github.com/lisinge/valid_email2/commit/8b99a799dc126229d9bc4d79d473a0344e788d34)
 ## Version 1.2.0
 Disposable email providers have started to use random subdomains so valid_email2
 will now correctly match against subdomains https://github.com/lisinge/valid_email2/issues/40  
