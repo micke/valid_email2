@@ -7,17 +7,7 @@ rvm:
   - 2.2.0
   - 2.1.0
   - 2.0.0
-  - 1.9.0
-  - jruby-19mode
-  - jruby
 
 gemfile:
   - gemfiles/activemodel3.gemfile
   - gemfiles/activemodel4.gemfile
-
-matrix:
-  exclude:
-    - rvm: 1.9.0
-      gemfile: gemfiles/activemodel4.gemfile
-    - rvm: jruby-19mode
-      gemfile: gemfiles/activemodel4.gemfile
