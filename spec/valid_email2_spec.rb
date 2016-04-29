@@ -16,6 +16,10 @@ class TestUserDisallowBlacklisted < TestModel
   validates :email, email: { blacklist: true }
 end
 
+class TestUserAllowRegex < TestModel
+  validates :email, email: { regex: false }
+end
+
 describe ValidEmail2 do
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
@@ -43,6 +47,11 @@ describe ValidEmail2 do
     it "shouldn't be valid if the domain constains consecutives dots" do
       user = TestUser.new(email: "foo@bar..com")
       user.valid?.should be_false
+    end
+
+    it "should be valid when regex is disabled" do
+      user = TestUserAllowRegex.new(email: "foo")
+      user.valid?.should be_true
     end
   end
 
