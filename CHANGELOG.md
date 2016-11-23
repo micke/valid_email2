@@ -1,5 +1,9 @@
+## Version 1.2.7
+Add throwam.com and pull updates from mailchecker.
+
 ## Version 1.2.6
 Remove nus.edu.sg as it's a valid domain (https://github.com/lisinge/valid_email2/pull/54)
+
 ## Version 1.2.5
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/51, https://github.com/lisinge/valid_email2/pull/52 and https://github.com/lisinge/valid_email2/pull/53)
 
