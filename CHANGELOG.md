@@ -1,3 +1,6 @@
+## Version 1.2.8
+Add maileme101.com (https://github.com/lisinge/valid_email2/pull/56)
+
 ## Version 1.2.7
 Add throwam.com and pull updates from mailchecker.
 
