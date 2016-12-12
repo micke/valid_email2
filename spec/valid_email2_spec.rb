@@ -85,5 +85,10 @@ describe ValidEmail2 do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
       user.valid?.should be_false
     end
+
+    it "should be valid when email is in the whitelist" do
+      user = TestUserMX.new(email: "foo@#{ValidEmail2.mx_whitelist.first}")
+      user.valid?.should be_true
+    end
   end
 end
