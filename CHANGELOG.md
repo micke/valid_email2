@@ -1,3 +1,6 @@
+## Version 1.2.9
+Remove example.com (https://github.com/lisinge/valid_email2/issues/59)
+
 ## Version 1.2.8
 Add maileme101.com (https://github.com/lisinge/valid_email2/pull/56)
 
