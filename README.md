@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-To validate that the domain has a MX record:
+To validate that the domain has a MX record (you can also allow some domain to pass that check under vendor/mx_whitelist.yml):
 ```ruby
 validates :email, email: { mx: true }
 ```

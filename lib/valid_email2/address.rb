@@ -39,6 +39,7 @@ module ValidEmail2
 
     def valid_mx?
       return false unless valid?
+      return true if domain_is_in?(ValidEmail2.mx_whitelist)
 
       mx = []
 
@@ -52,7 +53,8 @@ module ValidEmail2
     private
 
     def domain_is_in?(domain_list)
-      domain_list.select { |domain|
+      # Ensure domain_list is an array
+      (domain_list || []).select { |domain|
         address.domain =~ (/^(.*\.)*#{domain}$/i)
       }.any?
     end
