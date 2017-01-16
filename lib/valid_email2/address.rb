@@ -52,9 +52,10 @@ module ValidEmail2
     private
 
     def domain_is_in?(domain_list)
-      domain_list.select { |domain|
-        address.domain =~ (/^(.*\.)*#{domain}$/i)
-      }.any?
+      address_domain = address.domain.downcase
+      domain_list.any? { |domain|
+        address_domain.end_with?(domain) && address_domain =~ /\A(?:.+\.)*?#{domain}\z/
+      }
     end
   end
 end
