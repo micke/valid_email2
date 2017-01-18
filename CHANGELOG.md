@@ -1,3 +1,7 @@
+## Version 1.2.10
+Improve performance in domain matching (https://github.com/lisinge/valid_email2/pull/62)
+Add clipmail.eu (https://github.com/lisinge/valid_email2/pull/61)
+
 ## Version 1.2.9
 Remove example.com (https://github.com/lisinge/valid_email2/issues/59)
 
