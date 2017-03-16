@@ -25,7 +25,7 @@ describe ValidEmail2 do
     end
 
     it "should not be valid when domain is missing" do
-      user = TestUser.new(email: "foo")
+      user = TestUser.new(email: "foo@.com")
       expect(user.valid?).to be_falsey
     end
 
