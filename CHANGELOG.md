@@ -1,3 +1,6 @@
+## Version 1.2.11
+Properly test that domain is a proper domain and not just a TLD (https://github.com/lisinge/valid_email2/issues/63)
+
 ## Version 1.2.10
 Improve performance in domain matching (https://github.com/lisinge/valid_email2/pull/62)
 Add clipmail.eu (https://github.com/lisinge/valid_email2/pull/61)
