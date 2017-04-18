@@ -1,3 +1,6 @@
+## Version 1.2.12
+Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/64)
+
 ## Version 1.2.11
 Properly test that domain is a proper domain and not just a TLD (https://github.com/lisinge/valid_email2/issues/63)
 
