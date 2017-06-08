@@ -13,7 +13,9 @@ class EmailValidator < ActiveModel::EachValidator
 
     address = ValidEmail2::Address.new(value)
 
-    error(record, attribute) && return unless address.valid?
+    if options[:regex]
+      error(record, attribute) && return unless address.valid?
+    end
 
     if options[:disposable]
       error(record, attribute) && return if address.disposable?
