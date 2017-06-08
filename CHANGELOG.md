@@ -1,3 +1,6 @@
+## Version 1.2.14
+Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/66)
+
 ## Version 1.2.13
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/65)
 
