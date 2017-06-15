@@ -1,3 +1,6 @@
+## Version 1.2.15
+Removed disposable domains that are false positives (https://github.com/lisinge/valid_email2/pull/67)
+
 ## Version 1.2.14
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/66)
 
