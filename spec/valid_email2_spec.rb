@@ -1,19 +1,19 @@
 require "spec_helper"
 
 class TestUser < TestModel
-  validates :email, email: true
+  validates :email, 'valid_email_2/email': true
 end
 
 class TestUserMX < TestModel
-  validates :email, email: { mx: true }
+  validates :email, 'valid_email_2/email': { mx: true }
 end
 
 class TestUserDisallowDisposable < TestModel
-  validates :email, email: { disposable: true }
+  validates :email, 'valid_email_2/email': { disposable: true }
 end
 
 class TestUserDisallowBlacklisted < TestModel
-  validates :email, email: { blacklist: true }
+  validates :email, 'valid_email_2/email': { blacklist: true }
 end
 
 describe ValidEmail2 do
