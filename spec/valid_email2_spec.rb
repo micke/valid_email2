@@ -1,19 +1,23 @@
 require "spec_helper"
 
 class TestUser < TestModel
-  validates :email, email: true
+  validates :email, 'valid_email_2/email': true
 end
 
 class TestUserMX < TestModel
-  validates :email, email: { mx: true }
+  validates :email, 'valid_email_2/email': { mx: true }
 end
 
 class TestUserDisallowDisposable < TestModel
-  validates :email, email: { disposable: true }
+  validates :email, 'valid_email_2/email': { disposable: true }
 end
 
 class TestUserDisallowBlacklisted < TestModel
-  validates :email, email: { blacklist: true }
+  validates :email, 'valid_email_2/email': { blacklist: true }
+end
+
+class BackwardsCompatibleUser < TestModel
+  validates :email, email: true
 end
 
 describe ValidEmail2 do
@@ -43,6 +47,11 @@ describe ValidEmail2 do
     it "shouldn't be valid if the domain constains consecutives dots" do
       user = TestUser.new(email: "foo@bar..com")
       expect(user.valid?).to be_falsey
+    end
+
+    it "still works with the backwards-compatible syntax" do
+      user = BackwardsCompatibleUser.new(email: "foo@bar.com")
+      expect(user.valid?).to be_truthy
     end
   end
 
