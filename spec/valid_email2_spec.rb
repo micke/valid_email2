@@ -52,6 +52,9 @@ describe ValidEmail2 do
     it "still works with the backwards-compatible syntax" do
       user = BackwardsCompatibleUser.new(email: "foo@bar.com")
       expect(user.valid?).to be_truthy
+
+      user = BackwardsCompatibleUser.new(email: "foo@bar")
+      expect(user.valid?).to be_falsey
     end
   end
 
