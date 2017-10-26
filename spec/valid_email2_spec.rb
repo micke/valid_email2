@@ -24,6 +24,11 @@ describe ValidEmail2 do
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
 
+    it "should not be valid email is valid" do
+      user = TestUser.new(email: "foo@bar123.com")
+      expect(user.valid?).to be_truthy
+    end
+
     it "should be valid when email is empty" do
       expect(user.valid?).to be_truthy
     end
@@ -31,6 +36,13 @@ describe ValidEmail2 do
     it "should not be valid when domain is missing" do
       user = TestUser.new(email: "foo@.com")
       expect(user.valid?).to be_falsey
+    end
+
+    it "should be invalid when domain includes invalid characters" do
+      %w(+ _ !).each do |invalid_character|
+        user = TestUser.new(email: "foo@google#{invalid_character}yahoo.com")
+        expect(user.valid?).to be_falsey
+      end
     end
 
     it "should be invalid when email is malformed" do
