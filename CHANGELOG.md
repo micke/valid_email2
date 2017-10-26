@@ -1,3 +1,7 @@
+## Version 2.1.0
+Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/85)  
+Validate that the domain includes only allowed characters (https://github.com/lisinge/valid_email2/issues/88)
+
 ## Version 2.0.2
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/85)
 
