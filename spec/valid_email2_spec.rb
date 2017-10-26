@@ -98,4 +98,27 @@ describe ValidEmail2 do
       expect(user.valid?).to be_falsey
     end
   end
+
+  describe "without active model" do
+    it "should be invalid when email end with !" do
+      address = ValidEmail2::Address.new("foo@gmail.com!")
+      expect(address.valid?).to be_falsey
+    end
+
+    it "should be invalid if email has special characters just before domain" do
+      address = ValidEmail2::Address.new("foo@gmail+.com")
+      expect(address.valid?).to be_falsey
+    end
+
+    it "should be invalid when email has special characters in domain" do
+      address = ValidEmail2::Address.new("foo@gmail+yahoo.com")
+      expect(address.valid?).to be_falsey
+    end
+
+    it "should be valid email" do
+      address = ValidEmail2::Address.new("foo@gmail.com")
+      expect(address.valid?).to be_truthy
+    end
+  end
+
 end
