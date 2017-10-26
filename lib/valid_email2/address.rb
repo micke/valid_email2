@@ -6,6 +6,8 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
+    ALLOWED_DOMAIN_CHARACTERS_REGEX = /\A[a-z0-9\-.]+\z/i
+
     def initialize(address)
       @parse_error = false
       @raw_address = address
@@ -22,8 +24,14 @@ module ValidEmail2
 
       if address.domain && address.address == @raw_address
         domain = address.domain
-        # Valid address needs to have a dot in the domain but not start with a dot
-        !!domain.match(/\./) && !domain.match(/\.{2,}/) && !domain.match(/^\./)
+
+        domain.match(ALLOWED_DOMAIN_CHARACTERS_REGEX) &&
+          # Domain needs to have at least one dot
+          domain.match(/\./) &&
+          # Domain may not have two consecutive dots
+          !domain.match(/\.{2,}/) &&
+          # Domain may not start with a dot
+          !domain.match(/^\./)
       else
         false
       end
