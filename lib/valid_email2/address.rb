@@ -23,7 +23,7 @@ module ValidEmail2
       return false if @parse_error
 
       if address.domain && address.address == @raw_address
-        @raw_address.match? VALID_EMAIL_REGEX
+        @raw_address.match(VALID_EMAIL_REGEX)
       else
         false
       end
