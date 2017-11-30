@@ -17,7 +17,7 @@ class TestUserDisallowBlacklisted < TestModel
 end
 
 class BackwardsCompatibleUser < TestModel
-  validates :email, email: true
+  validates :email, 'valid_email_2/email': true
 end
 
 describe ValidEmail2 do
@@ -84,6 +84,11 @@ describe ValidEmail2 do
     it "should be invalid when domain is a subdomain of a disposable domain" do
       user = TestUserDisallowDisposable.new(email: "foo@bar.#{ValidEmail2.disposable_emails.first}")
       expect(user.valid?).to be_falsey
+    end
+
+    it "should allow example.com that is common in lists of disposable email providers" do
+      user = TestUserDisallowDisposable.new(email: "foo@example.com")
+      expect(user.valid?).to be_truthy
     end
   end
 
