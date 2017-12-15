@@ -17,11 +17,12 @@ module ValidEmail2
       rescue Mail::Field::ParseError
         @parse_error = true
       end
+
+      @parse_error ||= address_contain_emoticons? @raw_address
     end
 
     def valid?
       return false if @parse_error
-      return false if address_contain_emoticons? @raw_address
 
       if address.domain && address.address == @raw_address
         domain = address.domain
@@ -67,8 +68,8 @@ module ValidEmail2
       }
     end
 
-    def address_contain_emoticons? address
-      (address.each_char.select { |char| char.bytesize > 1 }.join).empty? ? false : true
+    def address_contain_emoticons? email_str
+      (email_str.each_char.select { |char| char.bytesize > 1 }.join).empty? ? false : true
     end
   end
 end
