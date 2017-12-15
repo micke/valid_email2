@@ -21,6 +21,7 @@ module ValidEmail2
 
     def valid?
       return false if @parse_error
+      return false if address_contain_emoticons? @raw_address
 
       if address.domain && address.address == @raw_address
         domain = address.domain
@@ -64,6 +65,10 @@ module ValidEmail2
       domain_list.any? { |domain|
         address_domain.end_with?(domain) && address_domain =~ /\A(?:.+\.)*?#{domain}\z/
       }
+    end
+
+    def address_contain_emoticons? address
+      (address.each_char.select { |char| char.bytesize > 1 }.join).empty? ? false : true
     end
   end
 end
