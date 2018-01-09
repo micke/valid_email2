@@ -1,3 +1,6 @@
+## Version 2.1.2
+Removed qq.com from disposable email domains
+
 ## Version 2.1.1
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/92)  
 Removed false positive domains
