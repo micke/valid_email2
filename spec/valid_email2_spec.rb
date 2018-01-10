@@ -110,6 +110,11 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
+    it "should be valid if A records are found" do
+      user = TestUserMX.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_truthy
+    end
+
     it "should be invalid if no mx records are found" do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
       expect(user.valid?).to be_falsey
