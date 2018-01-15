@@ -120,12 +120,6 @@ describe ValidEmail2 do
     it "should be invalid if email contains emoticon" do
       email = ValidEmail2::Address.new("foo🙈@gmail.com")
       expect(email.valid?).to be_falsy
-      end
-
-    it "should be invalid if email contains parsed emoticon" do
-      email = ValidEmail2::Address.new("foo:speak_no_evil:@gmail.com")
-      expect(email.valid?).to be_falsy
     end
-
   end
 end
