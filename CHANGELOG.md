@@ -1,3 +1,9 @@
+## Version 2.2.0
+Removed backwards-compatability shim  (https://github.com/lisinge/valid_email2/pull/79)  
+Removed protonmail.com from disposable email domains (https://github.com/lisinge/valid_email2/pull/99)  
+Update disposable email domains (https://github.com/lisinge/valid_email2/pull/100)  
+Allow case of MX record fallback to A record (https://github.com/lisinge/valid_email2/pull/101)
+
 ## Version 2.1.2
 Removed qq.com from disposable email domains
 
@@ -16,7 +22,7 @@ Added more disposable email domains (https://github.com/lisinge/valid_email2/pul
 Added more disposable email domains (https://github.com/lisinge/valid_email2/pull/82 and https://github.com/lisinge/valid_email2/pull/83)
 
 ## Version 2.0.0
-Add validator namespaced under `ValidEmail2` https://github.com/lisinge/valid_email2/pull/79
+Add validator namespaced under `ValidEmail2` https://github.com/lisinge/valid_email2/pull/79  
 Deprecate global `EmailValidator` in favor of the namespaced one.
 
 ## Version 1.2.22
