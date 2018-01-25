@@ -1,5 +1,4 @@
 require "valid_email2/email_validator"
-require "email_validator" # Backwards-compatibility shim
 
 module ValidEmail2
   def self.disposable_emails
