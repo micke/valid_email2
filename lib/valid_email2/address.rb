@@ -50,13 +50,10 @@ module ValidEmail2
     def valid_mx?
       return false unless valid?
 
-      mx = []
-
       Resolv::DNS.open do |dns|
-        mx.concat dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+        return dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX).size > 0 ||
+               dns.getresources(address.domain, Resolv::DNS::Resource::IN::A).size > 0
       end
-
-      mx.any?
     end
 
     private
