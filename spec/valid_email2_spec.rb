@@ -4,6 +4,10 @@ class TestUser < TestModel
   validates :email, 'valid_email_2/email': true
 end
 
+class TestUserRestrictTagging < TestModel
+  validates :email, 'valid_email_2/email': {restrict_tagging: true}
+end
+
 class TestUserMX < TestModel
   validates :email, 'valid_email_2/email': { mx: true }
 end
