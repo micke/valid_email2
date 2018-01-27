@@ -68,7 +68,7 @@ module ValidEmail2
     def address_contain_emoticons? email_str
       return false if email_str.nil?
 
-      (email_str.each_char.select { |char| char.bytesize > 1 }.join).empty? ? false : true
+      email_str.each_char.any? { |char| char.bytesize > 1 }
     end
   end
 end
