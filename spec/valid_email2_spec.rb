@@ -16,10 +16,6 @@ class TestUserDisallowBlacklisted < TestModel
   validates :email, 'valid_email_2/email': { blacklist: true }
 end
 
-class BackwardsCompatibleUser < TestModel
-  validates :email, 'valid_email_2/email': true
-end
-
 describe ValidEmail2 do
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
@@ -58,14 +54,6 @@ describe ValidEmail2 do
 
     it "shouldn't be valid if the domain constains consecutives dots" do
       user = TestUser.new(email: "foo@bar..com")
-      expect(user.valid?).to be_falsey
-    end
-
-    it "still works with the backwards-compatible syntax" do
-      user = BackwardsCompatibleUser.new(email: "foo@bar.com")
-      expect(user.valid?).to be_truthy
-
-      user = BackwardsCompatibleUser.new(email: "foo@bar")
       expect(user.valid?).to be_falsey
     end
   end
