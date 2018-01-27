@@ -7,6 +7,7 @@ module ValidEmail2
     attr_accessor :address
 
     ALLOWED_DOMAIN_CHARACTERS_REGEX = /\A[a-z0-9\-.]+\z/i
+    DEFAULT_RECIPIENT_DELIMITER = '+'.freeze
 
     def initialize(address)
       @parse_error = false
