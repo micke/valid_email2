@@ -40,6 +40,10 @@ module ValidEmail2
       end
     end
 
+    def tagged?
+      valid? && address.local.split(DEFAULT_RECIPIENT_DELIMITER).length > 1
+    end
+
     def disposable?
       valid? && domain_is_in?(ValidEmail2.disposable_emails)
     end
