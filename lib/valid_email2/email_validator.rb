@@ -16,6 +16,10 @@ module ValidEmail2
 
       error(record, attribute) && return unless address.valid?
 
+      if options[:restrict_tagging]
+        error(record, attribute) && return if address.tagged?
+      end
+
       if options[:disposable]
         error(record, attribute) && return if address.disposable?
       end
