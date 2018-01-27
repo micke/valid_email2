@@ -5,7 +5,7 @@ require "active_model/validations"
 module ValidEmail2
   class EmailValidator < ActiveModel::EachValidator
     def default_options
-      { regex: true, disposable: false, mx: false }
+      { regex: true, disposable: false, mx: false, restrict_tagging: false }
     end
 
     def validate_each(record, attribute, value)
