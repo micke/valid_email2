@@ -1,3 +1,7 @@
+## Version 2.2.1
+Fix regression where `ValidEmail2::Address.new` couldn't handle the address
+being nil (https://github.com/lisinge/valid_email2/issues/102)
+
 ## Version 2.2.0
 Removed backwards-compatability shim  (https://github.com/lisinge/valid_email2/pull/79)  
 Removed protonmail.com from disposable email domains (https://github.com/lisinge/valid_email2/pull/99)  
