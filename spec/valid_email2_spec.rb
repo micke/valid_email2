@@ -123,18 +123,18 @@ describe ValidEmail2 do
   describe "address tagged emails" do
 
     describe "::Address::DEFAULT_RECIPIENT_DELIMITER" do
-      it "should be '+'" do
+      it "should be recipient delimiter ('+')" do
         expect(ValidEmail2::Address::DEFAULT_RECIPIENT_DELIMITER).to eq('+')
       end
     end
 
     describe "::Address#tagged?" do
-      it "should be true when address local part contains a '+'" do
+      it "should be true when address local part contains a recipient delimiter ('+')" do
         email = ValidEmail2::Address.new("foo+1@gmail.com")
         expect(email.tagged?).to be_truthy
       end
 
-      it "should be false when address local part contains a '+'" do
+      it "should be false when address local part contains a recipient delimiter ('+')" do
         email = ValidEmail2::Address.new("foo@gmail.com")
         expect(email.tagged?).to be_falsey
       end
@@ -142,25 +142,25 @@ describe ValidEmail2 do
 
     describe "user validation" do
       context "restriction is disabled (default)" do
-        it "should be valid when address local part does not contain a '+'" do
+        it "should be valid when address local part does not contain a recipient delimiter ('+')" do
           user = TestUser.new(email: "foo@gmail.com")
           expect(user.valid?).to be_truthy
         end
 
-        it "should be valid when address local part contains a '+'" do
+        it "should be valid when address local part contains a recipient delimiter ('+')" do
           user = TestUser.new(email: "foo+1@gmail.com")
           expect(user.valid?).to be_truthy
         end
       end
 
       context "restriction is enabled" do
-        it "should be valid when address local part does not contain a '+'" do
-          user = TestUserRestrictTagging.new(email: "foo@gmail.com")
+        it "should be valid when address local part does not contain a recipient delimiter ('+')" do
+          user = TestUserForbidTagging.new(email: "foo@gmail.com")
           expect(user.valid?).to be_truthy
         end
 
-        it "should be invalid when address local part contains a '+'" do
-          user = TestUserRestrictTagging.new(email: "foo+1@gmail.com")
+        it "should be invalid when address local part contains a recipient delimiter ('+')" do
+          user = TestUserForbidTagging.new(email: "foo+1@gmail.com")
           expect(user.valid?).to be_falsey
         end
       end
