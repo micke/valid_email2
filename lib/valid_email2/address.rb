@@ -41,7 +41,7 @@ module ValidEmail2
     end
 
     def tagged?
-      valid? && address.local.split(DEFAULT_RECIPIENT_DELIMITER).length > 1
+      valid? && address.local.include?(DEFAULT_RECIPIENT_DELIMITER)
     end
 
     def disposable?
