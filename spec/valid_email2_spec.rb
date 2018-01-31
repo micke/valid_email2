@@ -120,7 +120,7 @@ describe ValidEmail2 do
     end
   end
 
-  describe "address tagged emails" do
+  describe "subaddressed emails" do
 
     describe "::Address::DEFAULT_RECIPIENT_DELIMITER" do
       it "should be recipient delimiter ('+')" do
@@ -128,7 +128,7 @@ describe ValidEmail2 do
       end
     end
 
-    describe "::Address#tagged?" do
+    describe "::Address#subaddressed?" do
       it "should be true when address local part contains a recipient delimiter ('+')" do
         email = ValidEmail2::Address.new("foo+1@gmail.com")
         expect(email.subaddressed?).to be_truthy
@@ -141,7 +141,7 @@ describe ValidEmail2 do
     end
 
     describe "user validation" do
-      context "restriction is disabled (default)" do
+      context "subaddressing is allowed (default)" do
         it "should be valid when address local part does not contain a recipient delimiter ('+')" do
           user = TestUser.new(email: "foo@gmail.com")
           expect(user.valid?).to be_truthy
@@ -153,7 +153,7 @@ describe ValidEmail2 do
         end
       end
 
-      context "restriction is enabled" do
+      context "subaddressing is forbidden" do
         it "should be valid when address local part does not contain a recipient delimiter ('+')" do
           user = TestUserSubaddressing.new(email: "foo@gmail.com")
           expect(user.valid?).to be_truthy
