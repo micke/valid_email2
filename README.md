@@ -5,7 +5,7 @@
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
 Aditionally validate that the domain has a MX record.
 Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
-
+Optionally validate that the email is not subaddressed ([RFC5233](https://tools.ietf.org/html/rfc5233)).
 
 ### Why?
 
@@ -58,9 +58,14 @@ To validate that the domain is not blacklisted (under vendor/blacklist.yml):
 validates :email, 'valid_email_2/email': { blacklist: true }
 ```
 
+To validate that email is not subaddressed:
+```ruby
+validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
+```
+
 All together:
 ```ruby
-validates :email, 'valid_email_2/email': { mx: true, disposable: true }
+validates :email, 'valid_email_2/email': { mx: true, disposable: true, disallow_subaddressing: true}
 ```
 
 > Note that this gem will let an empty email pass through so you will need to
@@ -73,6 +78,7 @@ address = ValidEmail2::Address.new("lisinge@gmail.com")
 address.valid? => true
 address.disposable? => false
 address.valid_mx? => true
+address.subaddressed? => false
 ```
 
 ### Test environment
