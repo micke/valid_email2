@@ -78,7 +78,7 @@ address = ValidEmail2::Address.new("lisinge@gmail.com")
 address.valid? => true
 address.disposable? => false
 address.valid_mx? => true
-address.tagged? => false
+address.subaddressed? => false
 ```
 
 ### Test environment

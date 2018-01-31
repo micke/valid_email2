@@ -131,12 +131,12 @@ describe ValidEmail2 do
     describe "::Address#tagged?" do
       it "should be true when address local part contains a recipient delimiter ('+')" do
         email = ValidEmail2::Address.new("foo+1@gmail.com")
-        expect(email.tagged?).to be_truthy
+        expect(email.subaddressed?).to be_truthy
       end
 
       it "should be false when address local part contains a recipient delimiter ('+')" do
         email = ValidEmail2::Address.new("foo@gmail.com")
-        expect(email.tagged?).to be_falsey
+        expect(email.subaddressed?).to be_falsey
       end
     end
 

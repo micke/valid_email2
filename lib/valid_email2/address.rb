@@ -40,7 +40,7 @@ module ValidEmail2
       end
     end
 
-    def tagged?
+    def subaddressed?
       valid? && address.local.include?(DEFAULT_RECIPIENT_DELIMITER)
     end
 
