@@ -5,7 +5,7 @@
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
 Aditionally validate that the domain has a MX record.
 Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
-Optionally validate that the email is not subaddressed [RFC5233](https://tools.ietf.org/html/rfc5233).
+Optionally validate that the email is not subaddressed ([RFC5233](https://tools.ietf.org/html/rfc5233)).
 
 ### Why?
 
@@ -58,7 +58,7 @@ To validate that the domain is not blacklisted (under vendor/blacklist.yml):
 validates :email, 'valid_email_2/email': { blacklist: true }
 ```
 
-To validate that email is not subaddressed (Forbid Email Address Tagging or Subaddressing):
+To validate that email is not subaddressed:
 ```ruby
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 ```
