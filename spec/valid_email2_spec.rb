@@ -5,7 +5,7 @@ class TestUser < TestModel
 end
 
 class TestUserForbidTagging < TestModel
-  validates :email, 'valid_email_2/email': {forbid_tagging: true}
+  validates :email, 'valid_email_2/email': {disallow_subaddressing: true}
 end
 
 class TestUserMX < TestModel

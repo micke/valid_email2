@@ -60,12 +60,12 @@ validates :email, 'valid_email_2/email': { blacklist: true }
 
 To validate that email is not subaddressed (Forbid Email Address Tagging or Subaddressing):
 ```ruby
-validates :email, 'valid_email_2/email': { forbid_tagging: true }
+validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 ```
 
 All together:
 ```ruby
-validates :email, 'valid_email_2/email': { mx: true, disposable: true, forbid_tagging: true}
+validates :email, 'valid_email_2/email': { mx: true, disposable: true, disallow_subaddressing: true}
 ```
 
 > Note that this gem will let an empty email pass through so you will need to
