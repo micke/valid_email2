@@ -4,7 +4,7 @@ class TestUser < TestModel
   validates :email, 'valid_email_2/email': true
 end
 
-class TestUserForbidTagging < TestModel
+class TestUserSubaddressing < TestModel
   validates :email, 'valid_email_2/email': {disallow_subaddressing: true}
 end
 
@@ -155,12 +155,12 @@ describe ValidEmail2 do
 
       context "restriction is enabled" do
         it "should be valid when address local part does not contain a recipient delimiter ('+')" do
-          user = TestUserForbidTagging.new(email: "foo@gmail.com")
+          user = TestUserSubaddressing.new(email: "foo@gmail.com")
           expect(user.valid?).to be_truthy
         end
 
         it "should be invalid when address local part contains a recipient delimiter ('+')" do
-          user = TestUserForbidTagging.new(email: "foo+1@gmail.com")
+          user = TestUserSubaddressing.new(email: "foo+1@gmail.com")
           expect(user.valid?).to be_falsey
         end
       end
