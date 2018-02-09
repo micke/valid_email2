@@ -1,3 +1,6 @@
+## Version 2.2.2
+Remove false-positive 163.com (https://github.com/lisinge/valid_email2/issues/105)
+
 ## Version 2.2.1
 Fix regression where `ValidEmail2::Address.new` couldn't handle the address
 being nil (https://github.com/lisinge/valid_email2/issues/102)
