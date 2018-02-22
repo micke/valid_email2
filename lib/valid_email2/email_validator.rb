@@ -16,7 +16,7 @@ module ValidEmail2
 
       error(record, attribute) && return unless address.valid?
 
-      # no further checks if domnain is whitelisted
+      # no further checks if domain is whitelisted
       return if options[:whitelist].include? address.address.domain
 
       if options[:disallow_subaddressing]

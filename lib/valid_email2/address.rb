@@ -66,7 +66,7 @@ module ValidEmail2
     def domain_is_in?(domain_list)
       address_domain = address.domain.downcase
       domain_list.any? { |domain|
-        address_domain.end_with?("@#{domain}")
+        address_domain.end_with?(domain)
       }
     end
 
