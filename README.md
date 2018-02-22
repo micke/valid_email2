@@ -48,6 +48,11 @@ To validate that the domain has a MX record:
 validates :email, 'valid_email_2/email': { mx: true }
 ```
 
+To display a custom error message:
+```ruby
+validates :email, 'valid_email_2/email': { mx: true, message: 'has no valid MX record' }
+```
+
 To validate that the domain is not a disposable email:
 ```ruby
 validates :email, 'valid_email_2/email': { disposable: true }
@@ -61,6 +66,11 @@ validates :email, 'valid_email_2/email': { blacklist: true }
 To validate that email is not subaddressed:
 ```ruby
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
+```
+
+To add domains to the whitelist:
+```ruby
+validates :email, 'valid_email_2/email': { disposable: true, whitelist: [gmail.com, outlook.com] }
 ```
 
 All together:
