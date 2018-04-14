@@ -1,3 +1,7 @@
+## Version 2.2.3
+Update disposable emails #113
+Remove false positives (yandex.com, naver.com, com.ar)
+
 ## Version 2.2.2
 Remove false-positive 163.com (https://github.com/lisinge/valid_email2/issues/105)
 
