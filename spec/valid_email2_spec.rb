@@ -16,6 +16,10 @@ class TestUserDisallowDisposable < TestModel
   validates :email, 'valid_email_2/email': { disposable: true }
 end
 
+class TestUserDisallowDisposableWithWhitelist < TestModel
+  validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
+end
+
 class TestUserDisallowBlacklisted < TestModel
   validates :email, 'valid_email_2/email': { blacklist: true }
 end
@@ -81,6 +85,22 @@ describe ValidEmail2 do
     it "should allow example.com that is common in lists of disposable email providers" do
       user = TestUserDisallowDisposable.new(email: "foo@example.com")
       expect(user.valid?).to be_truthy
+    end
+
+    describe "with whitelisted emails" do
+      it "should be invalid when the domain is in the list of disposable and there is no whitelist" do
+        user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{ValidEmail2.disposable_emails.first}")
+        expect(user.valid?).to be_falsey
+      end
+
+      it "should be valid when the domain is in the list of disposable but it is in the whitelist" do
+        whitelist_domain = ValidEmail2.disposable_emails.first
+        whitelist_file_path = "vendor/whitelist.yml"
+        File.open(whitelist_file_path, "w") {|f| f.write whitelist_domain.to_yaml }
+        user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
+        expect(user.valid?).to be_falsey
+        File.delete(whitelist_file_path)
+      end
     end
   end
 
