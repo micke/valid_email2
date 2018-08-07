@@ -24,6 +24,10 @@ module ValidEmail2
         error(record, attribute) && return if address.disposable?
       end
 
+      if options[:disposable_with_whitelist]
+        error(record, attribute) && return if address.disposable? && !address.whitelisted?
+      end
+
       if options[:blacklist]
         error(record, attribute) && return if address.blacklisted?
       end

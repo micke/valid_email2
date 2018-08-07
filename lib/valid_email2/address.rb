@@ -48,6 +48,10 @@ module ValidEmail2
       valid? && domain_is_in?(ValidEmail2.disposable_emails)
     end
 
+    def whitelisted?
+      domain_is_in?(ValidEmail2.whitelist)
+    end
+
     def blacklisted?
       valid? && domain_is_in?(ValidEmail2.blacklist)
     end
