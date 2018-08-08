@@ -1,3 +1,7 @@
+## Version 2.3.0
+Add whitelist feature (https://github.com/lisinge/valid_email2/pull/119)  
+Update disposable emails (https://github.com/lisinge/valid_email2/pull/116)
+
 ## Version 2.2.3
 Update disposable emails #113
 Remove false positives (yandex.com, naver.com, com.ar)
