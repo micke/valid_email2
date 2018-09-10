@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "valid_email2"
   spec.version       = ValidEmail2::VERSION
   spec.authors       = ["Micke Lisinge"]
-  spec.email         = ["lisinge@gmail.com"]
+  spec.email         = ["hi@micke.me"]
   spec.description   = %q{ActiveModel validation for email. Including MX lookup and disposable email blacklist}
   spec.summary       = %q{ActiveModel validation for email. Including MX lookup and disposable email blacklist}
-  spec.homepage      = "https://github.com/lisinge/valid_email2"
+  spec.homepage      = "https://github.com/micke/valid_email2"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
