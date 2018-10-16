@@ -1,3 +1,6 @@
+## Version 2.3.1
+Update disposable emails (https://github.com/micke/valid_email2/pull/122)
+
 ## Version 2.3.0
 Add whitelist feature (https://github.com/lisinge/valid_email2/pull/119)  
 Update disposable emails (https://github.com/lisinge/valid_email2/pull/116)
