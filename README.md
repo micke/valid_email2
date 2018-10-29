@@ -1,5 +1,5 @@
 # ValidEmail2
-[![Build Status](https://travis-ci.org/lisinge/valid_email2.png?branch=master)](https://travis-ci.org/lisinge/valid_email2)
+[![Build Status](https://travis-ci.org/micke/valid_email2.svg?branch=master)](https://travis-ci.org/micke/valid_email2)
 [![Gem Version](https://badge.fury.io/rb/valid_email2.png)](http://badge.fury.io/rb/valid_email2)
 
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
