@@ -24,6 +24,10 @@ class TestUserDisallowBlacklisted < TestModel
   validates :email, 'valid_email_2/email': { blacklist: true }
 end
 
+class TestUserMessage < TestModel
+  validates :email, 'valid_email_2/email': { message: "custom message" }
+end
+
 describe ValidEmail2 do
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
@@ -186,5 +190,13 @@ describe ValidEmail2 do
       end
     end
 
+  end
+
+  describe "custom error message" do
+    it "supports settings a custom error message" do
+      user = TestUserMessage.new(email: "fakeemail")
+      user.valid?
+      expect(user.errors.full_messages_for(:email)).to include("Email custom message")
+    end
   end
 end
