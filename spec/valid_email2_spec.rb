@@ -196,7 +196,7 @@ describe ValidEmail2 do
     it "supports settings a custom error message" do
       user = TestUserMessage.new(email: "fakeemail")
       user.valid?
-      expect(user.errors.full_messages_for(:email)).to include("Email custom message")
+      expect(user.errors.full_messages).to include("Email custom message")
     end
   end
 end
