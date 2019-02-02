@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 class TestUser < TestModel
@@ -5,7 +7,7 @@ class TestUser < TestModel
 end
 
 class TestUserSubaddressing < TestModel
-  validates :email, 'valid_email_2/email': {disallow_subaddressing: true}
+  validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 end
 
 class TestUserMX < TestModel
@@ -47,7 +49,7 @@ describe ValidEmail2 do
     end
 
     it "should be invalid when domain includes invalid characters" do
-      %w(+ _ !).each do |invalid_character|
+      %w[+ _ !].each do |invalid_character|
         user = TestUser.new(email: "foo@google#{invalid_character}yahoo.com")
         expect(user.valid?).to be_falsey
       end
@@ -100,7 +102,7 @@ describe ValidEmail2 do
       it "should be valid when the domain is in the list of disposable but it is in the whitelist" do
         whitelist_domain = ValidEmail2.disposable_emails.first
         whitelist_file_path = "vendor/whitelist.yml"
-        File.open(whitelist_file_path, "w") {|f| f.write whitelist_domain.to_yaml }
+        File.open(whitelist_file_path, "w") { |f| f.write whitelist_domain.to_yaml }
         user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
         expect(user.valid?).to be_falsey
         File.delete(whitelist_file_path)
@@ -145,7 +147,6 @@ describe ValidEmail2 do
   end
 
   describe "subaddressed emails" do
-
     describe "::Address::DEFAULT_RECIPIENT_DELIMITER" do
       it "should be recipient delimiter ('+')" do
         expect(ValidEmail2::Address::DEFAULT_RECIPIENT_DELIMITER).to eq('+')
@@ -189,7 +190,6 @@ describe ValidEmail2 do
         end
       end
     end
-
   end
 
   describe "custom error message" do
