@@ -12,3 +12,6 @@ gemfile:
   - gemfiles/activemodel3.gemfile
   - gemfiles/activemodel4.gemfile
   - gemfiles/activemodel5.gemfile
+
+before_install:
+  - gem install bundler
