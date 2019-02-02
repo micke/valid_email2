@@ -114,6 +114,7 @@ This gem requires Rails 3.2 or 4.0 or higher. It is tested against both versions
 
 In version v3.0.0 I decided to move __and__ rename the config files from the
 vendor directory to the config directory. That means:
+
 `vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
 `vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
