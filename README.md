@@ -68,6 +68,11 @@ To validate that email is not subaddressed:
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 ```
 
+To validate create your own custom message:
+```ruby
+validates :email, 'valid_email_2/email': { message: "is not a valid email" }
+```
+
 All together:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true, disposable: true, disallow_subaddressing: true}
@@ -100,9 +105,10 @@ end
 ## Requirements
 
 This gem requires Rails 3.2 or 4.0 or higher. It is tested against both versions using:
-* Ruby-2.2
 * Ruby-2.3
 * Ruby-2.4
+* Ruby-2.5
+* Ruby-2.6
 
 ## Upgrading to v2.0.0
 
