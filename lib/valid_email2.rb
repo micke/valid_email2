@@ -1,17 +1,30 @@
+# frozen_string_literal: true
+
 require "valid_email2/email_validator"
 
 module ValidEmail2
+  BLACKLIST_FILE = "config/blacklisted_email_domains.yml"
+  WHITELIST_FILE = "config/whitelisted_email_domains.yml"
+
   def self.disposable_emails
-    @@disposable_emails ||= YAML.load_file(File.expand_path("../../vendor/disposable_emails.yml",__FILE__))
+    @disposable_emails ||= YAML.load_file(
+      File.expand_path('../config/disposable_email_domains.yml', __dir__)
+    )
   end
 
   def self.blacklist
-    blacklist_file = "vendor/blacklist.yml"
-    @@blacklist ||= File.exists?(blacklist_file) ? YAML.load_file(File.expand_path(blacklist_file)) : []
+    @blacklist ||= if File.exist?(BLACKLIST_FILE)
+                     YAML.load_file(File.expand_path(BLACKLIST_FILE))
+                   else
+                     []
+                   end
   end
 
   def self.whitelist
-    whitelist_file = "vendor/whitelist.yml"
-    @@whitelist ||= File.exists?(whitelist_file) ? YAML.load_file(File.expand_path(whitelist_file)) : []
+    @whitelist ||= if File.exist?(WHITELIST_FILE)
+                     YAML.load_file(File.expand_path(WHITELIST_FILE))
+                   else
+                     []
+                   end
   end
 end

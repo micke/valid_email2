@@ -53,12 +53,12 @@ To validate that the domain is not a disposable email:
 validates :email, 'valid_email_2/email': { disposable: true }
 ```
 
-To validate that the domain is not a disposable email or a disposable email but whitelisted (under vendor/whitelist.yml):
+To validate that the domain is not a disposable email or a disposable email but whitelisted (under config/whitelisted_email_domains.yml):
 ```ruby
 validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
 ```
 
-To validate that the domain is not blacklisted (under vendor/blacklist.yml):
+To validate that the domain is not blacklisted (under config/blacklisted_email_domains.yml):
 ```ruby
 validates :email, 'valid_email_2/email': { blacklist: true }
 ```
@@ -130,6 +130,13 @@ Becomes this:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true, disposable: true }
 ```
+
+## Upgrading to v3.0.0
+
+In version v3.0.0 I decided to move __and__ rename the config files from the
+vendor directory to the config directory. That means:
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+`vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
 ## Contributing
 

@@ -1,3 +1,13 @@
+## Version 3.0.0
+Moved __and__ renamed blacklist and whitelist and disposable_emails. Moved from the vendor directory to
+the config directory.  
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+`vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`  
+`vendor/disposable_emails.yml` -> `config/disposable_email_domains.yml`
+
+Test if the MX server that a domain resolves to is present in the lists. As
+suggested in issue [#95](https://github.com/micke/valid_email2/issues/95) ()
+
 ## Version 2.3.1
 Update disposable emails (https://github.com/micke/valid_email2/pull/122)
 
