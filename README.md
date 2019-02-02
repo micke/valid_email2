@@ -110,6 +110,13 @@ This gem requires Rails 3.2 or 4.0 or higher. It is tested against both versions
 * Ruby-2.5
 * Ruby-2.6
 
+## Upgrading to v3.0.0
+
+In version v3.0.0 I decided to move __and__ rename the config files from the
+vendor directory to the config directory. That means:
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+`vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
+
 ## Upgrading to v2.0.0
 
 In version 1.0 of valid_email2 we only defined the `email` validator.  
@@ -130,13 +137,6 @@ Becomes this:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true, disposable: true }
 ```
-
-## Upgrading to v3.0.0
-
-In version v3.0.0 I decided to move __and__ rename the config files from the
-vendor directory to the config directory. That means:
-`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
-`vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
 ## Contributing
 
