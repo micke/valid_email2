@@ -147,17 +147,17 @@ describe ValidEmail2 do
   end
 
   describe "with mx validation" do
-    it "should be valid if mx records are found" do
+    it "is valid if mx records are found" do
       user = TestUserMX.new(email: "foo@gmail.com")
       expect(user.valid?).to be_truthy
     end
 
-    it "should be valid if A records are found" do
+    it "is valid if A records are found" do
       user = TestUserMX.new(email: "foo@ghs.google.com")
       expect(user.valid?).to be_truthy
     end
 
-    it "should be invalid if no mx records are found" do
+    it "is invalid if no mx records are found" do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
       expect(user.valid?).to be_falsey
     end
@@ -184,12 +184,12 @@ describe ValidEmail2 do
   end
 
   describe "#subaddressed?" do
-    it "should be true when address local part contains a recipient delimiter ('+')" do
+    it "is true when address local part contains a recipient delimiter ('+')" do
       email = ValidEmail2::Address.new("foo+1@gmail.com")
       expect(email.subaddressed?).to be_truthy
     end
 
-    it "should be false when address local part contains a recipient delimiter ('+')" do
+    it "is false when address local part contains a recipient delimiter ('+')" do
       email = ValidEmail2::Address.new("foo@gmail.com")
       expect(email.subaddressed?).to be_falsey
     end
