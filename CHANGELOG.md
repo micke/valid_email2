@@ -1,3 +1,7 @@
+## Version 3.0.1
+Relax the restrictions on domain validation so that we allow unicode domains and
+other non ASCII domains while still disallowing the domains we blocked before.
+
 ## Version 3.0.0
 * Moved __and__ renamed blacklist and whitelist and disposable_emails. Moved from the vendor directory to
   the config directory.  
