@@ -1,3 +1,6 @@
+## Version 3.0.3
+* Remove .id.au from the list https://github.com/micke/valid_email2/issues/131
+
 ## Version 3.0.2
 * Add displaosable email providers https://github.com/micke/valid_email2/pull/127 https://github.com/micke/valid_email2/pull/128 https://github.com/micke/valid_email2/pull/132
 * Refine documentation https://github.com/micke/valid_email2/pull/130
