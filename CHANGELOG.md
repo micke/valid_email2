@@ -1,3 +1,7 @@
+## Version 3.0.2
+* Add displaosable email providers https://github.com/micke/valid_email2/pull/127 https://github.com/micke/valid_email2/pull/128 https://github.com/micke/valid_email2/pull/132
+* Refine documentation https://github.com/micke/valid_email2/pull/130
+
 ## Version 3.0.1
 Relax the restrictions on domain validation so that we allow unicode domains and
 other non ASCII domains while still disallowing the domains we blocked before.
