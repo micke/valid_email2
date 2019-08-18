@@ -1,3 +1,6 @@
+## Version 3.0.4
+* https://github.com/micke/valid_email2/pull/133
+
 ## Version 3.0.3
 * Remove .id.au from the list https://github.com/micke/valid_email2/issues/131
 
