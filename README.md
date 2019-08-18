@@ -4,7 +4,7 @@
 
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
 Aditionally validate that the domain has a MX record.
-Optionally validate against a static [list of disposable email services](vendor/disposable_emails.yml).
+Optionally validate against a static [list of disposable email services](config/disposable_email_domains.yml).
 Optionally validate that the email is not subaddressed ([RFC5233](https://tools.ietf.org/html/rfc5233)).
 
 ### Why?
