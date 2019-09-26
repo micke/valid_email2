@@ -1,3 +1,6 @@
+## Version 3.0.5
+* Addresses with a dot before the @ is not valid https://github.com/micke/valid_email2/pull/136
+
 ## Version 3.0.4
 * https://github.com/micke/valid_email2/pull/133
 
