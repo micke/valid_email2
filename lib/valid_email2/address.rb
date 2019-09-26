@@ -34,7 +34,9 @@ module ValidEmail2
           # Domain may not have two consecutive dots
           domain !~ /\.{2,}/ &&
           # Domain may not start with a dot
-          domain !~ /^\./
+          domain !~ /^\./ &&
+          # Address may not contain a dot directly before @
+          address.address !~ /\.@/
       else
         false
       end
