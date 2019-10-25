@@ -7,14 +7,14 @@ module ValidEmail2
   WHITELIST_FILE = "config/whitelisted_email_domains.yml"
 
   def self.disposable_emails
-    @disposable_emails ||= YAML.load_file(
+    @disposable_emails ||= load_file(
       File.expand_path('../config/disposable_email_domains.yml', __dir__)
     )
   end
 
   def self.blacklist
     @blacklist ||= if File.exist?(BLACKLIST_FILE)
-                     YAML.load_file(File.expand_path(BLACKLIST_FILE))
+                     load_file(File.expand_path(BLACKLIST_FILE))
                    else
                      []
                    end
@@ -22,9 +22,13 @@ module ValidEmail2
 
   def self.whitelist
     @whitelist ||= if File.exist?(WHITELIST_FILE)
-                     YAML.load_file(File.expand_path(WHITELIST_FILE))
+                     load_file(File.expand_path(WHITELIST_FILE))
                    else
                      []
                    end
+  end
+
+  def self.load_file(path)
+    Set.new(YAML.load_file(path))
   end
 end

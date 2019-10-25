@@ -72,9 +72,12 @@ module ValidEmail2
 
     def domain_is_in?(domain_list)
       address_domain = address.domain.downcase
-      domain_list.any? { |domain|
-        address_domain.end_with?(domain) && address_domain =~ /\A(?:.+\.)*?#{domain}\z/
-      }
+      return true if domain_list.include?(address_domain)
+
+      i = address_domain.index('.')
+      return false unless i
+
+      return domain_list.include?(address_domain[(i+1)..-1])
     end
 
     def mx_server_is_in?(domain_list)
