@@ -31,6 +31,9 @@ class TestUserMessage < TestModel
 end
 
 describe ValidEmail2 do
+
+  let(:disposable_domain) { ValidEmail2.disposable_emails.first }
+
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
 
@@ -88,13 +91,18 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
+    it "is valid if it just ends with a disposable domain" do
+      user = TestUserDisallowDisposable.new(email: "foo@nondisposable-0-mail.com")
+      expect(user.valid?).to be_truthy
+    end
+
     it "is invalid if it's a disposable email" do
-      user = TestUserDisallowDisposable.new(email: "foo@#{ValidEmail2.disposable_emails.first}")
+      user = TestUserDisallowDisposable.new(email: "foo@#{disposable_domain}")
       expect(user.valid?).to be_falsey
     end
 
     it "is invalid if the domain is a subdomain of a disposable domain" do
-      user = TestUserDisallowDisposable.new(email: "foo@bar.#{ValidEmail2.disposable_emails.first}")
+      user = TestUserDisallowDisposable.new(email: "foo@bar.#{disposable_domain}")
       expect(user.valid?).to be_falsey
     end
 
@@ -119,7 +127,7 @@ describe ValidEmail2 do
     end
 
     describe "with whitelisted emails" do
-      let(:whitelist_domain) { ValidEmail2.disposable_emails.first }
+      let(:whitelist_domain) { disposable_domain }
       let(:whitelist_file_path) { "config/whitelisted_email_domains.yml" }
 
       after do
