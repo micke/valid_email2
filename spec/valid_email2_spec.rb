@@ -83,6 +83,11 @@ describe ValidEmail2 do
       user = TestUser.new(email: "foo.@gmail.com")
       expect(user.valid?).to be_falsy
     end
+
+    it "is invalid if the domain contains spaces" do
+      user = TestUser.new(email: "user@gmail .com")
+      expect(user.valid?).to be_falsy
+    end
   end
 
   describe "with disposable validation" do

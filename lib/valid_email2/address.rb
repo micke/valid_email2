@@ -6,7 +6,7 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
-    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_]/
+    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\s]/
     DEFAULT_RECIPIENT_DELIMITER = '+'.freeze
 
     def initialize(address)
