@@ -35,6 +35,10 @@ module ValidEmail2
           domain !~ /\.{2,}/ &&
           # Domain may not start with a dot
           domain !~ /^\./ &&
+          # Domain may not start with a dash
+          domain !~ /^-/ &&
+          # Domain name may not end with a dash
+          domain !~ /-\./ &&
           # Address may not contain a dot directly before @
           address.address !~ /\.@/
       else
