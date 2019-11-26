@@ -1,3 +1,6 @@
+## Version 3.1.2
+* Disallow ` ` in addresses https://github.com/micke/valid_email2/pull/139
+
 ## Version 3.1.1
 * Disallow domains starting or ending with `-` https://github.com/micke/valid_email2/pull/140
 
