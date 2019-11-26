@@ -1,3 +1,6 @@
+## Version 3.1.1
+* Disallow domains starting or ending with `-` https://github.com/micke/valid_email2/pull/140
+
 ## Version 3.1.0
 * Performance improvements https://github.com/micke/valid_email2/pull/137
 
