@@ -1,3 +1,7 @@
+## Version 3.1.3
+* Disallow `/` in addresses https://github.com/micke/valid_email2/pull/142
+* Add option to only validate that domain is not in list of disposable emails https://github.com/micke/valid_email2/pull/141
+
 ## Version 3.1.2
 * Disallow ` ` in addresses https://github.com/micke/valid_email2/pull/139
 
