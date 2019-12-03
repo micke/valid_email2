@@ -18,6 +18,10 @@ class TestUserDisallowDisposable < TestModel
   validates :email, 'valid_email_2/email': { disposable: true }
 end
 
+class TestUserDisallowDisposableDomain < TestModel
+  validates :email, 'valid_email_2/email': { disposable_domain: true }
+end
+
 class TestUserDisallowDisposableWithWhitelist < TestModel
   validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
 end
@@ -111,19 +115,26 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
-    it "is invalid if it's a disposable email" do
-      user = TestUserDisallowDisposable.new(email: "foo@#{disposable_domain}")
-      expect(user.valid?).to be_falsey
-    end
+    context "with disposable domain" do
+      it "is invalid with disposable domain" do
+        user = TestUserDisallowDisposable.new(email: "foo@#{disposable_domain}")
+        expect(user.valid?).to be_falsey
+      end
 
-    it "is invalid if the domain is a subdomain of a disposable domain" do
-      user = TestUserDisallowDisposable.new(email: "foo@bar.#{disposable_domain}")
-      expect(user.valid?).to be_falsey
-    end
+      it "is invalid with disposable domain even without mx server check" do
+        user = TestUserDisallowDisposableDomain.new(email: "foo@#{disposable_domain}")
+        expect(user.valid?).to be_falsey
+      end
 
-    it "allows example.com" do
-      user = TestUserDisallowDisposable.new(email: "foo@example.com")
-      expect(user.valid?).to be_truthy
+      it "is invalid if the domain is a subdomain of a disposable domain" do
+        user = TestUserDisallowDisposable.new(email: "foo@bar.#{disposable_domain}")
+        expect(user.valid?).to be_falsey
+      end
+
+      it "allows example.com" do
+        user = TestUserDisallowDisposable.new(email: "foo@example.com")
+        expect(user.valid?).to be_truthy
+      end
     end
 
     context "with domain that is not disposable but it's mx server is disposable" do

@@ -48,9 +48,14 @@ To validate that the domain has a MX record:
 validates :email, 'valid_email_2/email': { mx: true }
 ```
 
-To validate that the domain is not a disposable email:
+To validate that the domain is not a disposable email (checks domain and MX server):
 ```ruby
 validates :email, 'valid_email_2/email': { disposable: true }
+```
+
+To validate that the domain is not a disposable email (checks domain only, does not check MX server):
+```ruby
+validates :email, 'valid_email_2/email': { disposable_domain: true }
 ```
 
 To validate that the domain is not a disposable email or a disposable email but whitelisted (under config/whitelisted_email_domains.yml):

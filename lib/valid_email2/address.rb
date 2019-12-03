@@ -23,26 +23,28 @@ module ValidEmail2
     end
 
     def valid?
-      return false if @parse_error
+      @valid ||= begin
+        return false if @parse_error
 
-      if address.domain && address.address == @raw_address
-        domain = address.domain
+        if address.domain && address.address == @raw_address
+          domain = address.domain
 
-        domain !~ PROHIBITED_DOMAIN_CHARACTERS_REGEX &&
-          # Domain needs to have at least one dot
-          domain =~ /\./ &&
-          # Domain may not have two consecutive dots
-          domain !~ /\.{2,}/ &&
-          # Domain may not start with a dot
-          domain !~ /^\./ &&
-          # Domain may not start with a dash
-          domain !~ /^-/ &&
-          # Domain name may not end with a dash
-          domain !~ /-\./ &&
-          # Address may not contain a dot directly before @
-          address.address !~ /\.@/
-      else
-        false
+          domain !~ PROHIBITED_DOMAIN_CHARACTERS_REGEX &&
+            # Domain needs to have at least one dot
+            domain =~ /\./ &&
+            # Domain may not have two consecutive dots
+            domain !~ /\.{2,}/ &&
+            # Domain may not start with a dot
+            domain !~ /^\./ &&
+            # Domain may not start with a dash
+            domain !~ /^-/ &&
+            # Domain name may not end with a dash
+            domain !~ /-\./ &&
+            # Address may not contain a dot directly before @
+            address.address !~ /\.@/
+        else
+          false
+        end
       end
     end
 
@@ -51,11 +53,15 @@ module ValidEmail2
     end
 
     def disposable?
-      valid? &&
-        (
-          domain_is_in?(ValidEmail2.disposable_emails) ||
-          mx_server_is_in?(ValidEmail2.disposable_emails)
-        )
+      disposable_domain? || disposable_mx_server?
+    end
+
+    def disposable_domain?
+      valid? && domain_is_in?(ValidEmail2.disposable_emails)
+    end
+
+    def disposable_mx_server?
+      valid? && mx_server_is_in?(ValidEmail2.disposable_emails)
     end
 
     def whitelisted?
