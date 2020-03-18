@@ -8,6 +8,7 @@ module ValidEmail2
 
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s]/
     DEFAULT_RECIPIENT_DELIMITER = '+'.freeze
+    DOT_DELIMITER = '.'.freeze
 
     def initialize(address)
       @parse_error = false
@@ -46,6 +47,10 @@ module ValidEmail2
           false
         end
       end
+    end
+
+    def dotted?
+      valid? && address.local.include?(DOT_DELIMITER)
     end
 
     def subaddressed?
