@@ -6,6 +6,10 @@ class TestUser < TestModel
   validates :email, 'valid_email_2/email': true
 end
 
+class TestUserDotted < TestModel
+  validates :email, 'valid_email_2/email': { disallow_dotted: true }
+end
+
 class TestUserSubaddressing < TestModel
   validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 end
@@ -207,6 +211,18 @@ describe ValidEmail2 do
     end
   end
 
+  describe "with dotted validation" do
+    it "is valid when address does not contain dots" do
+      user = TestUserDotted.new(email: "johndoe@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is invalid when address cotains dots" do
+      user = TestUserDotted.new(email: "john.doe@gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
   describe "with subaddress validation" do
     it "is valid when address does not contain subaddress" do
       user = TestUserSubaddressing.new(email: "foo@gmail.com")
@@ -224,6 +240,18 @@ describe ValidEmail2 do
       user = TestUserMessage.new(email: "fakeemail")
       user.valid?
       expect(user.errors.full_messages).to include("Email custom message")
+    end
+  end
+
+  describe "#dotted?" do
+    it "is true when address local part contains a dot delimiter ('.')" do
+      email = ValidEmail2::Address.new("john.doe@gmail.com")
+      expect(email.dotted?).to be_truthy
+    end
+
+    it "is false when address local part contains a dot delimiter ('.')" do
+      email = ValidEmail2::Address.new("johndoe@gmail.com")
+      expect(email.dotted?).to be_falsey
     end
   end
 

@@ -16,6 +16,10 @@ module ValidEmail2
 
       error(record, attribute) && return unless address.valid?
 
+      if options[:disallow_dotted]
+        error(record, attribute) && return if address.dotted?
+      end
+
       if options[:disallow_subaddressing]
         error(record, attribute) && return if address.subaddressed?
       end
