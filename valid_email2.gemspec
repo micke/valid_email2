@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.5.0"
+  spec.add_development_dependency "pry"
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 3.2"
 end

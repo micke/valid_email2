@@ -189,7 +189,7 @@ describe ValidEmail2 do
     end
 
     it "is invalid if the domain is blacklisted" do
-      user = TestUserDisallowBlacklisted.new(email: "foo@#{ValidEmail2.blacklist.first}")
+      user = TestUserDisallowBlacklisted.new(email: "foo@blacklisted-test.com")
       expect(user.valid?).to be_falsey
     end
   end

@@ -3,7 +3,7 @@
 require "valid_email2/email_validator"
 
 module ValidEmail2
-  BLACKLIST_FILE  = "config/blacklisted_email_domains"
+  BLACKLIST_FILE  = "config/blacklisted_email_domains.yml"
   WHITELIST_FILE  = "config/whitelisted_email_domains.yml"
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
@@ -12,7 +12,7 @@ module ValidEmail2
   end
 
   def self.blacklist
-    @whitelist ||= if File.exist?(BLACKLIST_FILE)
+    @blacklist ||= if File.exist?(BLACKLIST_FILE)
                      YAML.load_file(File.expand_path(BLACKLIST_FILE))
                    else
                      []
