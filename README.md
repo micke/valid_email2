@@ -123,11 +123,11 @@ end
 
 ## Requirements
 
-This gem requires Rails 3.2 or 4.0 or higher. It is tested against both versions using:
-* Ruby-2.3
+This gem requires Rails 3.2 or higher. It is tested against Rails 3, 4, 5 and 6 using:
 * Ruby-2.4
 * Ruby-2.5
 * Ruby-2.6
+* Ruby-2.7
 
 ## Upgrading to v3.0.0
 
