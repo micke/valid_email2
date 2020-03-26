@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'activemodel', '~> 3.2.22.5'
+gem 'activemodel', '~> 6.0'
 
 gemspec path: '../'
