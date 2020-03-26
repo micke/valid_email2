@@ -1,3 +1,6 @@
+## Version 3.2.1
+* Fix loading of blacklisted domains
+
 ## Version 3.2.0
 * Add option to disallow dotted email addresses https://github.com/micke/valid_email2/pull/146
 * Update list of disposable email domains with another 18,327 domains
