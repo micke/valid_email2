@@ -1,3 +1,6 @@
+## Version 3.2.2
+* Disallow quote (') in domain
+
 ## Version 3.2.1
 * Fix loading of blacklisted domains
 
