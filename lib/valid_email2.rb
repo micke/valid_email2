@@ -8,22 +8,35 @@ module ValidEmail2
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
   def self.disposable_emails
-    @disposable_emails ||= File.open(DISPOSABLE_FILE){ |f| f.read }.split("\n")
+    @disposable_emails ||= load_file(DISPOSABLE_FILE)
   end
 
   def self.blacklist
-    @blacklist ||= if File.exist?(BLACKLIST_FILE)
-                     YAML.load_file(File.expand_path(BLACKLIST_FILE))
-                   else
-                     []
-                   end
+    @blacklist ||= load_if_exists(BLACKLIST_FILE)
   end
 
   def self.whitelist
-    @whitelist ||= if File.exist?(WHITELIST_FILE)
-                     YAML.load_file(File.expand_path(WHITELIST_FILE))
-                   else
-                     []
-                   end
+    @whitelist ||= load_if_exists(WHITELIST_FILE)
+  end
+
+private
+
+  def self.load_if_exists(path)
+    File.exist?(path) ? load_file(path) : Set.new
+  end
+
+  def self.load_file(path)
+    # This method MUST return a Set, otherwise the
+    # performance will be as bad as hell!
+    if path.end_with?(".yml")
+      Set.new(YAML.load_file(path))
+    else
+      result = Set.new
+      File.open(path, "r").each_line do |line|
+        line.strip!
+        result << line if line.present?
+      end
+      result
+    end
   end
 end
