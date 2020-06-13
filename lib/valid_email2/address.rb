@@ -24,25 +24,24 @@ module ValidEmail2
     end
 
     def valid?
-      @valid ||= begin
-        return false if @parse_error
+      return @valid if @valid != nil
+      return false  if @parse_error
 
+      @valid = begin
         if address.domain && address.address == @raw_address
           domain = address.domain
 
           domain !~ PROHIBITED_DOMAIN_CHARACTERS_REGEX &&
             # Domain needs to have at least one dot
-            domain =~ /\./ &&
+            domain.include?('.') &&
             # Domain may not have two consecutive dots
-            domain !~ /\.{2,}/ &&
+            !domain.include?('..') &&
             # Domain may not start with a dot
-            domain !~ /^\./ &&
+            !domain.start_with?('.') &&
             # Domain may not start with a dash
-            domain !~ /^-/ &&
+            !domain.start_with?('-') &&
             # Domain name may not end with a dash
-            domain !~ /-\./ &&
-            # Address may not contain a dot directly before @
-            address.address !~ /\.@/
+            !domain.include?('-.')
         else
           false
         end
