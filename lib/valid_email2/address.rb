@@ -62,7 +62,7 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      valid? && domain_is_in?(ValidEmail2.disposable_emails)
+      domain_is_in?(ValidEmail2.disposable_emails)
     end
 
     def disposable_mx_server?
