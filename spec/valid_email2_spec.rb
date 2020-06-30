@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "fileutils"
 
 class TestUser < TestModel
   validates :email, 'valid_email_2/email': true
