@@ -1,3 +1,8 @@
+## Version 3.2.3
+* Disallow backtick (\`) in domain
+* https://github.com/micke/valid_email2/pull/152
+* https://github.com/micke/valid_email2/pull/151
+
 ## Version 3.2.2
 * Disallow quote (') in domain
 
