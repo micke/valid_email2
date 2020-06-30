@@ -59,7 +59,7 @@ describe ValidEmail2 do
       expect(user.valid?).to be_falsey
     end
 
-    %w[+ _ ! / \  '].each do |invalid_character|
+    %w[+ _ ! / \  ' `].each do |invalid_character|
       it "is invalid if email contains a \"#{invalid_character}\" character" do
         user = TestUser.new(email: "foo@google#{invalid_character}yahoo.com")
         expect(user.valid?).to be_falsey
