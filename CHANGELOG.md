@@ -1,3 +1,6 @@
+## Version 3.2.4
+* Remove false positives
+
 ## Version 3.2.3
 * Disallow backtick (\`) in domain
 * https://github.com/micke/valid_email2/pull/152
