@@ -9772,7 +9772,6 @@ edu.auction
 edu.dmtc.dev
 edu.hstu.eu.org
 edu.my
-edu.sg
 eduanswer.ru
 education.eu
 educationleaders-ksa.com
