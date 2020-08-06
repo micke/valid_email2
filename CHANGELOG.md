@@ -1,3 +1,7 @@
+## Version 3.2.5
+* Remove false positives
+* Pull new domains
+
 ## Version 3.2.4
 * Remove false positives
 
