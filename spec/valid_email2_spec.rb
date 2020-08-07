@@ -39,6 +39,10 @@ class TestUserMessage < TestModel
   validates :email, 'valid_email_2/email': { message: "custom message" }
 end
 
+class TestUserMultiple < TestModel
+  validates :email, 'valid_email_2/email': { multiple: true }
+end
+
 describe ValidEmail2 do
 
   let(:disposable_domain) { ValidEmail2.disposable_emails.first }
@@ -241,6 +245,20 @@ describe ValidEmail2 do
       user = TestUserMessage.new(email: "fakeemail")
       user.valid?
       expect(user.errors.full_messages).to include("Email custom message")
+    end
+  end
+
+  describe "with multiple addresses" do
+    it "tests each address for it's own" do
+      user = TestUserMultiple.new(email: "foo@gmail.com, bar@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    context 'when one address is invalid' do
+      it "fails for all" do
+        user = TestUserMultiple.new(email: "foo@gmail.com, bar@123")
+        expect(user.valid?).to be_falsey
+      end
     end
   end
 

@@ -83,6 +83,11 @@ To validate create your own custom message:
 validates :email, 'valid_email_2/email': { message: "is not a valid email" }
 ```
 
+To allow multiple addresses separated by comma:
+```ruby
+validates :email, 'valid_email_2/email': { multiple: true }
+```
+
 All together:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true, disposable: true, disallow_subaddressing: true}
