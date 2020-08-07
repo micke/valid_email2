@@ -18,27 +18,27 @@ module ValidEmail2
       error(record, attribute) && return unless addresses.all?(&:valid?)
 
       if options[:disallow_dotted]
-        error(record, attribute) && return if addresses.all?(&:dotted?)
+        error(record, attribute) && return if addresses.any?(&:dotted?)
       end
 
       if options[:disallow_subaddressing]
-        error(record, attribute) && return if addresses.all?(&:subaddressed?)
+        error(record, attribute) && return if addresses.any?(&:subaddressed?)
       end
 
       if options[:disposable]
-        error(record, attribute) && return if addresses.all?(&:disposable?)
+        error(record, attribute) && return if addresses.any?(&:disposable?)
       end
 
       if options[:disposable_domain]
-        error(record, attribute) && return if addresses.all?(&:disposable_domain?)
+        error(record, attribute) && return if addresses.any?(&:disposable_domain?)
       end
 
       if options[:disposable_with_whitelist]
-        error(record, attribute) && return if addresses.all? { |address| address.disposable? && !address.whitelisted? }
+        error(record, attribute) && return if addresses.any? { |address| address.disposable? && !address.whitelisted? }
       end
 
       if options[:blacklist]
-        error(record, attribute) && return if addresses.all?(&:blacklisted?)
+        error(record, attribute) && return if addresses.any?(&:blacklisted?)
       end
 
       if options[:mx]
