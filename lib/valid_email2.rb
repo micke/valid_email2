@@ -27,7 +27,7 @@ private
 
   def self.load_file(path)
     # This method MUST return a Set, otherwise the
-    # performance will be as bad as hell!
+    # performance will suffer!
     if path.end_with?(".yml")
       Set.new(YAML.load_file(path))
     else
