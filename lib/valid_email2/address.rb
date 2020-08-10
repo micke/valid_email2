@@ -32,18 +32,12 @@ module ValidEmail2
           domain = address.domain
 
           domain !~ PROHIBITED_DOMAIN_CHARACTERS_REGEX &&
-            # Domain needs to have at least one dot
             domain.include?('.') &&
-            # Domain may not have two consecutive dots
             !domain.include?('..') &&
-            # Domain may not start with a dot
             !domain.start_with?('.') &&
-            # Domain may not start with a dash
             !domain.start_with?('-') &&
-            # Domain name may not end with a dash
             !domain.include?('-.') &&
-            # Address may not contain a dot directly before @
-            address.include?('.@')
+            !address.to_s.include?('.@')
         else
           false
         end
