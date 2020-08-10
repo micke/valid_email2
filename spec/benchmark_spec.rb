@@ -3,10 +3,9 @@
 require "spec_helper"
 
 describe "Performance testing" do
-
   let(:disposable_domain) { ValidEmail2.disposable_emails.first }
 
-  it "lookup timing" do
+  it "has acceptable lookup performance" do
     address = ValidEmail2::Address.new("test@example.com")
 
     # preload list and check size
@@ -16,5 +15,4 @@ describe "Performance testing" do
     # check lookup timing
     expect { address.disposable_domain? }.to perform_under(0.0001).sample(10).times
   end
-
 end
