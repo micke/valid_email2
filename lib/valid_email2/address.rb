@@ -24,7 +24,7 @@ module ValidEmail2
     end
 
     def valid?
-      return @valid if @valid != nil
+      return @valid unless @valid.nil?
       return false  if @parse_error
 
       @valid = begin
