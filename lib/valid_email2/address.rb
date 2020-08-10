@@ -41,7 +41,9 @@ module ValidEmail2
             # Domain may not start with a dash
             !domain.start_with?('-') &&
             # Domain name may not end with a dash
-            !domain.include?('-.')
+            !domain.include?('-.') &&
+            # Address may not contain a dot directly before @
+            address.include?('.@')
         else
           false
         end
