@@ -1,3 +1,6 @@
+## Version 3.3.1
+* Fix some performance regressions (https://github.com/micke/valid_email2/pull/150)
+
 ## Version 3.3.0
 * Allow multiple addresses separated by comma (https://github.com/micke/valid_email2/pull/156)
 * Make prohibited_domain_characters_regex changeable (https://github.com/micke/valid_email2/pull/157)
