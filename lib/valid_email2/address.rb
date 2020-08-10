@@ -32,25 +32,20 @@ module ValidEmail2
     end
 
     def valid?
-      @valid ||= begin
-        return false if @parse_error
+      return @valid unless @valid.nil?
+      return false  if @parse_error
 
+      @valid = begin
         if address.domain && address.address == @raw_address
           domain = address.domain
 
           domain !~ self.class.prohibited_domain_characters_regex &&
-            # Domain needs to have at least one dot
-            domain =~ /\./ &&
-            # Domain may not have two consecutive dots
-            domain !~ /\.{2,}/ &&
-            # Domain may not start with a dot
-            domain !~ /^\./ &&
-            # Domain may not start with a dash
-            domain !~ /^-/ &&
-            # Domain name may not end with a dash
-            domain !~ /-\./ &&
-            # Address may not contain a dot directly before @
-            address.address !~ /\.@/
+            domain.include?('.') &&
+            !domain.include?('..') &&
+            !domain.start_with?('.') &&
+            !domain.start_with?('-') &&
+            !domain.include?('-.') &&
+            !address.local.end_with?('.')
         else
           false
         end
@@ -70,7 +65,7 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      valid? && domain_is_in?(ValidEmail2.disposable_emails)
+      domain_is_in?(ValidEmail2.disposable_emails)
     end
 
     def disposable_mx_server?

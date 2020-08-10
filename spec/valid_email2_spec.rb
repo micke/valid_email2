@@ -87,13 +87,8 @@ describe ValidEmail2 do
       expect(user.valid?).to be_falsey
     end
 
-    it "is invalid if the domain contains emoticons" do
+    it "is invalid if the email contains emoticons" do
       user = TestUser.new(email: "foo🙈@gmail.com")
-      expect(user.valid?).to be_falsy
-    end
-
-    it "is invalid if the domain contains .@ consecutively" do
-      user = TestUser.new(email: "foo.@gmail.com")
       expect(user.valid?).to be_falsy
     end
 
