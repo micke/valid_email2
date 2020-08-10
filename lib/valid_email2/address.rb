@@ -6,9 +6,17 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
-    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s']/
+    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'.freeze
     DOT_DELIMITER = '.'.freeze
+
+    def self.prohibited_domain_characters_regex
+      @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
+    end
+
+    def self.prohibited_domain_characters_regex=(val)
+      @prohibited_domain_characters_regex = val
+    end
 
     def initialize(address)
       @parse_error = false
@@ -31,7 +39,7 @@ module ValidEmail2
         if address.domain && address.address == @raw_address
           domain = address.domain
 
-          domain !~ PROHIBITED_DOMAIN_CHARACTERS_REGEX &&
+          domain !~ self.class.prohibited_domain_characters_regex &&
             domain.include?('.') &&
             !domain.include?('..') &&
             !domain.start_with?('.') &&

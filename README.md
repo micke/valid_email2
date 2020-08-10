@@ -4,7 +4,7 @@
 
 Validate emails with the help of the `mail` gem instead of some clunky regexp.
 Aditionally validate that the domain has a MX record.
-Optionally validate against a static [list of disposable email services](config/disposable_email_domains.yml).
+Optionally validate against a static [list of disposable email services](config/disposable_email_domains.txt).
 Optionally validate that the email is not subaddressed ([RFC5233](https://tools.ietf.org/html/rfc5233)).
 
 ### Why?
@@ -81,6 +81,11 @@ validates :email, 'valid_email_2/email': { disallow_dotted: true }
 To validate create your own custom message:
 ```ruby
 validates :email, 'valid_email_2/email': { message: "is not a valid email" }
+```
+
+To allow multiple addresses separated by comma:
+```ruby
+validates :email, 'valid_email_2/email': { multiple: true }
 ```
 
 All together:

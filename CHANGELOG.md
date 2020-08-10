@@ -1,3 +1,19 @@
+## Version 3.3.0
+* Allow multiple addresses separated by comma (https://github.com/micke/valid_email2/pull/156)
+* Make prohibited_domain_characters_regex changeable (https://github.com/micke/valid_email2/pull/157)
+
+## Version 3.2.5
+* Remove false positives
+* Pull new domains
+
+## Version 3.2.4
+* Remove false positives
+
+## Version 3.2.3
+* Disallow backtick (\`) in domain
+* https://github.com/micke/valid_email2/pull/152
+* https://github.com/micke/valid_email2/pull/151
+
 ## Version 3.2.2
 * Disallow quote (') in domain
 
