@@ -32,12 +32,9 @@ module ValidEmail2
       if path.end_with?(".yml")
         Set.new(YAML.load_file(path))
       else
-        result = Set.new
-        File.open(path, "r").each_line do |line|
-          line.strip!
-          result << line if line.present?
+        File.open(path, "r").each_line.each_with_object(Set.new) do |domain, set|
+          set << domain.tap(&:chomp!)
         end
-        result
       end
     end
   end
