@@ -51,8 +51,8 @@ other non ASCII domains while still disallowing the domains we blocked before.
 ## Version 3.0.0
 * Moved __and__ renamed blocklist and allowlist and disposable_emails. Moved from the vendor directory to
   the config directory.  
-  `vendor/blocklist.yml` -> `config/blocklisted_email_domains.yml`  
-  `vendor/allowlist.yml` -> `config/allowlisted_email_domains.yml`  
+  `vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+  `vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`  
   `vendor/disposable_emails.yml` -> `config/disposable_email_domains.yml`
 
 * Test if the MX server that a domain resolves to is present in the lists of

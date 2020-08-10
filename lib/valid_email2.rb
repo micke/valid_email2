@@ -3,8 +3,8 @@
 require "valid_email2/email_validator"
 
 module ValidEmail2
-  blocklist_FILE  = "config/blocklisted_email_domains.yml"
-  allowlist_FILE  = "config/allowlisted_email_domains.yml"
+  blocklist_FILE  = "config/blacklisted_email_domains.yml"
+  allowlist_FILE  = "config/whitelisted_email_domains.yml"
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
   def self.disposable_emails
