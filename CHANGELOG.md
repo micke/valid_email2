@@ -1,3 +1,7 @@
+## Version 3.4.0
+* Disallow consecutive dots https://github.com/micke/valid_email2/pull/163
+* Add andyes.net https://github.com/micke/valid_email2/pull/162
+
 ## Version 3.3.1
 * Fix some performance regressions (https://github.com/micke/valid_email2/pull/150)
 
