@@ -45,6 +45,7 @@ module ValidEmail2
             !domain.start_with?('.') &&
             !domain.start_with?('-') &&
             !domain.include?('-.') &&
+            !address.local.include?('..') &&
             !address.local.end_with?('.')
         else
           false
