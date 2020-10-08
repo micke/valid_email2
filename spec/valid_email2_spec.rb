@@ -31,6 +31,10 @@ class TestUserDisallowDisposableWithWhitelist < TestModel
   validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
 end
 
+class TestUserDisallowDisposableDomainWithWhitelist < TestModel
+  validates :email, 'valid_email_2/email': { disposable_domain_with_whitelist: true }
+end
+
 class TestUserDisallowBlacklisted < TestModel
   validates :email, 'valid_email_2/email': { blacklist: true }
 end
@@ -170,8 +174,18 @@ describe ValidEmail2 do
       let(:whitelist_domain) { disposable_domain }
       let(:whitelist_file_path) { "config/whitelisted_email_domains.yml" }
 
+      # Some of the specs below need to explictly set the whitelist var or it 
+      # may be cached to an empty set
+      def set_whitelist
+        ValidEmail2.instance_variable_set(
+          :@whitelist, 
+          ValidEmail2.send(:load_if_exists, ValidEmail2::WHITELIST_FILE)
+        )
+      end
+
       after do
         FileUtils.rm(whitelist_file_path, force: true)
+        set_whitelist
       end
 
       it "is invalid if the domain is disposable and not in the whitelist" do
@@ -183,6 +197,18 @@ describe ValidEmail2 do
         File.open(whitelist_file_path, "w") { |f| f.write [whitelist_domain].to_yaml }
         user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
         expect(user.valid?).to be_falsey
+      end
+
+      it "is invalid if the domain is a disposable_domain and not in the whitelist" do
+        user = TestUserDisallowDisposableDomainWithWhitelist.new(email: "foo@#{whitelist_domain}")
+        expect(user.valid?).to be_falsey
+      end
+
+      it "is valid if the domain is a disposable_domain but in the whitelist" do
+        File.open(whitelist_file_path, "w") { |f| f.write [whitelist_domain].to_yaml }
+        set_whitelist
+        user = TestUserDisallowDisposableDomainWithWhitelist.new(email: "foo@#{whitelist_domain}")
+        expect(user.valid?).to be_truthy
       end
     end
   end
