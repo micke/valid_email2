@@ -195,8 +195,9 @@ describe ValidEmail2 do
 
       it "is valid if the domain is disposable but in the whitelist" do
         File.open(whitelist_file_path, "w") { |f| f.write [whitelist_domain].to_yaml }
+        set_whitelist
         user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
-        expect(user.valid?).to be_falsey
+        expect(user.valid?).to be_truthy
       end
 
       it "is invalid if the domain is a disposable_domain and not in the whitelist" do
