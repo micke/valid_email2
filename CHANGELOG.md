@@ -1,3 +1,8 @@
+## Version 3.5.0
+* Disallow emails starting with a dot https://github.com/micke/valid_email2/pull/170
+* Add option to whitelist domains from MX check https://github.com/micke/valid_email2/pull/167
+* Remove false positives
+
 ## Version 3.4.0
 * Disallow consecutive dots https://github.com/micke/valid_email2/pull/163
 * Add andyes.net https://github.com/micke/valid_email2/pull/162
