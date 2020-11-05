@@ -118,10 +118,21 @@ module ValidEmail2
     end
 
     def mx_servers
-      @mx_servers ||= Resolv::DNS.open do |dns|
+      @mx_servers ||= resolv_dns do |dns|
         mx_servers = dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
+      end
+    end
+
+    def resolv_dns
+      dns = Resolv::DNS.new
+      dns.timeouts = 1
+      return dns unless block_given?
+      begin
+        yield dns
+      ensure
+        dns.close
       end
     end
   end
