@@ -85,6 +85,12 @@ module ValidEmail2
     def valid_mx?
       return false unless valid?
 
+      mx_or_a_servers.any?
+    end
+
+    def valid_strict_mx?
+      return false unless valid?
+
       mx_servers.any?
     end
 
@@ -119,7 +125,12 @@ module ValidEmail2
 
     def mx_servers
       @mx_servers ||= Resolv::DNS.open do |dns|
-        mx_servers = dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+        dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+      end
+    end
+
+    def mx_or_a_servers
+      @mx_or_a_servers ||= Resolv::DNS.open do |dns|
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
       end
