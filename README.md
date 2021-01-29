@@ -43,9 +43,13 @@ class User < ActiveRecord::Base
 end
 ```
 
-To validate that the domain has a MX record:
+To validate that the domain has an MX record or A record:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true }
+```
+To validate strictly that the domain has an MX record:
+```ruby
+validates :email, 'valid_email_2/email': { strict_mx: true }
 ```
 
 To validate that the domain is not a disposable email (checks domain and MX server):
@@ -109,6 +113,7 @@ address = ValidEmail2::Address.new("lisinge@gmail.com")
 address.valid? => true
 address.disposable? => false
 address.valid_mx? => true
+address.valid_strict_mx? => true
 address.subaddressed? => false
 ```
 
@@ -120,6 +125,7 @@ Do so by adding this in your `spec_helper`:
 ```ruby
 config.before(:each) do
   allow_any_instance_of(ValidEmail2::Address).to receive(:valid_mx?).and_return(true)
+  allow_any_instance_of(ValidEmail2::Address).to receive(:valid_strict_mx?).and_return(true)
 end
 ```
 
