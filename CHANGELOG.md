@@ -1,3 +1,6 @@
+## Version 3.6.0
+* Add strict_mx validation https://github.com/micke/valid_email2/pull/173
+
 ## Version 3.5.0
 * Disallow emails starting with a dot https://github.com/micke/valid_email2/pull/170
 * Add option to whitelist domains from MX check https://github.com/micke/valid_email2/pull/167
