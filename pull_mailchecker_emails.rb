@@ -8,7 +8,7 @@ require "net/http"
 whitelisted_emails = %w(
   onet.pl poczta.onet.pl fastmail.fm hushmail.com
   hush.ai hush.com hushmail.me naver.com qq.com example.com
-  yandex.net gmx.com gmx.es
+  yandex.net gmx.com gmx.es webdesignspecialist.com.au vp.com
 )
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }
