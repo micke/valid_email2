@@ -5,7 +5,7 @@ require "active_model/validations"
 module ValidEmail2
   class EmailValidator < ActiveModel::EachValidator
     def default_options
-      { regex: true, disposable: false, mx: false, disallow_subaddressing: false, multiple: false }
+      { regex: true, disposable: false, mx: false, strict_mx: false, disallow_subaddressing: false, multiple: false }
     end
 
     def validate_each(record, attribute, value)
@@ -47,6 +47,10 @@ module ValidEmail2
 
       if options[:mx]
         error(record, attribute) && return unless addresses.all?(&:valid_mx?)
+      end
+
+      if options[:strict_mx]
+        error(record, attribute) && return unless addresses.all?(&:valid_strict_mx?)
       end
     end
 

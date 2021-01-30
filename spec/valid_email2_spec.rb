@@ -19,6 +19,10 @@ class TestUserMX < TestModel
   validates :email, 'valid_email_2/email': { mx: true }
 end
 
+class TestUserStrictMX < TestModel
+  validates :email, 'valid_email_2/email': { strict_mx: true }
+end
+
 class TestUserDisallowDisposable < TestModel
   validates :email, 'valid_email_2/email': { disposable: true }
 end
@@ -249,6 +253,23 @@ describe ValidEmail2 do
 
     it "is invalid if no mx records are found" do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with strict mx validation" do
+    it "is valid if mx records are found" do
+      user = TestUserStrictMX.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is invalid if A records are found but no mx records are found" do
+      user = TestUserStrictMX.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if no mx records are found" do
+      user = TestUserStrictMX.new(email: "foo@subdomain.gmail.com")
       expect(user.valid?).to be_falsey
     end
   end
