@@ -12,5 +12,10 @@ gemfile:
   - gemfiles/activemodel5.gemfile
   - gemfiles/activemodel6.gemfile
 
+jobs:
+  exclude:
+    - rvm: 3.0
+      gemfile: gemfiles/activemodel5.gemfile
+
 before_install:
   - gem install bundler
