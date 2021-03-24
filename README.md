@@ -140,11 +140,11 @@ end
 
 ## Requirements
 
-This gem requires Rails 3.2 or higher. It is tested against Rails 3, 4, 5 and 6 using:
-* Ruby-2.4
+This gem should work with Rails 3.2 or higher. It is tested against Rails 5 and 6 using:
 * Ruby-2.5
 * Ruby-2.6
 * Ruby-2.7
+* Ruby-3.0
 
 ## Upgrading to v3.0.0
 
