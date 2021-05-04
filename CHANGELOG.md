@@ -1,3 +1,7 @@
+## Version 3.6.1
+* Add new domain https://github.com/micke/valid_email2/pull/175
+* Pull new domains
+
 ## Version 3.6.0
 * Add strict_mx validation https://github.com/micke/valid_email2/pull/173
 
