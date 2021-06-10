@@ -12,8 +12,7 @@ module ValidEmail2
       return unless value.present?
       options = default_options.merge(self.options)
 
-      value_spitted = options[:multiple] ? value.split(',').map(&:strip) : [value]
-      addresses = value_spitted.map { |v| ValidEmail2::Address.new(v) }
+      addresses = sanitized_values(value).map { |v| ValidEmail2::Address.new(v) }
 
       error(record, attribute) && return unless addresses.all?(&:valid?)
 
@@ -52,6 +51,18 @@ module ValidEmail2
       if options[:strict_mx]
         error(record, attribute) && return unless addresses.all?(&:valid_strict_mx?)
       end
+    end
+
+    def sanitized_values(input)
+      options = default_options.merge(self.options)
+
+      if options[:multiple]
+        email_list = input.is_a?(Array) ? input : input.split(',')
+      else
+        email_list = [input]
+      end
+
+      email_list.reject(&:empty?).map(&:strip)
     end
 
     def error(record, attribute)
