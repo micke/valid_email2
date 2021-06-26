@@ -1,3 +1,5 @@
+# frozen_string_literal:true
+
 require "valid_email2"
 require "resolv"
 require "mail"
@@ -7,8 +9,8 @@ module ValidEmail2
     attr_accessor :address
 
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
-    DEFAULT_RECIPIENT_DELIMITER = '+'.freeze
-    DOT_DELIMITER = '.'.freeze
+    DEFAULT_RECIPIENT_DELIMITER = '+'
+    DOT_DELIMITER = '.'
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -35,23 +37,27 @@ module ValidEmail2
       return @valid unless @valid.nil?
       return false  if @parse_error
 
-      @valid = begin
-        if address.domain && address.address == @raw_address
-          domain = address.domain
+      @valid = address.domain &&
+               address.address == @raw_address &&
+               valid_domain? &&
+               valid_address?
+    end
 
-          domain !~ self.class.prohibited_domain_characters_regex &&
-            domain.include?('.') &&
-            !domain.include?('..') &&
-            !domain.start_with?('.') &&
-            !domain.start_with?('-') &&
-            !domain.include?('-.') &&
-            !address.local.include?('..') &&
-            !address.local.end_with?('.') &&
-            !address.local.start_with?('.')
-        else
-          false
-        end
-      end
+    def valid_domain?
+      domain = address.domain
+
+      domain !~ self.class.prohibited_domain_characters_regex &&
+        domain.include?('.') &&
+        !domain.include?('..') &&
+        !domain.start_with?('.') &&
+        !domain.start_with?('-') &&
+        !domain.include?('-.')
+    end
+
+    def valid_address?
+      !address.local.include?('..') &&
+        !address.local.end_with?('.') &&
+        !address.local.start_with?('.')
     end
 
     def dotted?
@@ -103,12 +109,13 @@ module ValidEmail2
       i = address_domain.index('.')
       return false unless i
 
-      return domain_list.include?(address_domain[(i+1)..-1])
+      domain_list.include?(address_domain[(i + 1)..-1])
     end
 
     def mx_server_is_in?(domain_list)
       mx_servers.any? { |mx_server|
         return false unless mx_server.respond_to?(:exchange)
+
         mx_server = mx_server.exchange.to_s
 
         domain_list.any? { |domain|

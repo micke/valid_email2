@@ -1,3 +1,8 @@
+## Version 3.7.0
+* Support validating arrays https://github.com/micke/valid_email2/pull/178
+* Pull new domains
+* Add new domain https://github.com/micke/valid_email2/pull/176
+
 ## Version 3.6.1
 * Add new domain https://github.com/micke/valid_email2/pull/175
 * Pull new domains
