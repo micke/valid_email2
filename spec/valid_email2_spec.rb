@@ -312,6 +312,11 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
+    it "tests each address from an array" do
+      user = TestUserMultiple.new(email: %w[foo@gmail.com bar@gmail.com])
+      expect(user.valid?).to be_truthy
+    end
+
     context 'when one address is invalid' do
       it "fails for all" do
         user = TestUserMultiple.new(email: "foo@gmail.com, bar@123")
