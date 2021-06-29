@@ -47,10 +47,15 @@ To validate that the domain has an MX record or A record:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true }
 ```
+
 To validate strictly that the domain has an MX record:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true }
 ```
+`strict_mx` and `mx` both default to a 5 second timeout for DNS lookups.  To
+override this timeout, specify a `dns_timeout` option:
+```ruby
+validates :email, 'valid_email_2/email': { strict_mx: true, dns_timeout: 10 }
 
 To validate that the domain is not a disposable email (checks domain and MX server):
 ```ruby
