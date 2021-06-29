@@ -1,3 +1,6 @@
+## Version 4.0.0
+* Support setting a timout for DNS lookups and default to 5 seconds https://github.com/micke/valid_email2/pull/181
+
 ## Version 3.7.0
 * Support validating arrays https://github.com/micke/valid_email2/pull/178
 * Pull new domains
