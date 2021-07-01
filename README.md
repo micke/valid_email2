@@ -56,6 +56,7 @@ validates :email, 'valid_email_2/email': { strict_mx: true }
 override this timeout, specify a `dns_timeout` option:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true, dns_timeout: 10 }
+```
 
 To validate that the domain is not a disposable email (checks domain and MX server):
 ```ruby
