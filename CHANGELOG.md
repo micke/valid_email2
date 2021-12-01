@@ -1,3 +1,7 @@
+## Version 4.0.1
+* Remove false positives (onit.com, asics.com)
+* Pull new domains
+
 ## Version 4.0.0
 * Support setting a timout for DNS lookups and default to 5 seconds https://github.com/micke/valid_email2/pull/181
 
