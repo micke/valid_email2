@@ -1,3 +1,7 @@
+## Version 4.0.2
+* Remove false positive (freemail.hu) #187
+* Pull new domains
+
 ## Version 4.0.1
 * Remove false positives (onit.com, asics.com)
 * Pull new domains
