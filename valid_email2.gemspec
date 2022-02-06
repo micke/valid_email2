@@ -21,9 +21,10 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 1.9.3"
 
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 12.3.3"
-  spec.add_development_dependency "rspec", "~> 3.5.0"
+  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "rspec-benchmark", "~> 0.6"
+  spec.add_development_dependency "net-smtp"
   spec.add_development_dependency "pry"
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 3.2"
