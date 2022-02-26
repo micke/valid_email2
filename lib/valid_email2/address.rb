@@ -38,14 +38,12 @@ module ValidEmail2
       return @valid unless @valid.nil?
       return false  if @parse_error
 
-      @valid = address.domain &&
-               address.address == @raw_address &&
-               valid_domain? &&
-               valid_address?
+      @valid = valid_domain? && valid_address?
     end
 
     def valid_domain?
       domain = address.domain
+      return false if domain.nil?
 
       domain !~ self.class.prohibited_domain_characters_regex &&
         domain.include?('.') &&
@@ -56,6 +54,8 @@ module ValidEmail2
     end
 
     def valid_address?
+      return false if address.address != @raw_address
+
       !address.local.include?('..') &&
         !address.local.end_with?('.') &&
         !address.local.start_with?('.')
