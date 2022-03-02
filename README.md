@@ -146,7 +146,7 @@ end
 
 ## Requirements
 
-This gem should work with Rails 3.2 or higher. It is tested against Rails 5 and 6 using:
+This gem should work with Rails 3.2 or higher. It is tested against Rails 5+ using:
 * Ruby-2.5
 * Ruby-2.6
 * Ruby-2.7

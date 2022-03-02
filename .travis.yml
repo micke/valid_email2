@@ -11,6 +11,7 @@ rvm:
 gemfile:
   - gemfiles/activemodel5.gemfile
   - gemfiles/activemodel6.gemfile
+  - gemfiles/activemodel7.gemfile
 
 jobs:
   exclude:
