@@ -145,11 +145,7 @@ end
 
 ## Requirements
 
-This gem should work with Rails 3.2 or higher. It is tested against Rails 5+ using:
-* Ruby-2.5
-* Ruby-2.6
-* Ruby-2.7
-* Ruby-3.0
+This gem is tested against currently supported Ruby and Rails versions. For an up to date list, check the build matrix in the [workflow](.github/workflows/ci.yaml).
 
 ## Upgrading to v3.0.0
 
