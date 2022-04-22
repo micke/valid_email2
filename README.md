@@ -129,17 +129,11 @@ It is a good idea to stub out that validation in your test environment.
 Do so by adding this in your `spec_helper`:
 ```ruby
 config.before(:each) do
-  allow_any_instance_of(ValidEmail2::Address).to receive(:valid_mx?).and_return(true)
-  allow_any_instance_of(ValidEmail2::Address).to receive(:valid_strict_mx?).and_return(true)
-end
-```
-
-Validating `disposable` e-mails triggers a `mx` validation alongside checking if
-the domain is disposable. The above stub does not apply to the `disposable`
-validation and should therefore be individually stubbed with:
-```ruby
-config.before(:each) do
-  allow_any_instance_of(ValidEmail2::Address).to receive(:mx_server_is_in?).and_return(false)
+  allow_any_instance_of(ValidEmail2::Address).to receive_messages(
+    valid_mx?: true,
+    valid_strict_mx?: true,
+    mx_server_is_in?: false
+  )
 end
 ```
 
