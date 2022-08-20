@@ -14,11 +14,15 @@ whitelisted_emails = %w(
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }
 
-url = "https://raw.githubusercontent.com/FGRibreau/mailchecker/master/list.txt"
-resp = Net::HTTP.get_response(URI.parse(url))
+remote_emails = [
+  "https://raw.githubusercontent.com/FGRibreau/mailchecker/master/list.txt",
+  "https://raw.githubusercontent.com/disposable/disposable-email-domains/master/domains.txt",
+].flat_map do |url|
+  resp = Net::HTTP.get_response(URI.parse(url))
 
-remote_emails = resp.body.split("\n").flatten - whitelisted_emails
+  resp.body.split("\n").flatten
+end
 
-result_emails = (existing_emails + remote_emails).map(&:strip).uniq.sort
+result_emails = (existing_emails + remote_emails).map(&:strip).uniq.sort - whitelisted_emails
 
-File.open("config/disposable_email_domains.txt", "w") {|f| f.write result_emails.join("\n") }
+File.open("config/disposable_email_domains.txt", "w") { |f| f.write result_emails.join("\n") }
