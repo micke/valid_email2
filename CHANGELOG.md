@@ -1,3 +1,7 @@
+## Version 4.0.4
+* Add new domains https://github.com/micke/valid_email2/pull/196
+* Pull new domains
+
 ## Version 4.0.3
 * Remove false positive (139.com) #188
 * Pull new domains
