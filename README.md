@@ -88,7 +88,7 @@ To validate that email is not subaddressed:
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 ```
 
-To validate that email does not contain a dot before the @:
+To validate that email does not contain a dot anywhere before the @:
 ```ruby
 validates :email, 'valid_email_2/email': { disallow_dotted: true }
 ```
