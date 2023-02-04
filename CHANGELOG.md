@@ -1,3 +1,7 @@
+## Version 4.0.5
+* Remove false positive mail2word.com
+* Pull new domains
+
 ## Version 4.0.4
 * Add new domains https://github.com/micke/valid_email2/pull/196
 * Pull new domains
