@@ -1,3 +1,8 @@
+## Version 4.0.6
+* Remove false positives https://github.com/micke/valid_email2/pull/200
+* Remove unused default option https://github.com/micke/valid_email2/pull/201
+* Pull new domains
+
 ## Version 4.0.5
 * Remove false positive mail2word.com
 * Pull new domains
