@@ -96709,7 +96709,6 @@ mozillafirefox.ml
 mozillafirefox.tk
 mozillamail.com
 mozillamailcom.com
-mozmail.com
 mozmail.info
 mozzasiatopizzavalencia.com
 mozzinovo.club
