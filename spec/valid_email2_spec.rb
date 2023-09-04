@@ -255,6 +255,11 @@ describe ValidEmail2 do
       user = TestUserMX.new(email: "foo@subdomain.gmail.com")
       expect(user.valid?).to be_falsey
     end
+
+    it "is invalid if a null mx is found" do
+      user = TestUserMX.new(email: "foo@gmail.de")
+      expect(user.valid?).to be_falsey
+    end
   end
 
   describe "with strict mx validation" do
@@ -270,6 +275,11 @@ describe ValidEmail2 do
 
     it "is invalid if no mx records are found" do
       user = TestUserStrictMX.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if a null mx is found" do
+      user = TestUserMX.new(email: "foo@gmail.de")
       expect(user.valid?).to be_falsey
     end
   end

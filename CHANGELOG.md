@@ -1,3 +1,6 @@
+## unreleased
+* support null MX rfc7505 #206
+
 ## Version 4.0.6
 * Remove false positives https://github.com/micke/valid_email2/pull/200
 * Remove unused default option https://github.com/micke/valid_email2/pull/201

@@ -91,12 +91,14 @@ module ValidEmail2
 
     def valid_mx?
       return false unless valid?
+      return false if null_mx?
 
       mx_or_a_servers.any?
     end
 
     def valid_strict_mx?
       return false unless valid?
+      return false if null_mx?
 
       mx_servers.any?
     end
@@ -136,6 +138,10 @@ module ValidEmail2
         dns.timeouts = @dns_timeout
         dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
       end
+    end
+
+    def null_mx?
+      mx_servers.length == 1 && mx_servers.first.preference == 0 && mx_servers.first.exchange.length == 0
     end
 
     def mx_or_a_servers
