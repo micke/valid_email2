@@ -279,7 +279,7 @@ describe ValidEmail2 do
     end
 
     it "is invalid if a null mx is found" do
-      user = TestUserMX.new(email: "foo@gmail.de")
+      user = TestUserStrictMX.new(email: "foo@gmail.de")
       expect(user.valid?).to be_falsey
     end
   end
