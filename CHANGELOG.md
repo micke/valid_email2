@@ -1,5 +1,6 @@
-## unreleased
-* support null MX rfc7505 #206
+## Version 5.0.0
+* Support Null MX [rfc7505](https://datatracker.ietf.org/doc/html/rfc7505) #206
+* Pull new domains
 
 ## Version 4.0.6
 * Remove false positives https://github.com/micke/valid_email2/pull/200
