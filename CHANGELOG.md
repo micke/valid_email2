@@ -1,3 +1,6 @@
+## Version 5.0.2
+* Remove mozmail from disposable_email_domains [#203](https://github.com/micke/valid_email2/pull/203)
+
 ## Version 5.0.1
 * Remove zoho from disposable_email_domains as it's a false positive
 
