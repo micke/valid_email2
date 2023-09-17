@@ -1,3 +1,6 @@
+## Version 5.0.1
+* Remove zoho from disposable_email_domains as it's a false positive
+
 ## Version 5.0.0
 * Support Null MX [rfc7505](https://datatracker.ietf.org/doc/html/rfc7505) #206
 * Pull new domains
