@@ -10,7 +10,7 @@ whitelisted_emails = %w(
   hush.ai hush.com hushmail.me naver.com qq.com example.com
   yandex.net gmx.com gmx.es webdesignspecialist.com.au vp.com
   onit.com asics.com freemail.hu 139.com mail2world.com slmail.me
-  zoho.com
+  zoho.com zoho.in
 )
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }
