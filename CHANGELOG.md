@@ -1,3 +1,7 @@
+## Version 5.0.3
+* Remove false positive mail.com [#210](https://github.com/micke/valid_email2/issues/210)
+* Pull new domains
+
 ## Version 5.0.2
 * Remove mozmail from disposable_email_domains [#203](https://github.com/micke/valid_email2/pull/203)
 
