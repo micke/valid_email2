@@ -1,3 +1,6 @@
+## Version 5.0.4
+* Remove false positives
+
 ## Version 5.0.3
 * Remove false positive mail.com [#210](https://github.com/micke/valid_email2/issues/210)
 * Pull new domains
