@@ -1,5 +1,11 @@
+## Version 5.0.5
+* Remove false positive duck.com
+
 ## Version 5.0.4
-* Remove false positives
+* Remove false positives:
+  * https://github.com/micke/valid_email2/pull/212
+  * https://github.com/micke/valid_email2/pull/213
+  * https://github.com/micke/valid_email2/pull/215
 
 ## Version 5.0.3
 * Remove false positive mail.com [#210](https://github.com/micke/valid_email2/issues/210)
