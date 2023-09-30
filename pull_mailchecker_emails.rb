@@ -12,7 +12,7 @@ whitelisted_emails = %w(
   onit.com asics.com freemail.hu 139.com mail2world.com slmail.me
   zoho.com zoho.in simplelogin.com simplelogin.fr simplelogin.co
   simplelogin.io aleeas.com slmails.com silomails.com slmail.me
-  passinbox.com passfwd.com passmail.com passmail.net
+  passinbox.com passfwd.com passmail.com passmail.net duck.com mozmail.com
 
 )
 
