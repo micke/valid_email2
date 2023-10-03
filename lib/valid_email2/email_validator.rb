@@ -66,7 +66,9 @@ module ValidEmail2
     end
 
     def error(record, attribute)
-      record.errors.add(attribute, options[:message] || :invalid)
+      message = options[:message].respond_to?(:call) ? options[:message].call : options[:message]
+
+      record.errors.add(attribute, message || :invalid)
     end
   end
 end
