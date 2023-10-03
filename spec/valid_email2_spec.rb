@@ -47,6 +47,14 @@ class TestUserMessage < TestModel
   validates :email, 'valid_email_2/email': { message: "custom message" }
 end
 
+class TestUserMessageWithLambda < TestModel
+  validates :email, 'valid_email_2/email': { message: -> { "custom message lambda" } }
+end
+
+class TestUserMessageWithProc < TestModel
+  validates :email, 'valid_email_2/email': { message: Proc.new { "custom message proc" } }
+end
+
 class TestUserMultiple < TestModel
   validates :email, 'valid_email_2/email': { multiple: true }
 end
@@ -188,11 +196,11 @@ describe ValidEmail2 do
       let(:whitelist_domain) { disposable_domain }
       let(:whitelist_file_path) { "config/whitelisted_email_domains.yml" }
 
-      # Some of the specs below need to explictly set the whitelist var or it 
+      # Some of the specs below need to explictly set the whitelist var or it
       # may be cached to an empty set
       def set_whitelist
         ValidEmail2.instance_variable_set(
-          :@whitelist, 
+          :@whitelist,
           ValidEmail2.send(:load_if_exists, ValidEmail2::WHITELIST_FILE)
         )
       end
@@ -308,11 +316,29 @@ describe ValidEmail2 do
     end
   end
 
-  describe "with custom error message" do
-    it "supports settings a custom error message" do
-      user = TestUserMessage.new(email: "fakeemail")
-      user.valid?
-      expect(user.errors.full_messages).to include("Email custom message")
+  context "when message is present" do
+    describe "with custom error message" do
+      it "supports settings a custom error message" do
+        user = TestUserMessage.new(email: "fakeemail")
+        user.valid?
+        expect(user.errors.full_messages).to include("Email custom message")
+      end
+    end
+
+    describe "with custom error message lambda" do
+      it "supports settings a custom error message lambda" do
+        user = TestUserMessageWithLambda.new(email: "fakeemail")
+        user.valid?
+        expect(user.errors.full_messages).to include("Email custom message lambda")
+      end
+    end
+
+    describe "with custom error message proc" do
+      it "supports settings a custom error message proc" do
+        user = TestUserMessageWithProc.new(email: "fakeemail")
+        user.valid?
+        expect(user.errors.full_messages).to include("Email custom message proc")
+      end
     end
   end
 
