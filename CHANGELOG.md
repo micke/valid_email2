@@ -1,3 +1,6 @@
+## Version 5.1.0
+* Allow dynamic validaton error messages [#221](https://github.com/micke/valid_email2/pull/221)
+
 ## Version 5.0.5
 * Remove false positive duck.com
 
