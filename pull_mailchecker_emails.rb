@@ -13,7 +13,7 @@ whitelisted_emails = %w(
   zoho.com zoho.in simplelogin.com simplelogin.fr simplelogin.co
   simplelogin.io aleeas.com slmails.com silomails.com slmail.me
   passinbox.com passfwd.com passmail.com passmail.net
-  duck.com mozmail.com
+  duck.com mozmail.com dralias.com 8alias.com 8shield.net
 )
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }

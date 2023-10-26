@@ -1,3 +1,6 @@
+## Version 5.1.1
+* Remove false positives [#223](https://github.com/micke/valid_email2/issues/223)
+
 ## Version 5.1.0
 * Allow dynamic validaton error messages [#221](https://github.com/micke/valid_email2/pull/221)
 
