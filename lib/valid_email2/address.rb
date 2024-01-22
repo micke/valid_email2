@@ -20,10 +20,15 @@ module ValidEmail2
       @prohibited_domain_characters_regex = val
     end
 
-    def initialize(address, dns_timeout = 5)
+    def initialize(address, dns_timeout = 5, dns_nameserver = nil)
       @parse_error = false
       @raw_address = address
       @dns_timeout = dns_timeout
+
+      if dns_nameserver
+        @dns_config_info = Resolv::DNS::Config.default_config_hash
+        @dns_config_info[:nameserver] = dns_nameserver
+      end
 
       begin
         @address = Mail::Address.new(address)
@@ -134,7 +139,7 @@ module ValidEmail2
     end
 
     def mx_servers
-      @mx_servers ||= Resolv::DNS.open do |dns|
+      @mx_servers ||= Resolv::DNS.open(@dns_config_info) do |dns|
         dns.timeouts = @dns_timeout
         dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
       end
@@ -145,7 +150,7 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      @mx_or_a_servers ||= Resolv::DNS.open do |dns|
+      @mx_or_a_servers ||= Resolv::DNS.open(@dns_config_info) do |dns|
         dns.timeouts = @dns_timeout
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)

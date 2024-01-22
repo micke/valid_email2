@@ -51,10 +51,16 @@ To validate strictly that the domain has an MX record:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true }
 ```
-`strict_mx` and `mx` both default to a 5 second timeout for DNS lookups.  To
+`strict_mx` and `mx` both default to a 5 second timeout for DNS lookups. To
 override this timeout, specify a `dns_timeout` option:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true, dns_timeout: 10 }
+```
+
+Any checks that require DNS resolution will use the default `Resolv::DNS` nameservers for DNS lookups. To
+override these, specify a `dns_nameserver` option:
+```ruby
+validates :email, 'valid_email_2/email': { mx: true, dns_nameserver: ['8.8.8.8', '8.8.4.4'] }
 ```
 
 To validate that the domain is not a disposable email (checks domain and MX server):
@@ -125,7 +131,7 @@ address.subaddressed? => false
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
-It is a good idea to stub out that validation in your test environment.  
+It is a good idea to stub out that validation in your test environment.
 Do so by adding this in your `spec_helper`:
 ```ruby
 config.before(:each) do
@@ -146,7 +152,7 @@ This gem is tested against currently supported Ruby and Rails versions. For an u
 In version v3.0.0 I decided to move __and__ rename the config files from the
 vendor directory to the config directory. That means:
 
-`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`
 `vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
 The `disposable` validation has been improved with a `mx` check. Apply the
@@ -155,7 +161,7 @@ down or if they do not work without an internet connection.
 
 ## Upgrading to v2.0.0
 
-In version 1.0 of valid_email2 we only defined the `email` validator.  
+In version 1.0 of valid_email2 we only defined the `email` validator.
 But since other gems also define a `email` validator this can cause some unintended
 behaviours and emails that shouldn't be valid are regarded valid because the
 wrong validator is used by rails.
