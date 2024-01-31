@@ -25,10 +25,8 @@ module ValidEmail2
       @raw_address = address
       @dns_timeout = dns_timeout
 
-      if dns_nameserver
-        @dns_config_info = Resolv::DNS::Config.default_config_hash
-        @dns_config_info[:nameserver] = dns_nameserver
-      end
+      @resolv_config = Resolv::DNS::Config.default_config_hash
+      @resolv_config[:nameserver] = dns_nameserver if dns_nameserver
 
       begin
         @address = Mail::Address.new(address)
