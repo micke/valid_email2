@@ -148,7 +148,7 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      @mx_or_a_servers ||= Resolv::DNS.open(@dns_config_info) do |dns|
+      @mx_or_a_servers ||= Resolv::DNS.open(@resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
