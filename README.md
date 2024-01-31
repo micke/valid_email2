@@ -131,7 +131,7 @@ address.subaddressed? => false
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
-It is a good idea to stub out that validation in your test environment.
+It is a good idea to stub out that validation in your test environment.  
 Do so by adding this in your `spec_helper`:
 ```ruby
 config.before(:each) do
