@@ -152,7 +152,7 @@ This gem is tested against currently supported Ruby and Rails versions. For an u
 In version v3.0.0 I decided to move __and__ rename the config files from the
 vendor directory to the config directory. That means:
 
-`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
 `vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
 The `disposable` validation has been improved with a `mx` check. Apply the
@@ -161,7 +161,7 @@ down or if they do not work without an internet connection.
 
 ## Upgrading to v2.0.0
 
-In version 1.0 of valid_email2 we only defined the `email` validator.
+In version 1.0 of valid_email2 we only defined the `email` validator.  
 But since other gems also define a `email` validator this can cause some unintended
 behaviours and emails that shouldn't be valid are regarded valid because the
 wrong validator is used by rails.
