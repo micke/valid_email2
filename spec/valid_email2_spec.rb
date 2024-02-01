@@ -28,7 +28,7 @@ class TestUserMXDnsTimeout < TestModel
 end
 
 class TestUserMXDnsFailingTimeout < TestModel
-  validates :email, 'valid_email_2/email': { mx: true, dns_timeout: 0.001 }
+  validates :email, 'valid_email_2/email': { mx: true, dns_timeout: Float::MIN }
 end
 
 class TestUserMXDnsNameserver < TestModel
