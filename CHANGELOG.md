@@ -1,3 +1,6 @@
+## Version 5.2.0
+* Allow configuration of DNS nameserver [#230](https://github.com/micke/valid_email2/pull/230)
+
 ## Version 5.1.1
 * Remove false positives [#223](https://github.com/micke/valid_email2/issues/223)
 
