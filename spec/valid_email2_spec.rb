@@ -23,6 +23,22 @@ class TestUserStrictMX < TestModel
   validates :email, 'valid_email_2/email': { strict_mx: true }
 end
 
+class TestUserMXDnsTimeout < TestModel
+  validates :email, 'valid_email_2/email': { mx: true, dns_timeout: 10 }
+end
+
+class TestUserMXDnsFailingTimeout < TestModel
+  validates :email, 'valid_email_2/email': { mx: true, dns_timeout: Float::MIN }
+end
+
+class TestUserMXDnsNameserver < TestModel
+  validates :email, 'valid_email_2/email': { mx: true, dns_nameserver: ['8.8.8.8', '8.8.4.4'] }
+end
+
+class TestUserMXDnsFailingNameserver < TestModel
+  validates :email, 'valid_email_2/email': { mx: true, dns_timeout: 0.1, dns_nameserver: '1.0.0.0' }
+end
+
 class TestUserDisallowDisposable < TestModel
   validates :email, 'valid_email_2/email': { disposable: true }
 end
@@ -288,6 +304,94 @@ describe ValidEmail2 do
 
     it "is invalid if a null mx is found" do
       user = TestUserStrictMX.new(email: "foo@gmail.de")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with mx validation and dns not hitting timeout" do
+    it "is valid if mx records are found" do
+      user = TestUserMXDnsTimeout.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is valid if A records are found" do
+      user = TestUserMXDnsTimeout.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is invalid if no mx records are found" do
+      user = TestUserMXDnsTimeout.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if a null mx is found" do
+      user = TestUserMXDnsTimeout.new(email: "foo@gmail.de")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with mx validation and dns hitting timeout" do
+    it "is never valid even if mx records exist" do
+      user = TestUserMXDnsFailingTimeout.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is never valid even A records exist" do
+      user = TestUserMXDnsFailingTimeout.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if no mx records exist" do
+      user = TestUserMXDnsFailingTimeout.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if a null mx exists" do
+      user = TestUserMXDnsFailingTimeout.new(email: "foo@gmail.de")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with mx validation and dns nameserver" do
+    it "is valid if mx records are found" do
+      user = TestUserMXDnsNameserver.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is valid if A records are found" do
+      user = TestUserMXDnsNameserver.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is invalid if no mx records are found" do
+      user = TestUserMXDnsNameserver.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if a null mx is found" do
+      user = TestUserMXDnsNameserver.new(email: "foo@gmail.de")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with mx validation and failing dns nameserver" do
+    it "is never valid even if mx records exist" do
+      user = TestUserMXDnsFailingNameserver.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is never valid even A records exist" do
+      user = TestUserMXDnsFailingNameserver.new(email: "foo@ghs.google.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if no mx records exist" do
+      user = TestUserMXDnsFailingNameserver.new(email: "foo@subdomain.gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+
+    it "is invalid if a null mx exists" do
+      user = TestUserMXDnsFailingNameserver.new(email: "foo@gmail.de")
       expect(user.valid?).to be_falsey
     end
   end
