@@ -1,3 +1,7 @@
+## Version 5.2.2
+* Pull new domains
+* Remove addy.io and associated and ignor them.
+
 ## Version 5.2.1
 * Remov false positive [#231](https://github.com/micke/valid_email2/pull/231)
 
