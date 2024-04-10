@@ -1,3 +1,6 @@
+## Version 5.2.3
+* Remove privaterelay.appleid.com.
+
 ## Version 5.2.2
 * Pull new domains
 * Remove addy.io and associated and ignor them.
