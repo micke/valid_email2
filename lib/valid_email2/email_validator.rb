@@ -12,7 +12,7 @@ module ValidEmail2
       return unless value.present?
       options = default_options.merge(self.options)
 
-      addresses = sanitized_values(value).map { |v| ValidEmail2::Address.new(v, options[:dns_timeout], options[:dns_nameserver]) }
+      addresses = sanitized_values(value).map { |v| ValidEmail2::Address.new(v, dns_timeout: options[:dns_timeout], dns_nameserver: options[:dns_nameserver], allow_display_name: options[:allow_display_name]) }
 
       error(record, attribute) && return unless addresses.all?(&:valid?)
 
