@@ -508,6 +508,16 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
+    it "is true when the display name contains a dot or special character" do
+      user = TestUserAllowDisplayName.new(email: "Friendly.O'Toole <foo@gmail.com>")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is false when the friendly name contains unicode characters" do
+      user = TestUserAllowDisplayName.new(email: "Jürgen Klopp <footy@gmail.com>")
+      expect(user.valid?).to be_falsey
+    end
+
     context "with used with other flags" do
       it "mutliple tests each address for it's own" do
         user = TestUserDisplayNameMultiple.new(email: "Foo <foo@gmail.com>, Bar <bar@gmail.com>")

@@ -58,8 +58,12 @@ module ValidEmail2
     end
 
     def valid_address?
-      return false if address.address != @raw_address && !@allow_display_name
-      return false if address.format != @raw_address
+      if @allow_display_name
+        address_only = @raw_address.split('<').last.split('>').first
+        return false if address.address != address_only
+      else
+        return false if address.address != @raw_address
+      end
 
       !address.local.include?('..') &&
         !address.local.end_with?('.') &&
