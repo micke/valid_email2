@@ -1,3 +1,7 @@
+## Version 5.2.4
+* Remove false positives [#236](https://github.com/micke/valid_email2/pull/236) [#237](https://github.com/micke/valid_email2/pull/237) [#239](https://github.com/micke/valid_email2/pull/239)
+* Pull new domains
+
 ## Version 5.2.3
 * Remove privaterelay.appleid.com.
 
