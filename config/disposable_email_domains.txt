@@ -103329,7 +103329,6 @@ net-piyango.biz
 net-privichkam.ru
 net-solution.info
 net.ee
-net.ua
 net100limite.ml
 net191.com
 net1mail.com
