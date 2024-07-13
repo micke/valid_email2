@@ -508,6 +508,36 @@ describe ValidEmail2 do
       expect(user.valid?).to be_truthy
     end
 
+    it "is false when the name has a '<' character" do
+      user = TestUserAllowDisplayName.new(email: "Friendly < Name <foo@gmail.com>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has a '<' character" do
+      user = TestUserAllowDisplayName.new(email: "Name <fo<o@gmail.com>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has additional separator characters" do
+      user = TestUserAllowDisplayName.new(email: "Name <fo<o@gmail.c>om>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has an additional '>' character in the TLD" do
+      user = TestUserAllowDisplayName.new(email: "Name <foo@gmail.c>om>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the separator characters are missing" do
+      user = TestUserAllowDisplayName.new(email: "Name foo@gmail.com")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
     it "is true when the display name contains a dot or special character" do
       user = TestUserAllowDisplayName.new(email: "Friendly.O'Toole <foo@gmail.com>")
       expect(user.valid?).to be_truthy
@@ -516,6 +546,7 @@ describe ValidEmail2 do
     it "is false when the friendly name contains unicode characters" do
       user = TestUserAllowDisplayName.new(email: "Jürgen Klopp <footy@gmail.com>")
       expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
     end
 
     context "with used with other flags" do
