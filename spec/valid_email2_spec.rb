@@ -75,6 +75,14 @@ class TestUserMultiple < TestModel
   validates :email, 'valid_email_2/email': { multiple: true }
 end
 
+class TestUserAllowDisplayName < TestModel
+  validates :email, 'valid_email_2/email': { allow_display_name: true }
+end
+
+class TestUserDisplayNameMultiple < TestModel
+  validates :email, 'valid_email_2/email': { allow_display_name: true, multiple: true }
+end
+
 describe ValidEmail2 do
 
   let(:disposable_domain) { ValidEmail2.disposable_emails.first }
@@ -486,6 +494,78 @@ describe ValidEmail2 do
     it "is false when address local part contains a recipient delimiter ('+')" do
       email = ValidEmail2::Address.new("foo@gmail.com")
       expect(email.subaddressed?).to be_falsey
+    end
+  end
+
+  describe "with display_name allowed" do
+    it "is true with email address only" do
+      user = TestUserAllowDisplayName.new(email: "foo@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is true when address contains a friendly_name" do
+      user = TestUserAllowDisplayName.new(email: "Friendly Name <foo@gmail.com>")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is false when the name has a '<' character" do
+      user = TestUserAllowDisplayName.new(email: "Friendly < Name <foo@gmail.com>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has a '<' character" do
+      user = TestUserAllowDisplayName.new(email: "Name <fo<o@gmail.com>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has additional separator characters" do
+      user = TestUserAllowDisplayName.new(email: "Name <fo<o@gmail.c>om>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the email has an additional '>' character in the TLD" do
+      user = TestUserAllowDisplayName.new(email: "Name <foo@gmail.c>om>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is false when the separator characters are missing" do
+      user = TestUserAllowDisplayName.new(email: "Name foo@gmail.com")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    it "is true when the display name contains a dot or special character" do
+      user = TestUserAllowDisplayName.new(email: "Friendly.O'Toole <foo@gmail.com>")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is false when the friendly name contains unicode characters" do
+      user = TestUserAllowDisplayName.new(email: "Jürgen Klopp <footy@gmail.com>")
+      expect(user.valid?).to be_falsey
+      expect(user.errors.full_messages).to contain_exactly("Email is invalid")
+    end
+
+    context "with used with other flags" do
+      it "mutliple tests each address for it's own" do
+        user = TestUserDisplayNameMultiple.new(email: "Foo <foo@gmail.com>, Bar <bar@gmail.com>")
+        expect(user.valid?).to be_truthy
+      end
+
+      it "multiple tests each address from an array" do
+        user = TestUserDisplayNameMultiple.new(email: ["Foo <foo@gmail.com>", "Bar <bar@gmail.com>"])
+        expect(user.valid?).to be_truthy
+      end
+
+      context 'with multiple when one address is invalid' do
+        it "fails for all" do
+          user = TestUserDisplayNameMultiple.new(email: "Foo <foo@gmail.com>, Bar <bar@123>")
+          expect(user.valid?).to be_falsey
+        end
+      end
     end
   end
 end
