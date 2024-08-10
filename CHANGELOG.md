@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.2.7](https://github.com/micke/valid_email2/compare/v5.2.6...v5.2.7) (2024-08-10)
+
+
+### Bug Fixes
+
+* add .release-please-manifest.json ([8a9ef25](https://github.com/micke/valid_email2/commit/8a9ef25b77db3942956bb4790627b14eadc2404e))
+* add id to release-please-action ([35b4697](https://github.com/micke/valid_email2/commit/35b4697b1970ebd696b7cdaf38889ec7b674000c))
+* add release-please-config.json ([adde8b6](https://github.com/micke/valid_email2/commit/adde8b6fe23e3bdf8b892290b565f560d7e72c8d))
+* Add step to publish gem to rubygems to the release action ([b6932f3](https://github.com/micke/valid_email2/commit/b6932f36c0a6af9897d723d222145678c9bc0f06))
+* fetch tags when checking out the repository ([0d6ed8b](https://github.com/micke/valid_email2/commit/0d6ed8bd5e51d50eeb8f2315b6bc9803bf1d34da))
+* reset the version to 5.2.5 ([b0cb66c](https://github.com/micke/valid_email2/commit/b0cb66c57cd08f0ecef72bb0dd84d4f5636adf41))
+* Whitelist directbox.com ([cf70737](https://github.com/micke/valid_email2/commit/cf707371735c10b565ab3aafce39d7ea7089cdb1))
+
 ## [5.2.6](https://github.com/micke/valid_email2/compare/v5.2.5...v5.2.6) (2024-08-10)
 
 
