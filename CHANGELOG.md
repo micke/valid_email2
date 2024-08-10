@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.2.7](https://github.com/micke/valid_email2/compare/v5.2.6...v5.2.7) (2024-08-10)
+
+
+### Bug Fixes
+
+* add id to release-please-action ([35b4697](https://github.com/micke/valid_email2/commit/35b4697b1970ebd696b7cdaf38889ec7b674000c))
+
 ## [5.2.6](https://github.com/micke/valid_email2/compare/v5.2.5...v5.2.6) (2024-08-10)
 
 
