@@ -15,7 +15,7 @@ whitelisted_emails = %w[
   passinbox.com passfwd.com passmail.com passmail.net
   duck.com mozmail.com dralias.com 8alias.com 8shield.net
   mailinblack.com anonaddy.com anonaddy.me addy.io privaterelay.appleid.com appleid.com
-  net.ua kommespaeter.de alpenjodel.de my.id web.id
+  net.ua kommespaeter.de alpenjodel.de my.id web.id directbox.com
 ]
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }
