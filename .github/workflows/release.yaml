@@ -16,5 +16,3 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           release-type: ruby
-          package-name: valid_email2
-          version-file: "lib/valid_email2/version.rb"
