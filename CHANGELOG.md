@@ -1,3 +1,13 @@
+# Changelog
+
+## [5.2.6](https://github.com/micke/valid_email2/compare/v5.2.5...v5.2.6) (2024-08-10)
+
+
+### Bug Fixes
+
+* Add step to publish gem to rubygems to the release action ([b6932f3](https://github.com/micke/valid_email2/commit/b6932f36c0a6af9897d723d222145678c9bc0f06))
+* Whitelist directbox.com ([cf70737](https://github.com/micke/valid_email2/commit/cf707371735c10b565ab3aafce39d7ea7089cdb1))
+
 ## Version 5.2.5
 * Remove false positives [#240](https://github.com/micke/valid_email2/issue/240)
 * Pull new domains
