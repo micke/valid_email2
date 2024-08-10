@@ -1,0 +1,9 @@
+{
+  "release-type": "ruby",
+  "packages": {
+    ".": {
+      "release-type": "ruby",
+      "package-name": "valid_email2"
+    }
+  }
+}

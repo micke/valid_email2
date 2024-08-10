@@ -16,8 +16,6 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
-        with:
-          release-type: ruby
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
       - uses: ruby/setup-ruby@v1
