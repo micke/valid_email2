@@ -73,20 +73,20 @@ To validate that the domain is not a disposable email (checks domain only, does 
 validates :email, 'valid_email_2/email': { disposable_domain: true }
 ```
 
-To validate that the domain is not a disposable email or a disposable email (checks domain and MX server) but whitelisted (under config/whitelisted_email_domains.yml):
+To validate that the domain is not a disposable email or a disposable email (checks domain and MX server) but allow-listed (under config/allow_listed_email_domains.yml):
 ```ruby
-validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
+validates :email, 'valid_email_2/email': { disposable_with_allow_list: true }
 ```
 
-To validate that the domain is not a disposable email or a disposable email (checks domain only, does not check MX server) but whitelisted (under config/whitelisted_email_domains.yml):
+To validate that the domain is not a disposable email or a disposable email (checks domain only, does not check MX server) but allow-listed (under config/allow_listed_email_domains.yml):
 
 ```ruby
-validates :email, 'valid_email_2/email': { disposable_domain_with_whitelist: true }
+validates :email, 'valid_email_2/email': { disposable_domain_with_allow_list: true }
 ```
 
-To validate that the domain is not blacklisted (under config/blacklisted_email_domains.yml):
+To validate that the domain is not on the deny list (under config/deny_list_email_domains.yml):
 ```ruby
-validates :email, 'valid_email_2/email': { blacklist: true }
+validates :email, 'valid_email_2/email': { deny_list: true }
 ```
 
 To validate that email is not subaddressed:

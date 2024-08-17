@@ -1,9 +1,12 @@
 require "valid_email2/address"
 require "active_model"
 require "active_model/validations"
+require_relative "../helpers/deprecation_helper"
 
 module ValidEmail2
   class EmailValidator < ActiveModel::EachValidator
+    include DeprecationHelper
+
     def default_options
       { disposable: false, mx: false, strict_mx: false, disallow_subaddressing: false, multiple: false, dns_timeout: 5, dns_nameserver: nil }
     end
@@ -33,15 +36,27 @@ module ValidEmail2
       end
 
       if options[:disposable_with_whitelist]
-        error(record, attribute) && return if addresses.any? { |address| address.disposable? && !address.whitelisted? }
+        deprecation_message(:disposable_with_whitelist, :disposable_with_allow_list)
+      end
+
+      if options[:disposable_with_allow_list] || options[:disposable_with_whitelist]
+        error(record, attribute) && return if addresses.any? { |address| address.disposable? && !address.allow_listed? }
       end
 
       if options[:disposable_domain_with_whitelist]
-        error(record, attribute) && return if addresses.any? { |address| address.disposable_domain? && !address.whitelisted? }
+        deprecation_message(:disposable_domain_with_whitelist, :disposable_domain_with_allow_list)
+      end
+
+      if options[:disposable_domain_with_allow_list] || options[:disposable_domain_with_whitelist]
+        error(record, attribute) && return if addresses.any? { |address| address.disposable_domain? && !address.allow_listed? }
       end
 
       if options[:blacklist]
-        error(record, attribute) && return if addresses.any?(&:blacklisted?)
+        deprecation_message(:blacklist, :deny_list)
+      end
+      
+      if options[:deny_list] || options[:blacklist]
+        error(record, attribute) && return if addresses.any?(&:deny_listed?)
       end
 
       if options[:mx]

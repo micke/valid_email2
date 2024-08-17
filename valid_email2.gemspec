@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ValidEmail2::VERSION
   spec.authors       = ["Micke Lisinge"]
   spec.email         = ["hi@micke.me"]
-  spec.description   = %q{ActiveModel validation for email. Including MX lookup and disposable email blacklist}
-  spec.summary       = %q{ActiveModel validation for email. Including MX lookup and disposable email blacklist}
+  spec.description   = %q{ActiveModel validation for email. Including MX lookup and disposable email deny list}
+  spec.summary       = %q{ActiveModel validation for email. Including MX lookup and disposable email deny list}
   spec.homepage      = "https://github.com/micke/valid_email2"
   spec.license       = "MIT"
 
