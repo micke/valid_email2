@@ -18,16 +18,16 @@ module ValidEmail2
       @disposable_emails ||= load_file(DISPOSABLE_FILE)
     end
 
-    def blacklist
+    def deny_list
       @deny_list ||= load_if_exists(DENY_LIST_FILE || BLACKLIST_FILE)
     end
-    alias_method :deny_list, :blacklist
+    alias_method :blacklist, :deny_list
     deprecate_method :blacklist, :deny_list
 
-    def whitelist
+    def allow_list
       @allow_list ||= load_if_exists(ALLOW_LIST_FILE || WHITELIST_FILE)
     end
-    alias_method :allow_list, :whitelist
+    alias_method :whitelist, :allow_list
     deprecate_method :whitelist, :allow_list
 
     private

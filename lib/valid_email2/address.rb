@@ -87,16 +87,16 @@ module ValidEmail2
       valid? && mx_server_is_in?(ValidEmail2.disposable_emails)
     end
 
-    def whitelisted?
+    def allow_listed?
       domain_is_in?(ValidEmail2.allow_list)
     end
-    alias_method :allow_listed?, :whitelisted?
+    alias_method :whitelisted?, :allow_listed?
     deprecate_method :whitelisted?, :allow_listed?
 
-    def blacklisted?
+    def deny_listed?
       valid? && domain_is_in?(ValidEmail2.deny_list)
     end
-    alias_method :deny_listed?, :blacklisted?
+    alias_method :blacklisted?, :deny_listed?
     deprecate_method :blacklisted?, :deny_listed?
 
     def valid_mx?
