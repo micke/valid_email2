@@ -5,7 +5,7 @@ require "yaml"
 require "json"
 require "net/http"
 
-whitelisted_emails = %w[
+allow_listed_emails = %w[
   onet.pl poczta.onet.pl fastmail.fm hushmail.com
   hush.ai hush.com hushmail.me naver.com qq.com example.com
   yandex.net gmx.com gmx.es webdesignspecialist.com.au vp.com
@@ -29,6 +29,6 @@ remote_emails = [
   resp.body.split("\n").flatten
 end
 
-result_emails = (existing_emails + remote_emails).map(&:strip).uniq.sort - whitelisted_emails
+result_emails = (existing_emails + remote_emails).map(&:strip).uniq.sort - allow_listed_emails
 
 File.write("config/disposable_email_domains.txt", result_emails.join("\n"))

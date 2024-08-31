@@ -35,27 +35,15 @@ module ValidEmail2
         error(record, attribute) && return if addresses.any?(&:disposable_domain?)
       end
 
-      if options[:disposable_with_whitelist]
-        deprecation_message(:disposable_with_whitelist, :disposable_with_allow_list)
-      end
-
-      if options[:disposable_with_allow_list] || options[:disposable_with_whitelist]
+      if options[:disposable_with_allow_list]
         error(record, attribute) && return if addresses.any? { |address| address.disposable? && !address.allow_listed? }
       end
 
-      if options[:disposable_domain_with_whitelist]
-        deprecation_message(:disposable_domain_with_whitelist, :disposable_domain_with_allow_list)
-      end
-
-      if options[:disposable_domain_with_allow_list] || options[:disposable_domain_with_whitelist]
+      if options[:disposable_domain_with_allow_list]
         error(record, attribute) && return if addresses.any? { |address| address.disposable_domain? && !address.allow_listed? }
       end
 
-      if options[:blacklist]
-        deprecation_message(:blacklist, :deny_list)
-      end
-      
-      if options[:deny_list] || options[:blacklist]
+      if options[:deny_list]
         error(record, attribute) && return if addresses.any?(&:deny_listed?)
       end
 

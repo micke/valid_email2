@@ -90,12 +90,10 @@ module ValidEmail2
     def allow_listed?
       domain_is_in?(ValidEmail2.allow_list)
     end
-    deprecate_method :whitelisted?, :allow_listed?
 
     def deny_listed?
       valid? && domain_is_in?(ValidEmail2.deny_list)
     end
-    deprecate_method :blacklisted?, :deny_listed?
 
     def valid_mx?
       return false unless valid?
