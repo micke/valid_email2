@@ -1,12 +1,9 @@
 require "valid_email2/address"
 require "active_model"
 require "active_model/validations"
-require_relative "../helpers/deprecation_helper"
 
 module ValidEmail2
   class EmailValidator < ActiveModel::EachValidator
-    include DeprecationHelper
-
     def default_options
       { disposable: false, mx: false, strict_mx: false, disallow_subaddressing: false, multiple: false, dns_timeout: 5, dns_nameserver: nil }
     end

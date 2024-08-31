@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "valid_email2/email_validator"
-require_relative "./helpers/deprecation_helper"
 
 module ValidEmail2
   DENY_LIST_FILE  = "config/deny_listed_email_domains.yml"
@@ -9,8 +8,6 @@ module ValidEmail2
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
   class << self
-    extend DeprecationHelper
-
     def disposable_emails
       @disposable_emails ||= load_file(DISPOSABLE_FILE)
     end

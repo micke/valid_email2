@@ -3,12 +3,9 @@
 require "valid_email2"
 require "resolv"
 require "mail"
-require_relative "../helpers/deprecation_helper"
 
 module ValidEmail2
   class Address
-    extend DeprecationHelper
-
     attr_accessor :address
 
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
