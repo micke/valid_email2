@@ -19,21 +19,33 @@ module ValidEmail2
     end
 
     def deny_list
-      @deny_list ||= load_if_exists(DENY_LIST_FILE || BLACKLIST_FILE)
+      @deny_list ||= load_if_exists(DENY_LIST_FILE) ||
+        load_deprecated_if_exists(BLACKLIST_FILE) ||
+        Set.new
     end
-    alias_method :blacklist, :deny_list
     deprecate_method :blacklist, :deny_list
 
     def allow_list
-      @allow_list ||= load_if_exists(ALLOW_LIST_FILE || WHITELIST_FILE)
+      @allow_list ||= load_if_exists(ALLOW_LIST_FILE) ||
+        load_deprecated_if_exists(WHITELIST_FILE) ||
+        Set.new
     end
-    alias_method :whitelist, :allow_list
     deprecate_method :whitelist, :allow_list
 
     private
 
     def load_if_exists(path)
-      File.exist?(path) ? load_file(path) : Set.new
+      load_file(path) if File.exist?(path)
+    end
+
+    def load_deprecated_if_exists(path)
+      if File.exist?(path)
+        warn <<~WARN
+          Warning: The file `#{path}` used by valid_email2 is deprecated and won't be read in version 6 of valid_email2;
+          Rename the file to `#{path.gsub("blacklisted", "deny_listed").gsub("whitelisted", "allow_listed")}` instead."
+        WARN
+        load_file(path)
+      end
     end
 
     def load_file(path)
