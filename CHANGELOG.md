@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.3.0](https://github.com/micke/valid_email2/compare/v5.2.6...v5.3.0) (2024-08-31)
+
+
+### Features
+
+* Deprecate blacklist and whitelist naming ([9df0bf8](https://github.com/micke/valid_email2/commit/9df0bf8c9912721b007e5a6acc67f533ca560c9f))
+* Warn when loading deprecated files ([46634df](https://github.com/micke/valid_email2/commit/46634dff409f9a47f10684d629dc022b22daf362))
+
 ## [5.2.6](https://github.com/micke/valid_email2/compare/v5.2.5...v5.2.6) (2024-08-10)
 
 
