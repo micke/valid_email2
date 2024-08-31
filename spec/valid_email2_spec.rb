@@ -47,16 +47,16 @@ class TestUserDisallowDisposableDomain < TestModel
   validates :email, 'valid_email_2/email': { disposable_domain: true }
 end
 
-class TestUserDisallowDisposableWithWhitelist < TestModel
-  validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
+class TestUserDisallowDisposableWithAllowList < TestModel
+  validates :email, 'valid_email_2/email': { disposable_with_allow_list: true }
 end
 
-class TestUserDisallowDisposableDomainWithWhitelist < TestModel
-  validates :email, 'valid_email_2/email': { disposable_domain_with_whitelist: true }
+class TestUserDisallowDisposableDomainWithAllowList < TestModel
+  validates :email, 'valid_email_2/email': { disposable_domain_with_allow_list: true }
 end
 
-class TestUserDisallowBlacklisted < TestModel
-  validates :email, 'valid_email_2/email': { blacklist: true }
+class TestUserDisallowDenyListed < TestModel
+  validates :email, 'valid_email_2/email': { deny_list: true }
 end
 
 class TestUserMessage < TestModel
@@ -208,58 +208,58 @@ describe ValidEmail2 do
       end
     end
 
-    describe "with whitelisted emails" do
-      let(:whitelist_domain) { disposable_domain }
-      let(:whitelist_file_path) { "config/whitelisted_email_domains.yml" }
+    describe "with allow-listed emails" do
+      let(:allow_list_domain) { disposable_domain }
+      let(:allow_list_file_path) { "config/allow_listed_email_domains.yml" }
 
-      # Some of the specs below need to explictly set the whitelist var or it
+      # Some of the specs below need to explictly set the allow list var or it
       # may be cached to an empty set
-      def set_whitelist
+      def set_allow_list
         ValidEmail2.instance_variable_set(
-          :@whitelist,
-          ValidEmail2.send(:load_if_exists, ValidEmail2::WHITELIST_FILE)
+          :@allow_list,
+          ValidEmail2.send(:load_if_exists, ValidEmail2::ALLOW_LIST_FILE)
         )
       end
 
       after do
-        FileUtils.rm(whitelist_file_path, force: true)
-        set_whitelist
+        FileUtils.rm(allow_list_file_path, force: true)
+        set_allow_list
       end
 
-      it "is invalid if the domain is disposable and not in the whitelist" do
-        user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
+      it "is invalid if the domain is disposable and not in the allow list" do
+        user = TestUserDisallowDisposableWithAllowList.new(email: "foo@#{allow_list_domain}")
         expect(user.valid?).to be_falsey
       end
 
-      it "is valid if the domain is disposable but in the whitelist" do
-        File.open(whitelist_file_path, "w") { |f| f.write [whitelist_domain].to_yaml }
-        set_whitelist
-        user = TestUserDisallowDisposableWithWhitelist.new(email: "foo@#{whitelist_domain}")
+      it "is valid if the domain is disposable but in the allow list" do
+        File.open(allow_list_file_path, "w") { |f| f.write [allow_list_domain].to_yaml }
+        set_allow_list
+        user = TestUserDisallowDisposableWithAllowList.new(email: "foo@#{allow_list_domain}")
         expect(user.valid?).to be_truthy
       end
 
-      it "is invalid if the domain is a disposable_domain and not in the whitelist" do
-        user = TestUserDisallowDisposableDomainWithWhitelist.new(email: "foo@#{whitelist_domain}")
+      it "is invalid if the domain is a disposable_domain and not in the allow list" do
+        user = TestUserDisallowDisposableDomainWithAllowList.new(email: "foo@#{allow_list_domain}")
         expect(user.valid?).to be_falsey
       end
 
-      it "is valid if the domain is a disposable_domain but in the whitelist" do
-        File.open(whitelist_file_path, "w") { |f| f.write [whitelist_domain].to_yaml }
-        set_whitelist
-        user = TestUserDisallowDisposableDomainWithWhitelist.new(email: "foo@#{whitelist_domain}")
+      it "is valid if the domain is a disposable_domain but in the allow list" do
+        File.open(allow_list_file_path, "w") { |f| f.write [allow_list_domain].to_yaml }
+        set_allow_list
+        user = TestUserDisallowDisposableDomainWithAllowList.new(email: "foo@#{allow_list_domain}")
         expect(user.valid?).to be_truthy
       end
     end
   end
 
-  describe "with blacklist validation" do
-    it "is valid if the domain is not blacklisted" do
-      user = TestUserDisallowBlacklisted.new(email: "foo@gmail.com")
+  describe "with deny list validation" do
+    it "is valid if the domain is not deny-listed" do
+      user = TestUserDisallowDenyListed.new(email: "foo@gmail.com")
       expect(user.valid?).to be_truthy
     end
 
-    it "is invalid if the domain is blacklisted" do
-      user = TestUserDisallowBlacklisted.new(email: "foo@blacklisted-test.com")
+    it "is invalid if the domain is deny-listed" do
+      user = TestUserDisallowDenyListed.new(email: "foo@deny-listed-test.com")
       expect(user.valid?).to be_falsey
     end
   end

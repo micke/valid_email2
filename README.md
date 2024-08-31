@@ -73,20 +73,20 @@ To validate that the domain is not a disposable email (checks domain only, does 
 validates :email, 'valid_email_2/email': { disposable_domain: true }
 ```
 
-To validate that the domain is not a disposable email or a disposable email (checks domain and MX server) but whitelisted (under config/whitelisted_email_domains.yml):
+To validate that the domain is not a disposable email or a disposable email (checks domain and MX server) but allow-listed (under config/allow_listed_email_domains.yml):
 ```ruby
-validates :email, 'valid_email_2/email': { disposable_with_whitelist: true }
+validates :email, 'valid_email_2/email': { disposable_with_allow_list: true }
 ```
 
-To validate that the domain is not a disposable email or a disposable email (checks domain only, does not check MX server) but whitelisted (under config/whitelisted_email_domains.yml):
+To validate that the domain is not a disposable email or a disposable email (checks domain only, does not check MX server) but allow-listed (under config/allow_listed_email_domains.yml):
 
 ```ruby
-validates :email, 'valid_email_2/email': { disposable_domain_with_whitelist: true }
+validates :email, 'valid_email_2/email': { disposable_domain_with_allow_list: true }
 ```
 
-To validate that the domain is not blacklisted (under config/blacklisted_email_domains.yml):
+To validate that the domain is not on the deny list (under config/deny_list_email_domains.yml):
 ```ruby
-validates :email, 'valid_email_2/email': { blacklist: true }
+validates :email, 'valid_email_2/email': { deny_list: true }
 ```
 
 To validate that email is not subaddressed:
@@ -146,6 +146,15 @@ end
 ## Requirements
 
 This gem is tested against currently supported Ruby and Rails versions. For an up to date list, check the build matrix in the [workflow](.github/workflows/ci.yaml).
+
+## Upgrading to v5.3.0
+
+In version v5.3.0 the config directory files were renamed as follows:
+
+`config/blacklisted_email_domains.yml` -> `config/deny_listed_email_domains.yml`
+`config/whitelisted_email_domains.yml` -> `config/allow_listed_email_domains.yml`
+
+You won't need to make any changes yourself if you're installing this version for the first time. For individuals updating from earlier versions, make sure to update the file namings as per the above. In future versions this will be a breaking change.
 
 ## Upgrading to v3.0.0
 
