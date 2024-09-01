@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.0.0](https://github.com/micke/valid_email2/compare/v5.3.0...v6.0.0) (2024-09-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Remove deprecated methods and options
+
+### Features
+
+* Remove deprecated methods and options ([1a29d27](https://github.com/micke/valid_email2/commit/1a29d27d587a39d181dfe2b6f39028bc317aff52))
+
 ## [5.3.0](https://github.com/micke/valid_email2/compare/v5.2.6...v5.3.0) (2024-08-31)
 
 
