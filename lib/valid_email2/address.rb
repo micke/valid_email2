@@ -90,7 +90,7 @@ module ValidEmail2
 
     def deny_listed?
       valid? && (
-        DynamicOptionValues.domain_is_in?(:deny_list, address) || domain_is_in?(ValidEmail2.blacklist)
+        DynamicOptionValues.domain_is_in?(:deny_list_function, address) || domain_is_in?(ValidEmail2.deny_list)
       )
     end
 

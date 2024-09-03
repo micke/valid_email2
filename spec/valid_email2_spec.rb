@@ -59,20 +59,20 @@ class TestUserDisallowDenyListed < TestModel
   validates :email, 'valid_email_2/email': { deny_list: true }
 end
 
-class TestUserDisallowBlacklistedWithDynamicArray < TestModel
-  validates :email, 'valid_email_2/email': { blacklist: ["test-dynamic-array.com"] }
+class TestUserDisallowDenyListedWithDynamicArray < TestModel
+  validates :email, 'valid_email_2/email': { deny_list: proc { |domain| ["test-dynamic-array.com"].include?(domain) } }
 end
 
-class TestUserDisallowBlacklistedWithDynamicSet < TestModel
-  validates :email, 'valid_email_2/email': { blacklist: Set.new(["test-dynamic-set.com"]) }
+class TestUserDisallowDenyListedWithDynamicSet < TestModel
+  validates :email, 'valid_email_2/email': { deny_list: proc { |domain| Set.new(["test-dynamic-set.com"]).include?(domain) } }
 end
 
-class TestUserDisallowBlacklistedWithDynamicProc < TestModel
-  validates :email, 'valid_email_2/email': { blacklist: proc { ["test-dynamic-proc.com"] } }
+class TestUserDisallowDenyListedWithDynamicLambda < TestModel
+  validates :email, 'valid_email_2/email': { deny_list: ->(domain) { Set.new(["test-dynamic-lambda.com"]).include?(domain) } }
 end
 
-class TestUserDisallowBlacklistedWithDynamicHash < TestModel
-  validates :email, 'valid_email_2/email': { blacklist: { active_record_scope: TestDynamicDomainModel, attribute: :domain } }
+class TestUserDisallowDenyListedWithDynamicRailsModel < TestModel
+  validates :email, 'valid_email_2/email': { deny_list: ->(domain) { TestDynamicDomainModel.exists?(domain: domain) } }
 end
 
 class TestUserMessage < TestModel
@@ -279,31 +279,31 @@ describe ValidEmail2 do
       expect(user.valid?).to be_falsey
     end
 
-    it "is invalid if the domain is blacklisted via a dynamic array option" do
-      user = TestUserDisallowBlacklistedWithDynamicArray.new(email: "foo@test-dynamic-array.com")
+    it "is invalid if the domain is deny-listed via a dynamic array option" do
+      user = TestUserDisallowDenyListedWithDynamicArray.new(email: "foo@test-dynamic-array.com")
       expect(user.valid?).to be_falsy
     end
 
-    it "is invalid if the domain is blacklisted via a dynamic set option" do
-      user = TestUserDisallowBlacklistedWithDynamicSet.new(email: "foo@test-dynamic-set.com")
+    it "is invalid if the domain is deny-listed via a dynamic set option" do
+      user = TestUserDisallowDenyListedWithDynamicSet.new(email: "foo@test-dynamic-set.com")
       expect(user.valid?).to be_falsy
     end
 
-    it "is invalid if the domain is blacklisted via a dynamic proc option" do
-      user = TestUserDisallowBlacklistedWithDynamicProc.new(email: "foo@test-dynamic-proc.com")
+    it "is invalid if the domain is deny-listed via a dynamic proc option" do
+      user = TestUserDisallowDenyListedWithDynamicLambda.new(email: "foo@test-dynamic-lambda.com")
       expect(user.valid?).to be_falsy
     end
 
-    it "is invalid if the domain is blacklisted via a dynamic hash option" do
-      invalid_dynamic_domain = "test-dynamic-hash.com"
+    it "is invalid if the domain is deny-listed via a dynamic rails model" do
+      invalid_dynamic_domain = "test-dynamic-rails-model.com"
       TestDynamicDomainModel.domain_attribute_values = [invalid_dynamic_domain]
-      user = TestUserDisallowBlacklistedWithDynamicHash.new(email: "foo@#{invalid_dynamic_domain}")
+      user = TestUserDisallowDenyListedWithDynamicRailsModel.new(email: "foo@#{invalid_dynamic_domain}")
       expect(user.valid?).to be_falsy
     end
 
     it "is valid if the dynamic domain list does not include the email domain" do
-      TestDynamicDomainModel.domain_attribute_values = ["not-blacklisted.com"]
-      user = TestUserDisallowBlacklistedWithDynamicHash.new(email: "foo@test-dynamic-hash.com")
+      TestDynamicDomainModel.domain_attribute_values = ["not-deny-listed.com"]
+      user = TestUserDisallowDenyListedWithDynamicRailsModel.new(email: "foo@test-dynamic-rails-model.com")
       expect(user.valid?).to be_truthy
     end
   end
