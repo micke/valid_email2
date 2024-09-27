@@ -84,7 +84,7 @@ To validate that the domain is not a disposable email or a disposable email (che
 validates :email, 'valid_email_2/email': { disposable_domain_with_allow_list: true }
 ```
 
-To validate that the domain is not on the deny list (under config/deny_list_email_domains.yml):
+To validate that the domain is not on the deny list (under config/deny_listed_email_domains.yml):
 ```ruby
 validates :email, 'valid_email_2/email': { deny_list: true }
 ```
