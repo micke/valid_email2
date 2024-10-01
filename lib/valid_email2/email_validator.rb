@@ -57,12 +57,12 @@ module ValidEmail2
       options = default_options.merge(self.options)
 
       if options[:multiple]
-        email_list = input.is_a?(Array) ? input : input.split(',')
+        email_list = input.is_a?(Array) ? input : input.split(',').map(&:strip)
       else
         email_list = [input]
       end
 
-      email_list.reject(&:empty?).map(&:strip)
+      email_list.reject(&:empty?)
     end
 
     def error(record, attribute)
