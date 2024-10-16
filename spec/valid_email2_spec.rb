@@ -79,6 +79,11 @@ describe ValidEmail2 do
 
   let(:disposable_domain) { ValidEmail2.disposable_emails.first }
 
+  before do
+    ValidEmail2::Address.class_variable_set(:@@mx_servers_cache, {})
+    ValidEmail2::Address.class_variable_set(:@@mx_or_a_servers_cache, {})
+  end
+
   describe "basic validation" do
     subject(:user) { TestUser.new(email: "") }
 
