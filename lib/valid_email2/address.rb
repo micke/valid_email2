@@ -3,6 +3,7 @@
 require "valid_email2"
 require "resolv"
 require "mail"
+require "unicode/emoji"
 
 module ValidEmail2
   class Address
@@ -34,7 +35,7 @@ module ValidEmail2
         @parse_error = true
       end
 
-      @parse_error ||= address_contain_emoticons? @raw_address
+      @parse_error ||= address_contain_emoticons?
     end
 
     def valid?
@@ -130,10 +131,10 @@ module ValidEmail2
       }
     end
 
-    def address_contain_emoticons?(email)
-      return false if email.nil?
+    def address_contain_emoticons?
+      return false if @raw_address.nil?
 
-      email.each_char.any? { |char| char.bytesize > 1 }
+      @raw_address.scan(Unicode::Emoji::REGEX).length >= 1
     end
 
     def mx_servers
