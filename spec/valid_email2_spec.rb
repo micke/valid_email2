@@ -158,6 +158,11 @@ describe ValidEmail2 do
       user = TestUser.new(email: "foo@gmail-.com")
       expect(user.valid?).to be_falsy
     end
+
+    it "is invalid with trailing whitespace" do
+      user = TestUser.new(email: "foo@example.com ")
+      expect(user.valid?).to be_falsey
+    end
   end
 
   describe "with disposable validation" do
