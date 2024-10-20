@@ -8,6 +8,9 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
+    @@mx_servers_cache = {}
+    @@mx_or_a_servers_cache = {}
+
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
@@ -137,10 +140,16 @@ module ValidEmail2
     end
 
     def mx_servers
-      @mx_servers ||= Resolv::DNS.open(@resolv_config) do |dns|
+      return @@mx_servers_cache[address.domain.downcase] if @@mx_servers_cache.key?(address.domain.downcase)
+
+      result = Resolv::DNS.open(@resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
       end
+
+      @@mx_servers_cache[address.domain.downcase] = result
+
+      result
     end
 
     def null_mx?
@@ -148,11 +157,17 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      @mx_or_a_servers ||= Resolv::DNS.open(@resolv_config) do |dns|
+      return @@mx_or_a_servers_cache[address.domain.downcase] if @@mx_or_a_servers_cache.key?(address.domain.downcase)
+
+      result = Resolv::DNS.open(@resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
       end
+
+      @@mx_or_a_servers_cache[address.domain.downcase] = result
+
+      result
     end
   end
 end
