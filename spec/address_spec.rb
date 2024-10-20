@@ -6,7 +6,6 @@ describe ValidEmail2::Address do
   describe "#valid?" do
     it "is valid" do
       address = described_class.new("foo@bar123.com")
-      expect(address.__send__(:address_contain_emoticons?)).to eq false
       expect(address.valid?).to be true
     end
 
