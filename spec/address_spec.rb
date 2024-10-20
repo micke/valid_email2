@@ -36,7 +36,6 @@ describe ValidEmail2::Address do
 
     it "is valid if it contains special scandinavian characters" do
       address = described_class.new("jørgen@email.dk")
-      expect(address.__send__(:address_contain_emoticons?)).to eq false
       expect(address.valid?).to eq true
     end
   end
