@@ -1,4 +1,5 @@
 require "valid_email2/address"
+require "valid_email2/dynamic_option_values"
 require "active_model"
 require "active_model/validations"
 
@@ -41,6 +42,7 @@ module ValidEmail2
       end
 
       if options[:deny_list]
+        ValidEmail2::DynamicOptionValues.parse_option_for_additional_items(:deny_list, options[:deny_list])
         error(record, attribute) && return if addresses.any?(&:deny_listed?)
       end
 
