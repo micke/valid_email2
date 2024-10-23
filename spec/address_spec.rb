@@ -33,5 +33,10 @@ describe ValidEmail2::Address do
       address = described_class.new("foo🙈@gmail.com")
       expect(address.valid?).to be false
     end
+
+    it "is valid if it contains special scandinavian characters" do
+      address = described_class.new("jørgen@email.dk")
+      expect(address.valid?).to eq true
+    end
   end
 end
