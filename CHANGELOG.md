@@ -1,5 +1,23 @@
 # Changelog
 
+## [6.0.0](https://github.com/micke/valid_email2/compare/v5.3.0...v6.0.0) (2024-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* Remove deprecated methods and options
+
+### Features
+
+* Remove deprecated methods and options ([1a29d27](https://github.com/micke/valid_email2/commit/1a29d27d587a39d181dfe2b6f39028bc317aff52))
+
+
+### Bug Fixes
+
+* **email_validator:** handle trailing whitespace in emails ([#255](https://github.com/micke/valid_email2/issues/255)) ([a06fdf7](https://github.com/micke/valid_email2/commit/a06fdf72cfc0df51c81057c6094aba332b692741))
+* Falsely detecting Scandinavian characters as emojis ([#257](https://github.com/micke/valid_email2/issues/257)) ([e64de5c](https://github.com/micke/valid_email2/commit/e64de5c675a015c09c7e6b89bb4f65a39137f48f))
+* typo in readme about config file to deny email domains ([#254](https://github.com/micke/valid_email2/issues/254)) ([a39ed57](https://github.com/micke/valid_email2/commit/a39ed5792a9d46abd954fceff929770eabf99a73))
+
 ## [5.3.0](https://github.com/micke/valid_email2/compare/v5.2.6...v5.3.0) (2024-08-31)
 
 
