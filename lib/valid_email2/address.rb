@@ -21,10 +21,11 @@ module ValidEmail2
       @prohibited_domain_characters_regex = val
     end
 
-    def initialize(address, dns_timeout = 5, dns_nameserver = nil)
+    def initialize(address, dns_timeout: 5, dns_nameserver: nil, allow_display_name: false)
       @parse_error = false
       @raw_address = address
       @dns_timeout = dns_timeout
+      @allow_display_name = allow_display_name
 
       @resolv_config = Resolv::DNS::Config.default_config_hash
       @resolv_config[:nameserver] = dns_nameserver if dns_nameserver
@@ -58,7 +59,12 @@ module ValidEmail2
     end
 
     def valid_address?
-      return false if address.address != @raw_address
+      if @allow_display_name
+        address_only = @raw_address.split('<').last.split('>').first
+        return false if address.address != address_only
+      else
+        return false if address.address != @raw_address
+      end
 
       !address.local.include?('..') &&
         !address.local.end_with?('.') &&
