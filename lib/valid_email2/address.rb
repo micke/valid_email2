@@ -9,6 +9,7 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
+    # Cache structure: { domain (String): { records: [], cached_at: Time, ttl: Integer } }
     @@mx_servers_cache = {}
     @@mx_or_a_servers_cache = {}
 
@@ -141,16 +142,28 @@ module ValidEmail2
     end
 
     def mx_servers
-      return @@mx_servers_cache[address.domain.downcase] if @@mx_servers_cache.key?(address.domain.downcase)
+      domain = address.domain.downcase
 
-      result = Resolv::DNS.open(@resolv_config) do |dns|
+      if @@mx_servers_cache[domain]
+        cache_entry = @@mx_servers_cache[domain]
+        if (Time.now - cache_entry[:cached_at]) < cache_entry[:ttl]
+          return cache_entry[:records]
+        else
+          @@mx_servers_cache.delete(domain)
+        end
+      end
+
+      records = Resolv::DNS.open(@resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
       end
 
-      @@mx_servers_cache[address.domain.downcase] = result
+      if records.any?
+        ttl = records.map(&:ttl).min
+        @@mx_servers_cache[domain] = { records: records, cached_at: Time.now, ttl: ttl }
+      end
 
-      result
+      records
     end
 
     def null_mx?
@@ -158,17 +171,29 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      return @@mx_or_a_servers_cache[address.domain.downcase] if @@mx_or_a_servers_cache.key?(address.domain.downcase)
+      domain = address.domain.downcase
 
-      result = Resolv::DNS.open(@resolv_config) do |dns|
+      if @@mx_or_a_servers_cache[domain]
+        cache_entry = @@mx_or_a_servers_cache[domain]
+        if (Time.now - cache_entry[:cached_at]) < cache_entry[:ttl]
+          return cache_entry[:records]
+        else
+          @@mx_or_a_servers_cache.delete(domain)
+        end
+      end
+
+      records = Resolv::DNS.open(@resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         (mx_servers.any? && mx_servers) ||
           dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
       end
 
-      @@mx_or_a_servers_cache[address.domain.downcase] = result
+      if records.any?
+        ttl = records.map(&:ttl).min
+        @@mx_or_a_servers_cache[domain] = { records: records, cached_at: Time.now, ttl: ttl }
+      end
 
-      result
+      records
     end
   end
 end

@@ -43,8 +43,9 @@ describe ValidEmail2::Address do
   describe "caching" do
     let(:email_address) { "example@ymail.com" }
     let(:email_instance) { described_class.new(email_address) }
+    let(:ttl) { 1_000 }
     let(:mock_resolv_dns) { instance_double(Resolv::DNS) }
-    let(:mock_mx_records) { [double('MX', exchange: 'mx.ymail.com', preference: 10)] }
+    let(:mock_mx_records) { [double('MX', exchange: 'mx.ymail.com', preference: 10, ttl: ttl)] }
 
     before do
       allow(email_instance).to receive(:null_mx?).and_return(false)
@@ -85,10 +86,26 @@ describe ValidEmail2::Address do
         second_result = email_instance.valid_strict_mx?
         expect(second_result).to be true
       end
+
+      it "does not call the MX servers lookup when the cached time since last lookup is less than the cached ttl entry" do
+        described_class.class_variable_set(:@@mx_servers_cache, { email_instance.address.domain => { records: mock_mx_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_strict_mx?
+
+        expect(Resolv::DNS).not_to have_received(:open)
+      end
+
+      it "calls the MX servers lookup when the cached time since last lookup is greater than the cached ttl entry" do
+        described_class.class_variable_set(:@@mx_servers_cache, { email_instance.address.domain => { records: mock_mx_records, cached_at: Time.now - ttl, ttl: ttl }}) # Cached 1 day ago
+      
+        email_instance.valid_strict_mx?
+
+        expect(Resolv::DNS).to have_received(:open).once
+      end
     end
 
     describe "#valid_mx?" do
-      let(:mock_a_records) { [double('A', address: '192.168.1.1')] }
+      let(:mock_a_records) { [double('A', address: '192.168.1.1', ttl: ttl)] }
 
       before do
         described_class.class_variable_set(:@@mx_or_a_servers_cache, {})
@@ -98,11 +115,13 @@ describe ValidEmail2::Address do
           .and_return(mock_a_records)
       end
 
-      it "calls the MX or A servers lookup when the email is not cached" do
-        result = email_instance.valid_mx?
+      context "when the email is not cached" do
+        it "calls the MX or A servers lookup" do
+          result = email_instance.valid_mx?
 
-        expect(Resolv::DNS).to have_received(:open).once
-        expect(result).to be true
+          expect(Resolv::DNS).to have_received(:open).once
+          expect(result).to be true
+        end
       end
 
       it "does not call the MX or A servers lookup when the email is cached" do
@@ -122,6 +141,22 @@ describe ValidEmail2::Address do
 
         second_result = email_instance.valid_mx?
         expect(second_result).to be true
+      end
+
+      it "does not call the MX or A servers lookup when the time since last lookup is less than the cached ttl entry" do
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, { email_instance.address.domain => { records: mock_a_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_mx?
+
+        expect(Resolv::DNS).not_to have_received(:open)
+      end
+
+      it "calls the MX or A servers lookup when the time since last lookup is greater than the cached ttl entry" do
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, { email_instance.address.domain => { records: mock_a_records, cached_at: Time.now - ttl, ttl: ttl }})
+      
+        email_instance.valid_mx?
+
+        expect(Resolv::DNS).to have_received(:open).once
       end
     end
   end
