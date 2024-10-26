@@ -9,13 +9,14 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
-    # Cache structure: { domain (String): { records: [], cached_at: Time, ttl: Integer } }
-    @@mx_servers_cache = {}
-    @@mx_or_a_servers_cache = {}
-
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
+    MAX_CACHE_SIZE = 1_000
+
+    # Cache structure: { domain (String): { records: [], cached_at: Time, ttl: Integer } }
+    @@mx_servers_cache = {}
+    @@mx_or_a_servers_cache = {}
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -142,6 +143,10 @@ module ValidEmail2
     end
 
     def mx_servers
+      if @@mx_servers_cache.size > MAX_CACHE_SIZE
+        prune_cache(@@mx_servers_cache)
+      end
+
       domain = address.domain.downcase
 
       if @@mx_servers_cache[domain]
@@ -171,6 +176,10 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
+      if @@mx_or_a_servers_cache.size > MAX_CACHE_SIZE
+        prune_cache(@@mx_or_a_servers_cache)
+      end
+
       domain = address.domain.downcase
 
       if @@mx_or_a_servers_cache[domain]
@@ -194,6 +203,12 @@ module ValidEmail2
       end
 
       records
+    end
+
+    def prune_cache(cache)
+      entries_sorted_by_cached_at_asc = (cache.sort_by { |_domain, data| data[:cached_at] }).flatten
+      entries_to_remove = entries_sorted_by_cached_at_asc.first(cache.size - MAX_CACHE_SIZE)
+      entries_to_remove.each { |domain| cache.delete(domain) }
     end
   end
 end

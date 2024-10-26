@@ -102,6 +102,65 @@ describe ValidEmail2::Address do
 
         expect(Resolv::DNS).to have_received(:open).once
       end
+
+      it "does not prune the cache when the cache size is less than the max cache size" do
+        expect(email_instance).not_to receive(:prune_cache)
+
+        email_instance.valid_strict_mx?
+      end
+
+      it "prunes the cache when the cache size is greater than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+
+        expect(email_instance).to receive(:prune_cache).with(described_class.class_variable_get(:@@mx_servers_cache)).once
+
+        email_instance.valid_strict_mx?
+        email_instance.valid_strict_mx?
+      end
+
+      it "does not call the MX or A servers lookup when there is a cached entry for the domain and the cache size is less than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 1)
+        described_class.class_variable_set(:@@mx_servers_cache, { email_instance.address.domain => { records: mock_mx_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_strict_mx?
+
+        expect(Resolv::DNS).not_to have_received(:open)
+      end
+
+      it "calls the MX or A servers lookup when there is a cached entry for the domain but the cache size is greater than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+        described_class.class_variable_set(:@@mx_servers_cache, { email_instance.address.domain => { records: mock_mx_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_strict_mx?
+
+        expect(Resolv::DNS).to have_received(:open).once
+      end
+
+      it "does not prune older entries when the cache size is less than the max size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 1)
+        described_class.class_variable_set(:@@mx_servers_cache, {
+          'another_domain.com' => {
+            records: mock_mx_records, cached_at: Time.now - 100, ttl: ttl
+          }
+        })
+
+        email_instance.valid_strict_mx?
+
+        expect(described_class.class_variable_get(:@@mx_servers_cache).keys).to match_array([email_instance.address.domain, 'another_domain.com'])
+      end
+
+      it "prunes older entries when the cache size is greater than the max size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+        described_class.class_variable_set(:@@mx_servers_cache, {
+          'another_domain.com' => {
+            records: mock_mx_records, cached_at: Time.now - 100, ttl: ttl
+          }
+        })
+
+        email_instance.valid_strict_mx?
+
+        expect(described_class.class_variable_get(:@@mx_servers_cache).keys).to match_array([email_instance.address.domain])
+      end
     end
 
     describe "#valid_mx?" do
@@ -153,10 +212,69 @@ describe ValidEmail2::Address do
 
       it "calls the MX or A servers lookup when the time since last lookup is greater than the cached ttl entry" do
         described_class.class_variable_set(:@@mx_or_a_servers_cache, { email_instance.address.domain => { records: mock_a_records, cached_at: Time.now - ttl, ttl: ttl }})
-      
+
         email_instance.valid_mx?
 
         expect(Resolv::DNS).to have_received(:open).once
+      end
+
+      it "does not prune the cache when the cache size is less than the max cache size" do
+        expect(email_instance).not_to receive(:prune_cache)
+
+        email_instance.valid_mx?
+      end
+
+      it "prunes the cache when the cache size is greater than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+
+        expect(email_instance).to receive(:prune_cache).with(described_class.class_variable_get(:@@mx_or_a_servers_cache)).once
+
+        email_instance.valid_mx?
+        email_instance.valid_mx?
+      end
+
+      it "does not call the MX or A servers lookup when there is a cached entry for the domain and the cache size is less than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 1)
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, { email_instance.address.domain => { records: mock_a_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_mx?
+
+        expect(Resolv::DNS).not_to have_received(:open)
+      end
+
+      it "calls the MX or A servers lookup when there is a cached entry for the domain but the cache size is greater than the max cache size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, { email_instance.address.domain => { records: mock_a_records, cached_at: Time.now, ttl: ttl }})
+
+        email_instance.valid_mx?
+
+        expect(Resolv::DNS).to have_received(:open).once
+      end
+
+      it "does not prune older entries when the cache size is less than the max size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 1)
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, {
+          'another_domain.com' => {
+            records: mock_a_records, cached_at: Time.now - 100, ttl: ttl
+          }
+        })
+
+        email_instance.valid_mx?
+
+        expect(described_class.class_variable_get(:@@mx_or_a_servers_cache).keys).to match_array([email_instance.address.domain, 'another_domain.com'])
+      end
+
+      it "prunes older entries when the cache size is greater than the max size" do
+        stub_const("#{described_class}::MAX_CACHE_SIZE", 0)
+        described_class.class_variable_set(:@@mx_or_a_servers_cache, {
+          'another_domain.com' => {
+            records: mock_a_records, cached_at: Time.now - 100, ttl: ttl
+          }
+        })
+
+        email_instance.valid_mx?
+
+        expect(described_class.class_variable_get(:@@mx_or_a_servers_cache).keys).to match_array([email_instance.address.domain])
       end
     end
   end
