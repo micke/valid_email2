@@ -163,6 +163,11 @@ describe ValidEmail2 do
       user = TestUser.new(email: "foo@example.com ")
       expect(user.valid?).to be_falsey
     end
+
+    it "is invalid if domain contains #" do
+      user = TestUser.new(email: "foo@example.com#")
+      expect(user.valid?).to be_falsey
+    end
   end
 
   describe "with disposable validation" do
