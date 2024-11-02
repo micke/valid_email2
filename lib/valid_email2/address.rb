@@ -4,6 +4,7 @@ require "valid_email2"
 require "resolv"
 require "mail"
 require "unicode/emoji"
+require "valid_email2/dns_records_cache"
 
 module ValidEmail2
   class Address
@@ -12,11 +13,6 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
-    MAX_CACHE_SIZE = 1_000
-
-    # Cache structure: { domain (String): { records: [], cached_at: Time, ttl: Integer } }
-    @@mx_servers_cache = {}
-    @@mx_or_a_servers_cache = {}
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -143,32 +139,14 @@ module ValidEmail2
     end
 
     def mx_servers
-      if @@mx_servers_cache.size > MAX_CACHE_SIZE
-        prune_cache(@@mx_servers_cache)
-      end
+      @mx_servers_cache ||= ValidEmail2::DnsRecordsCache.new
 
-      domain = address.domain.downcase
-
-      if @@mx_servers_cache[domain]
-        cache_entry = @@mx_servers_cache[domain]
-        if (Time.now - cache_entry[:cached_at]) < cache_entry[:ttl]
-          return cache_entry[:records]
-        else
-          @@mx_servers_cache.delete(domain)
+      @mx_servers_cache.fetch(address.domain.downcase) do
+        Resolv::DNS.open(@resolv_config) do |dns|
+          dns.timeouts = @dns_timeout
+          dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
         end
       end
-
-      records = Resolv::DNS.open(@resolv_config) do |dns|
-        dns.timeouts = @dns_timeout
-        dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
-      end
-
-      if records.any?
-        ttl = records.map(&:ttl).min
-        @@mx_servers_cache[domain] = { records: records, cached_at: Time.now, ttl: ttl }
-      end
-
-      records
     end
 
     def null_mx?
@@ -176,39 +154,15 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      if @@mx_or_a_servers_cache.size > MAX_CACHE_SIZE
-        prune_cache(@@mx_or_a_servers_cache)
-      end
+      @mx_or_a_servers_cache ||= ValidEmail2::DnsRecordsCache.new
 
-      domain = address.domain.downcase
-
-      if @@mx_or_a_servers_cache[domain]
-        cache_entry = @@mx_or_a_servers_cache[domain]
-        if (Time.now - cache_entry[:cached_at]) < cache_entry[:ttl]
-          return cache_entry[:records]
-        else
-          @@mx_or_a_servers_cache.delete(domain)
+      @mx_or_a_servers_cache.fetch(address.domain.downcase) do
+        Resolv::DNS.open(@resolv_config) do |dns|
+          dns.timeouts = @dns_timeout
+          (mx_servers.any? && mx_servers) ||
+            dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
         end
       end
-
-      records = Resolv::DNS.open(@resolv_config) do |dns|
-        dns.timeouts = @dns_timeout
-        (mx_servers.any? && mx_servers) ||
-          dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
-      end
-
-      if records.any?
-        ttl = records.map(&:ttl).min
-        @@mx_or_a_servers_cache[domain] = { records: records, cached_at: Time.now, ttl: ttl }
-      end
-
-      records
-    end
-
-    def prune_cache(cache)
-      entries_sorted_by_cached_at_asc = (cache.sort_by { |_domain, data| data[:cached_at] }).flatten
-      entries_to_remove = entries_sorted_by_cached_at_asc.first(cache.size - MAX_CACHE_SIZE)
-      entries_to_remove.each { |domain| cache.delete(domain) }
     end
   end
 end
