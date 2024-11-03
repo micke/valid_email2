@@ -4,6 +4,7 @@ require "valid_email2"
 require "resolv"
 require "mail"
 require "unicode/emoji"
+require "valid_email2/dns_records_cache"
 
 module ValidEmail2
   class Address
@@ -25,9 +26,7 @@ module ValidEmail2
       @parse_error = false
       @raw_address = address
       @dns_timeout = dns_timeout
-
-      @resolv_config = Resolv::DNS::Config.default_config_hash
-      @resolv_config[:nameserver] = dns_nameserver if dns_nameserver
+      @dns_nameserver = dns_nameserver
 
       begin
         @address = Mail::Address.new(address)
@@ -137,10 +136,24 @@ module ValidEmail2
       @raw_address.scan(Unicode::Emoji::REGEX).length >= 1
     end
 
+    def resolv_config
+      @resolv_config ||= begin
+        config = Resolv::DNS::Config.default_config_hash
+        config[:nameserver] = @dns_nameserver if @dns_nameserver
+        config
+      end
+
+      @resolv_config
+    end
+
     def mx_servers
-      @mx_servers ||= Resolv::DNS.open(@resolv_config) do |dns|
-        dns.timeouts = @dns_timeout
-        dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+      @mx_servers_cache ||= ValidEmail2::DnsRecordsCache.new
+
+      @mx_servers_cache.fetch(address.domain.downcase) do
+        Resolv::DNS.open(resolv_config) do |dns|
+          dns.timeouts = @dns_timeout
+          dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
+        end
       end
     end
 
@@ -149,10 +162,14 @@ module ValidEmail2
     end
 
     def mx_or_a_servers
-      @mx_or_a_servers ||= Resolv::DNS.open(@resolv_config) do |dns|
-        dns.timeouts = @dns_timeout
-        (mx_servers.any? && mx_servers) ||
-          dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
+      @mx_or_a_servers_cache ||= ValidEmail2::DnsRecordsCache.new
+
+      @mx_or_a_servers_cache.fetch(address.domain.downcase) do
+        Resolv::DNS.open(resolv_config) do |dns|
+          dns.timeouts = @dns_timeout
+          (mx_servers.any? && mx_servers) ||
+            dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
+        end
       end
     end
   end

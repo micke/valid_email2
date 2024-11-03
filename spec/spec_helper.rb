@@ -5,6 +5,7 @@ require "valid_email2"
 require 'rspec-benchmark'
 RSpec.configure do |config|
   config.include RSpec::Benchmark::Matchers
+  config.default_formatter = 'doc'
 end
 RSpec::Benchmark.configure do |config|
   config.disable_gc = true
