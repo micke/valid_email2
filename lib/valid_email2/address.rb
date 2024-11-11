@@ -13,6 +13,7 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
+    SCANDINAVIAN_REGEX = /[ÆæØøÅåÄäÖöÞþÐð]/
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -133,7 +134,9 @@ module ValidEmail2
     def address_contain_emoticons?
       return false if @raw_address.nil?
 
-      @raw_address.scan(Unicode::Emoji::REGEX).length >= 1
+      @raw_address.each_char.any? do |char|
+        char.bytesize > 1 && char !~ SCANDINAVIAN_REGEX
+      end
     end
 
     def resolv_config
