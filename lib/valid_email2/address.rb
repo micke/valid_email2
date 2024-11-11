@@ -3,7 +3,6 @@
 require "valid_email2"
 require "resolv"
 require "mail"
-require "unicode/emoji"
 require "valid_email2/dns_records_cache"
 
 module ValidEmail2
