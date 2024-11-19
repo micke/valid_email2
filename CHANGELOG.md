@@ -1,5 +1,16 @@
 # Changelog
 
+## [7.0.0](https://github.com/micke/valid_email2/compare/v6.0.0...v7.0.0) (2024-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* revert allowing scandinavian characters by making allowed multibyte characters configurable ([#261](https://github.com/micke/valid_email2/issues/261))
+
+### Bug Fixes
+
+* revert allowing scandinavian characters by making allowed multibyte characters configurable ([#261](https://github.com/micke/valid_email2/issues/261)) ([cf6a1e9](https://github.com/micke/valid_email2/commit/cf6a1e9e28f78e0c6f3e3ea7e9160bf9194b45e6))
+
 ## [6.0.0](https://github.com/micke/valid_email2/compare/v5.3.0...v6.0.0) (2024-11-03)
 
 
