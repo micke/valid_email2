@@ -128,6 +128,12 @@ address.valid_strict_mx? => true
 address.subaddressed? => false
 ```
 
+If you want to allow multibyte characters, set it explicitly.
+
+```ruby
+ValidEmail2::Address.permitted_multibyte_characters_regex = /[ÆæØøÅåÄäÖöÞþÐð]/
+```
+
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.

@@ -3,7 +3,6 @@
 require "valid_email2"
 require "resolv"
 require "mail"
-require "unicode/emoji"
 require "valid_email2/dns_records_cache"
 
 module ValidEmail2
@@ -22,6 +21,14 @@ module ValidEmail2
       @prohibited_domain_characters_regex = val
     end
 
+    def self.permitted_multibyte_characters_regex
+      @permitted_multibyte_characters_regex
+    end
+
+    def self.permitted_multibyte_characters_regex=(val)
+      @permitted_multibyte_characters_regex = val
+    end
+
     def initialize(address, dns_timeout = 5, dns_nameserver = nil)
       @parse_error = false
       @raw_address = address
@@ -34,7 +41,7 @@ module ValidEmail2
         @parse_error = true
       end
 
-      @parse_error ||= address_contain_emoticons?
+      @parse_error ||= address_contain_multibyte_characters?
     end
 
     def valid?
@@ -130,10 +137,12 @@ module ValidEmail2
       }
     end
 
-    def address_contain_emoticons?
+    def address_contain_multibyte_characters?
       return false if @raw_address.nil?
 
-      @raw_address.scan(Unicode::Emoji::REGEX).length >= 1
+      return false if @raw_address.ascii_only?
+
+      @raw_address.each_char.any? { |char| char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex }
     end
 
     def resolv_config

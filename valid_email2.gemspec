@@ -28,5 +28,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 6.0"
-  spec.add_runtime_dependency "unicode-emoji", "~> 3.7.0"
 end

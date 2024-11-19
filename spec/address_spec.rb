@@ -34,9 +34,25 @@ describe ValidEmail2::Address do
       expect(address.valid?).to be false
     end
 
-    it "is valid if it contains special scandinavian characters" do
+    it "is invalid if it contains Japanese characters" do
+      address = described_class.new("あいうえお@example.com")
+      expect(address.valid?).to be false
+    end
+
+    it "is invalid if it contains special scandinavian characters" do
       address = described_class.new("jørgen@email.dk")
-      expect(address.valid?).to eq true
+      expect(address.valid?).to eq false
+    end
+
+    context "permitted_multibyte_characters_regex is set" do
+      before do
+        described_class.permitted_multibyte_characters_regex = /[ÆæØøÅåÄäÖöÞþÐð]/
+      end
+
+      it "is valid if it contains special scandinavian characters" do
+        address = described_class.new("jørgen@email.dk")
+        expect(address.valid?).to eq true
+      end
     end
   end
 
