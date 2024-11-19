@@ -140,14 +140,9 @@ module ValidEmail2
     def address_contain_multibyte_characters?
       return false if @raw_address.nil?
 
-      multibyte_chars = @raw_address.scan(/./).select { |char| char.bytesize > 1 }
-      return false if multibyte_chars.empty?
+      return false if @raw_address.ascii_only?
 
-      return true if self.class.permitted_multibyte_characters_regex.nil?
-
-      multibyte_chars.any? do |char|
-        !self.class.permitted_multibyte_characters_regex.match?(char)
-      end
+      @raw_address.each_char.any? { |char| char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex }
     end
 
     def resolv_config
