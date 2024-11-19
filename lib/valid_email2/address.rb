@@ -12,7 +12,6 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
-    SCANDINAVIAN_REGEX = /[ÆæØøÅåÄäÖöÞþÐð]/
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -20,6 +19,14 @@ module ValidEmail2
 
     def self.prohibited_domain_characters_regex=(val)
       @prohibited_domain_characters_regex = val
+    end
+
+    def self.permitted_multibyte_characters_regex
+      @permitted_multibyte_characters_regex
+    end
+
+    def self.permitted_multibyte_characters_regex=(val)
+      @permitted_multibyte_characters_regex = val
     end
 
     def initialize(address, dns_timeout = 5, dns_nameserver = nil)
@@ -134,7 +141,7 @@ module ValidEmail2
       return false if @raw_address.nil?
 
       @raw_address.each_char.any? do |char|
-        char.bytesize > 1 && char !~ SCANDINAVIAN_REGEX
+        char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex
       end
     end
 
