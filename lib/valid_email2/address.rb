@@ -41,7 +41,7 @@ module ValidEmail2
         @parse_error = true
       end
 
-      @parse_error ||= address_contain_emoticons?
+      @parse_error ||= address_contain_multibyte_characters?
     end
 
     def valid?
@@ -137,7 +137,7 @@ module ValidEmail2
       }
     end
 
-    def address_contain_emoticons?
+    def address_contain_multibyte_characters?
       return false if @raw_address.nil?
 
       multibyte_chars = @raw_address.scan(/./).select { |char| char.bytesize > 1 }
