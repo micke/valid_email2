@@ -140,8 +140,13 @@ module ValidEmail2
     def address_contain_emoticons?
       return false if @raw_address.nil?
 
-      @raw_address.each_char.any? do |char|
-        char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex
+      multibyte_chars = @raw_address.scan(/./).select { |char| char.bytesize > 1 }
+      return false if multibyte_chars.empty?
+
+      return true if self.class.permitted_multibyte_characters_regex.nil?
+
+      multibyte_chars.any? do |char|
+        !self.class.permitted_multibyte_characters_regex.match?(char)
       end
     end
 
