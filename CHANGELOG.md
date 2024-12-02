@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.0.1](https://github.com/micke/valid_email2/compare/v7.0.0...v7.0.1) (2024-12-02)
+
+
+### Bug Fixes
+
+* Add domain luxyss.com ([#264](https://github.com/micke/valid_email2/issues/264)) ([b04d316](https://github.com/micke/valid_email2/commit/b04d31680881cde8d1620b8f6233c05db10232ca))
+* Update disposable domains from Yopmail ([#263](https://github.com/micke/valid_email2/issues/263)) ([fee055f](https://github.com/micke/valid_email2/commit/fee055f62294eb7991d9cd20ec04f0b27afdee45))
+
 ## [7.0.0](https://github.com/micke/valid_email2/compare/v6.0.0...v7.0.0) (2024-11-19)
 
 
