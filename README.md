@@ -89,6 +89,14 @@ To validate that the domain is not on the deny list (under config/deny_listed_em
 validates :email, 'valid_email_2/email': { deny_list: true }
 ```
 
+The allow_listed_email_domains.yml and deny_listed_email_domains.yml can be written as follows:
+
+```yml
+# config/deny_listed_email_domains.yml
+- denied1.example.com
+- denied2.example.com
+```
+
 To validate that email is not subaddressed:
 ```ruby
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
