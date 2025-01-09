@@ -89,6 +89,14 @@ To validate that the domain is not on the deny list (under config/deny_listed_em
 validates :email, 'valid_email_2/email': { deny_list: true }
 ```
 
+The allow_listed_email_domains.yml and deny_listed_email_domains.yml can be written as follows:
+
+```yml
+# config/deny_listed_email_domains.yml
+- denied1.example.com
+- denied2.example.com
+```
+
 To validate that email is not subaddressed:
 ```ruby
 validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
@@ -117,6 +125,7 @@ validates :email, 'valid_email_2/email': { mx: true, disposable: true, disallow_
 > Note that this gem will let an empty email pass through so you will need to
 > add `presence: true` if you require an email
 
+
 ### Use without ActiveModel
 
 ```ruby
@@ -127,6 +136,8 @@ address.valid_mx? => true
 address.valid_strict_mx? => true
 address.subaddressed? => false
 ```
+
+For other APIs, please check [lib/valid_email2/address.rb](https://github.com/micke/valid_email2/blob/main/lib/valid_email2/address.rb).
 
 If you want to allow multibyte characters, set it explicitly.
 
