@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.2](https://github.com/micke/valid_email2/compare/v7.0.1...v7.0.2) (2025-01-23)
+
+
+### Bug Fixes
+
+* Remove nytimes.com from list of disposable domains ([#267](https://github.com/micke/valid_email2/issues/267)) ([8173464](https://github.com/micke/valid_email2/commit/8173464e15c492556167d3227804976d3546d1b2))
+
 ## [7.0.1](https://github.com/micke/valid_email2/compare/v7.0.0...v7.0.1) (2024-12-02)
 
 
