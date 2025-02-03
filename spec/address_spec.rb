@@ -56,6 +56,30 @@ describe ValidEmail2::Address do
     end
   end
 
+  describe "#disposable_domain?" do
+    let(:disposable_domain) { ValidEmail2.disposable_emails.first }
+
+    it "is true if the domain is in the disposable_emails list" do
+      address = described_class.new("foo@#{disposable_domain}")
+      expect(address.disposable_domain?).to eq true
+    end
+
+    it "is true if the domain is a subdomain of a disposable domain" do
+      address = described_class.new("foo@sub.#{disposable_domain}")
+      expect(address.disposable_domain?).to eq true
+    end
+
+    it "is true if the domain is a deeply nested subdomain of a disposable domain" do
+      address = described_class.new("foo@sub3.sub2.sub1.#{disposable_domain}")
+      expect(address.disposable_domain?).to eq true
+    end
+
+    it "is false if the domain is not in the disposable_emails list" do
+      address = described_class.new("foo@example.com")
+      expect(address.disposable_domain?).to eq false
+    end
+  end
+
   describe "caching" do
     let(:email_address) { "example@ymail.com" }
     let(:email_instance) { described_class.new(email_address) }
@@ -181,7 +205,7 @@ describe ValidEmail2::Address do
             email_instance.valid_strict_mx?
           end
 
-          it "calls the the MX servers lookup" do    
+          it "calls the the MX servers lookup" do
             email_instance.valid_strict_mx?
 
             expect(Resolv::DNS).to have_received(:open).once
@@ -308,8 +332,8 @@ describe ValidEmail2::Address do
             stub_const("ValidEmail2::DnsRecordsCache::MAX_CACHE_SIZE", 0)
           end
 
-          it "prunes the cache" do 
-            expect(dns_records_cache_instance).to receive(:prune_cache).once 
+          it "prunes the cache" do
+            expect(dns_records_cache_instance).to receive(:prune_cache).once
 
             email_instance.valid_mx?
           end
@@ -331,7 +355,7 @@ describe ValidEmail2::Address do
             end
           end
         end
-      end    
+      end
     end
   end
 end

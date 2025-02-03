@@ -119,10 +119,12 @@ module ValidEmail2
       address_domain = address.domain.downcase
       return true if domain_list.include?(address_domain)
 
-      i = address_domain.index('.')
-      return false unless i
+      while i = address_domain.index('.')
+        address_domain = address_domain[(i + 1)..-1]
+        return true if domain_list.include?(address_domain)
+      end
 
-      domain_list.include?(address_domain[(i + 1)..-1])
+      false
     end
 
     def mx_server_is_in?(domain_list)
