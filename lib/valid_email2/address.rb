@@ -125,7 +125,7 @@ module ValidEmail2
 
       max_depth = [@domain_hierarchy_max_depth, tokens.length].min
       (2..max_depth).each do |depth|
-        partial_domain = tokens.reverse.first(depth).reverse.join('.')
+        partial_domain = tokens.last(depth).join('.')
         return true if domain_list.include?(partial_domain)
       end
 
