@@ -29,11 +29,12 @@ module ValidEmail2
       @permitted_multibyte_characters_regex = val
     end
 
-    def initialize(address, dns_timeout = 5, dns_nameserver = nil)
+    def initialize(address, dns_timeout = 5, dns_nameserver = nil, domain_hierarchy_max_depth = 2)
       @parse_error = false
       @raw_address = address
       @dns_timeout = dns_timeout
       @dns_nameserver = dns_nameserver
+      @domain_hierarchy_max_depth = domain_hierarchy_max_depth
 
       begin
         @address = Mail::Address.new(address)
@@ -119,12 +120,16 @@ module ValidEmail2
       address_domain = address.domain.downcase
       return true if domain_list.include?(address_domain)
 
-      while i = address_domain.index('.')
-        address_domain = address_domain[(i + 1)..-1]
-        return true if domain_list.include?(address_domain)
+      tokens = address_domain.split('.')
+      return false if tokens.length < 3
+
+      max_depth = [@domain_hierarchy_max_depth, tokens.length].min
+      (2..max_depth).each do |depth|
+        partial_domain = tokens.reverse.first(depth).reverse.join('.')
+        return true if domain_list.include?(partial_domain)
       end
 
-      false
+      return false
     end
 
     def mx_server_is_in?(domain_list)

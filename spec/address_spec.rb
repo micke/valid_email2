@@ -78,6 +78,25 @@ describe ValidEmail2::Address do
       address = described_class.new("foo@example.com")
       expect(address.disposable_domain?).to eq false
     end
+
+    context "when the disposable domain has subdomains" do
+      let(:disposable_domain) { ValidEmail2.disposable_emails.find { |domain| domain.count(".") > 1 } }
+
+      it "is true if the domain is in the disposable_emails list" do
+        address = described_class.new("foo@#{disposable_domain}")
+        expect(address.disposable_domain?).to eq true
+      end
+
+      it "is true if the domain is a subdomain of a disposable domain" do
+        address = described_class.new("foo@sub.#{disposable_domain}")
+        expect(address.disposable_domain?).to eq true
+      end
+
+      it "is true if the domain is a deeply nested subdomain of a disposable domain" do
+        address = described_class.new("foo@sub3.sub2.sub1.#{disposable_domain}")
+        expect(address.disposable_domain?).to eq true
+      end
+    end
   end
 
   describe "caching" do
