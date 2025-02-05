@@ -29,7 +29,7 @@ module ValidEmail2
       @permitted_multibyte_characters_regex = val
     end
 
-    def initialize(address, dns_timeout = 5, dns_nameserver = nil, domain_hierarchy_max_depth = 2)
+    def initialize(address, dns_timeout = 5, dns_nameserver = nil, domain_hierarchy_max_depth: 3)
       @parse_error = false
       @raw_address = address
       @dns_timeout = dns_timeout
@@ -124,7 +124,7 @@ module ValidEmail2
       return false if tokens.length < 3
 
       max_depth = [@domain_hierarchy_max_depth, tokens.length].min
-      (3..max_depth).each do |depth|
+      (2..max_depth).each do |depth|
         partial_domain = tokens.reverse.first(depth).reverse.join('.')
         return true if domain_list.include?(partial_domain)
       end
