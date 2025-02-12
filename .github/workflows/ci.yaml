@@ -5,8 +5,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gemfile: [ activemodel6, activemodel7 ]
+        gemfile: [activemodel6, activemodel7, activemodel8]
         ruby: [3.1, 3.2, 3.3]
+        exclude:
+          - gemfile: activemodel8
+            ruby: 3.1
     runs-on: ubuntu-latest
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
