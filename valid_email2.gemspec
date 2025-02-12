@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "rspec-benchmark", "~> 0.6"
   spec.add_development_dependency "net-smtp"
-  spec.add_development_dependency "pry"
+  spec.add_development_dependency "debug"
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 6.0"
 end

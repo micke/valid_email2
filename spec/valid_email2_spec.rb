@@ -76,6 +76,9 @@ class TestUserMultiple < TestModel
 end
 
 describe ValidEmail2 do
+  before do
+    ValidEmail2::Dns.clear_cache
+  end
 
   let(:disposable_domain) { ValidEmail2.disposable_emails.first }
 

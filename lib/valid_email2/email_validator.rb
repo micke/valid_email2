@@ -1,4 +1,5 @@
 require "valid_email2/address"
+require "logger" # Fix concurrent-ruby removing logger dependency which Rails itself does not have
 require "active_model"
 require "active_model/validations"
 
@@ -12,7 +13,8 @@ module ValidEmail2
       return unless value.present?
       options = default_options.merge(self.options)
 
-      addresses = sanitized_values(value).map { |v| ValidEmail2::Address.new(v, options[:dns_timeout], options[:dns_nameserver]) }
+      dns = ValidEmail2::Dns.new(options[:dns_timeout], options[:dns_nameserver])
+      addresses = sanitized_values(value).map { |v| ValidEmail2::Address.new(v, dns) }
 
       error(record, attribute) && return unless addresses.all?(&:valid?)
 

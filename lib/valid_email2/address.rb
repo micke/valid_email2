@@ -1,9 +1,8 @@
 # frozen_string_literal:true
 
 require "valid_email2"
-require "resolv"
 require "mail"
-require "valid_email2/dns_records_cache"
+require "valid_email2/dns"
 
 module ValidEmail2
   class Address
@@ -29,11 +28,10 @@ module ValidEmail2
       @permitted_multibyte_characters_regex = val
     end
 
-    def initialize(address, dns_timeout = 5, dns_nameserver = nil)
+    def initialize(address, dns = Dns.new)
       @parse_error = false
       @raw_address = address
-      @dns_timeout = dns_timeout
-      @dns_nameserver = dns_nameserver
+      @dns = dns
 
       begin
         @address = Mail::Address.new(address)
@@ -103,14 +101,14 @@ module ValidEmail2
       return false unless valid?
       return false if null_mx?
 
-      mx_or_a_servers.any?
+      @dns.mx_servers(address.domain).any? || @dns.a_servers(address.domain).any?
     end
 
     def valid_strict_mx?
       return false unless valid?
       return false if null_mx?
 
-      mx_servers.any?
+      @dns.mx_servers(address.domain).any?
     end
 
     private
@@ -126,7 +124,7 @@ module ValidEmail2
     end
 
     def mx_server_is_in?(domain_list)
-      mx_servers.any? { |mx_server|
+      @dns.mx_servers(address.domain).any? { |mx_server|
         return false unless mx_server.respond_to?(:exchange)
 
         mx_server = mx_server.exchange.to_s
@@ -145,41 +143,9 @@ module ValidEmail2
       @raw_address.each_char.any? { |char| char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex }
     end
 
-    def resolv_config
-      @resolv_config ||= begin
-        config = Resolv::DNS::Config.default_config_hash
-        config[:nameserver] = @dns_nameserver if @dns_nameserver
-        config
-      end
-
-      @resolv_config
-    end
-
-    def mx_servers
-      @mx_servers_cache ||= ValidEmail2::DnsRecordsCache.new
-
-      @mx_servers_cache.fetch(address.domain.downcase) do
-        Resolv::DNS.open(resolv_config) do |dns|
-          dns.timeouts = @dns_timeout
-          dns.getresources(address.domain, Resolv::DNS::Resource::IN::MX)
-        end
-      end
-    end
-
     def null_mx?
+      mx_servers = @dns.mx_servers(address.domain)
       mx_servers.length == 1 && mx_servers.first.preference == 0 && mx_servers.first.exchange.length == 0
-    end
-
-    def mx_or_a_servers
-      @mx_or_a_servers_cache ||= ValidEmail2::DnsRecordsCache.new
-
-      @mx_or_a_servers_cache.fetch(address.domain.downcase) do
-        Resolv::DNS.open(resolv_config) do |dns|
-          dns.timeouts = @dns_timeout
-          (mx_servers.any? && mx_servers) ||
-            dns.getresources(address.domain, Resolv::DNS::Resource::IN::A)
-        end
-      end
     end
   end
 end

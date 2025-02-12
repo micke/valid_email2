@@ -1,5 +1,6 @@
 $:.unshift File.expand_path("../lib",__FILE__)
 require "valid_email2"
+require "debug"
 
 # Include and configure  benchmark
 require 'rspec-benchmark'

@@ -3,6 +3,10 @@
 require "spec_helper"
 
 describe ValidEmail2::Address do
+  before do
+    ValidEmail2::Dns.clear_cache
+  end
+
   describe "#valid?" do
     it "is valid" do
       address = described_class.new("foo@bar123.com")
@@ -58,8 +62,8 @@ describe ValidEmail2::Address do
 
   describe "caching" do
     let(:email_address) { "example@ymail.com" }
-    let(:email_instance) { described_class.new(email_address) }
-    let(:dns_records_cache_instance) { ValidEmail2::DnsRecordsCache.new }
+    let(:dns_instance) { ValidEmail2::Dns.new }
+    let(:email_instance) { described_class.new(email_address, dns_instance) }
     let(:ttl) { 1_000 }
     let(:mock_resolv_dns) { instance_double(Resolv::DNS) }
     let(:mock_mx_records) { [double("MX", exchange: "mx.ymail.com", preference: 10, ttl: ttl)] }
@@ -72,7 +76,7 @@ describe ValidEmail2::Address do
 
     describe "#valid_strict_mx?" do
       let(:cached_at) { Time.now }
-      let(:mock_cache_data) { { email_instance.address.domain => { records: mock_mx_records, cached_at: cached_at, ttl: ttl } } }
+      let(:mock_cache_data) { { [email_instance.address.domain, Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_mx_records, cached_at, ttl) } }
 
       before do
         allow(mock_resolv_dns).to receive(:getresources)
@@ -108,9 +112,9 @@ describe ValidEmail2::Address do
 
       describe "ttl" do
         before do
-          dns_records_cache_instance.instance_variable_set(:@cache, mock_cache_data)
-          allow(ValidEmail2::DnsRecordsCache).to receive(:new).and_return(dns_records_cache_instance)
-          allow(dns_records_cache_instance).to receive(:fetch).with(email_instance.address.domain).and_call_original
+          stub_const("ValidEmail2::Dns::CACHE", mock_cache_data)
+          allow(ValidEmail2::Dns).to receive(:new).and_return(dns_instance)
+          allow(dns_instance).to receive(:fetch).with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX).and_call_original
         end
 
         context "when the time since last lookup is less than the cached ttl entry" do
@@ -136,18 +140,18 @@ describe ValidEmail2::Address do
 
       describe "cache size" do
         before do
-          dns_records_cache_instance.instance_variable_set(:@cache, mock_cache_data)
-          allow(ValidEmail2::DnsRecordsCache).to receive(:new).and_return(dns_records_cache_instance)
-          allow(dns_records_cache_instance).to receive(:fetch).with(email_instance.address.domain).and_call_original
+          stub_const("ValidEmail2::Dns::CACHE", mock_cache_data)
+          allow(ValidEmail2::Dns).to receive(:new).and_return(dns_instance)
+          allow(dns_instance).to receive(:fetch).with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX).and_call_original
         end
 
         context "when the cache size is less than or equal to the max cache size" do
           before do
-            stub_const("ValidEmail2::DnsRecordsCache::MAX_CACHE_SIZE", 1)
+            stub_const("ValidEmail2::Dns::MAX_CACHE_SIZE", 1)
           end
 
           it "does not prune the cache" do
-            expect(dns_records_cache_instance).not_to receive(:prune_cache)
+            expect(dns_instance).not_to receive(:prune_cache)
 
             email_instance.valid_strict_mx?
           end
@@ -159,42 +163,40 @@ describe ValidEmail2::Address do
           end
 
           context "and there are older cached entries" do
-            let(:mock_cache_data) { { "another_domain.com" => { records: mock_mx_records, cached_at: cached_at - 100, ttl: ttl } } }
+            let(:mock_cache_data) { { ["another_domain.com", Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_mx_records, cached_at - 100, ttl) } }
 
             it "does not prune those entries" do
               email_instance.valid_strict_mx?
 
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys.size).to eq 2
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys).to match_array([email_instance.address.domain, "another_domain.com"])
+              expect(ValidEmail2::Dns::CACHE.keys).to match_array([[email_instance.address.domain, Resolv::DNS::Resource::IN::MX], ["another_domain.com", Resolv::DNS::Resource::IN::MX]])
             end
           end
         end
 
         context "when the cache size is greater than the max cache size" do
           before do
-            stub_const("ValidEmail2::DnsRecordsCache::MAX_CACHE_SIZE", 0)
+            stub_const("ValidEmail2::Dns::MAX_CACHE_SIZE", 0)
           end
 
           it "prunes the cache" do
-            expect(dns_records_cache_instance).to receive(:prune_cache).once
+            expect(dns_instance).to receive(:prune_cache).once
 
             email_instance.valid_strict_mx?
           end
 
-          it "calls the the MX servers lookup" do    
+          it "calls the the MX servers lookup" do
             email_instance.valid_strict_mx?
 
             expect(Resolv::DNS).to have_received(:open).once
           end
 
           context "and there are older cached entries" do
-            let(:mock_cache_data) { { "another_domain.com" => { records: mock_mx_records, cached_at: cached_at - 100, ttl: ttl } } }
+            let(:mock_cache_data) { { ["another_domain.com", Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_mx_records, cached_at - 100, ttl) } }
 
             it "prunes those entries" do
               email_instance.valid_strict_mx?
 
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys.size).to eq 1
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys).to match_array([email_instance.address.domain])
+              expect(ValidEmail2::Dns::CACHE.keys).to match_array([[email_instance.address.domain, Resolv::DNS::Resource::IN::MX]])
             end
           end
         end
@@ -203,13 +205,13 @@ describe ValidEmail2::Address do
 
     describe "#valid_mx?" do
       let(:cached_at) { Time.now }
-      let(:mock_cache_data) { { email_instance.address.domain => { records: mock_a_records, cached_at: cached_at, ttl: ttl } } }
+      let(:mock_cache_data) { { [email_instance.address.domain, Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_a_records, cached_at, ttl) } }
       let(:mock_a_records) { [double("A", address: "192.168.1.1", ttl: ttl)] }
 
       before do
         allow(email_instance).to receive(:mx_servers).and_return(mock_mx_records)
         allow(mock_resolv_dns).to receive(:getresources)
-          .with(email_instance.address.domain, Resolv::DNS::Resource::IN::A)
+          .with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
           .and_return(mock_a_records)
       end
 
@@ -241,9 +243,9 @@ describe ValidEmail2::Address do
 
       describe "ttl" do
         before do
-          dns_records_cache_instance.instance_variable_set(:@cache, mock_cache_data)
-          allow(ValidEmail2::DnsRecordsCache).to receive(:new).and_return(dns_records_cache_instance)
-          allow(dns_records_cache_instance).to receive(:fetch).with(email_instance.address.domain).and_call_original
+          stub_const("ValidEmail2::Dns::CACHE", mock_cache_data)
+          allow(ValidEmail2::Dns).to receive(:new).and_return(dns_instance)
+          allow(dns_instance).to receive(:fetch).with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX).and_call_original
         end
 
         context "when the time since last lookup is less than the cached ttl entry" do
@@ -269,14 +271,14 @@ describe ValidEmail2::Address do
 
       describe "cache size" do
         before do
-          dns_records_cache_instance.instance_variable_set(:@cache, mock_cache_data)
-          allow(ValidEmail2::DnsRecordsCache).to receive(:new).and_return(dns_records_cache_instance)
-          allow(dns_records_cache_instance).to receive(:fetch).with(email_instance.address.domain).and_call_original
+          stub_const("ValidEmail2::Dns::CACHE", mock_cache_data)
+          allow(ValidEmail2::Dns).to receive(:new).and_return(dns_instance)
+          allow(dns_instance).to receive(:fetch).with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX).and_call_original
         end
 
         context "when the cache size is less than or equal to the max cache size" do
           before do
-            stub_const("ValidEmail2::DnsRecordsCache::MAX_CACHE_SIZE", 1)
+            stub_const("ValidEmail2::Dns::MAX_CACHE_SIZE", 1)
           end
 
           it "does not prune the cache" do
@@ -292,24 +294,23 @@ describe ValidEmail2::Address do
           end
 
           context "and there are older cached entries" do
-            let(:mock_cache_data) { { "another_domain.com" => { records: mock_a_records, cached_at: cached_at - 100, ttl: ttl } } }
+            let(:mock_cache_data) { { ["another_domain.com", Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_a_records, cached_at - 100, ttl) } }
 
             it "does not prune those entries" do
               email_instance.valid_mx?
 
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys.size).to eq 2
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys).to match_array([email_instance.address.domain, "another_domain.com"])
+              expect(ValidEmail2::Dns::CACHE.keys).to match_array([[email_instance.address.domain, Resolv::DNS::Resource::IN::MX], ["another_domain.com", Resolv::DNS::Resource::IN::MX]])
             end
           end
         end
 
         context "when the cache size is greater than the max cache size" do
           before do
-            stub_const("ValidEmail2::DnsRecordsCache::MAX_CACHE_SIZE", 0)
+            stub_const("ValidEmail2::Dns::MAX_CACHE_SIZE", 0)
           end
 
-          it "prunes the cache" do 
-            expect(dns_records_cache_instance).to receive(:prune_cache).once 
+          it "prunes the cache" do
+            expect(dns_instance).to receive(:prune_cache).once
 
             email_instance.valid_mx?
           end
@@ -321,17 +322,16 @@ describe ValidEmail2::Address do
           end
 
           context "and there are older cached entries" do
-            let(:mock_cache_data) { { "another_domain.com" => { records: mock_a_records, cached_at: cached_at - 100, ttl: ttl } } }
+            let(:mock_cache_data) { { ["another_domain.com", Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_a_records, cached_at - 100, ttl) } }
 
             it "prunes those entries" do
               email_instance.valid_mx?
 
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys.size).to eq 1
-              expect(dns_records_cache_instance.instance_variable_get(:@cache).keys).to match_array([email_instance.address.domain])
+              expect(ValidEmail2::Dns::CACHE.keys).to match_array([[email_instance.address.domain, Resolv::DNS::Resource::IN::MX]])
             end
           end
         end
-      end    
+      end
     end
   end
 end
