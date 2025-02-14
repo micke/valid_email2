@@ -23,8 +23,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         if: ${{ steps.release.outputs.release_created }}
         with:
-          ruby-version: 3.2
+          rubygems: latest
           bundler-cache: true
-          cache-version: 1
       - uses: rubygems/release-gem@v1
         if: ${{ steps.release.outputs.release_created }}
