@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.4](https://github.com/micke/valid_email2/compare/v7.0.3...v7.0.4) (2025-02-14)
+
+
+### Bug Fixes
+
+* pinning dependency for release task ([2f7d554](https://github.com/micke/valid_email2/commit/2f7d554bc5c18d68e56a1abdcb52957443ad6288))
+
 ## [7.0.3](https://github.com/micke/valid_email2/compare/v7.0.2...v7.0.3) (2025-02-13)
 
 
