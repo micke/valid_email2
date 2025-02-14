@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.6](https://github.com/micke/valid_email2/compare/v7.0.5...v7.0.6) (2025-02-14)
+
+
+### Bug Fixes
+
+* check corrupted bundler cache ([290009b](https://github.com/micke/valid_email2/commit/290009b92c3e69fc668e473215ed08ff2fc5a48d))
+
 ## [7.0.5](https://github.com/micke/valid_email2/compare/v7.0.4...v7.0.5) (2025-02-14)
 
 
