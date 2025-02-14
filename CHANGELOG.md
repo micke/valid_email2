@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.8](https://github.com/micke/valid_email2/compare/v7.0.7...v7.0.8) (2025-02-14)
+
+
+### Bug Fixes
+
+* checkout new version ([9906824](https://github.com/micke/valid_email2/commit/990682433d176c00351eff056c28a6dd72cd6d8a))
+
 ## [7.0.7](https://github.com/micke/valid_email2/compare/v7.0.6...v7.0.7) (2025-02-14)
 
 
