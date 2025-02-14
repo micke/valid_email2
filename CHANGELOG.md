@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.5](https://github.com/micke/valid_email2/compare/v7.0.4...v7.0.5) (2025-02-14)
+
+
+### Bug Fixes
+
+* do not cache deps in release please ([a53f765](https://github.com/micke/valid_email2/commit/a53f76548eaf3c286763b73cfca6f6061fc88d28))
+
 ## [7.0.4](https://github.com/micke/valid_email2/compare/v7.0.3...v7.0.4) (2025-02-14)
 
 
