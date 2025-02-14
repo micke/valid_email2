@@ -22,7 +22,5 @@ jobs:
           fetch-tags: true
       - uses: ruby/setup-ruby@v1
         if: ${{ steps.release.outputs.release_created }}
-        with:
-          bundler-cache: true
       - uses: rubygems/release-gem@v1
         if: ${{ steps.release.outputs.release_created }}
