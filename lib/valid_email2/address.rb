@@ -117,10 +117,16 @@ module ValidEmail2
       address_domain = address.domain.downcase
       return true if domain_list.include?(address_domain)
 
-      i = address_domain.index('.')
-      return false unless i
+      tokens = address_domain.split('.')
+      return false if tokens.length < 3
 
-      domain_list.include?(address_domain[(i + 1)..-1])
+      # check only 6 elements deep
+      2.upto(6).each do |depth|
+        limited_sub_domain_part = tokens.reverse.first(depth).reverse.join('.')
+        return true if domain_list.include?(limited_sub_domain_part)
+      end
+
+      false
     end
 
     def mx_server_is_in?(domain_list)
