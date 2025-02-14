@@ -101,14 +101,22 @@ module ValidEmail2
       return false unless valid?
       return false if null_mx?
 
-      @dns.mx_servers(address.domain).any? || @dns.a_servers(address.domain).any?
+      mx_servers.any? || a_servers.any?
     end
 
     def valid_strict_mx?
       return false unless valid?
       return false if null_mx?
 
-      @dns.mx_servers(address.domain).any?
+      mx_servers.any?
+    end
+
+    def mx_servers
+      @dns.mx_servers(address.domain)
+    end
+
+    def a_servers
+      @dns.a_servers(address.domain)
     end
 
     private
@@ -124,7 +132,7 @@ module ValidEmail2
     end
 
     def mx_server_is_in?(domain_list)
-      @dns.mx_servers(address.domain).any? { |mx_server|
+      mx_servers.any? { |mx_server|
         return false unless mx_server.respond_to?(:exchange)
 
         mx_server = mx_server.exchange.to_s
@@ -144,7 +152,6 @@ module ValidEmail2
     end
 
     def null_mx?
-      mx_servers = @dns.mx_servers(address.domain)
       mx_servers.length == 1 && mx_servers.first.preference == 0 && mx_servers.first.exchange.length == 0
     end
   end
