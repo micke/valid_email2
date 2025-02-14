@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.7](https://github.com/micke/valid_email2/compare/v7.0.6...v7.0.7) (2025-02-14)
+
+
+### Bug Fixes
+
+* use a different ruby-version for release ([5d9465b](https://github.com/micke/valid_email2/commit/5d9465be9d32f685b78d14c56c822428e7d33580))
+
 ## [7.0.6](https://github.com/micke/valid_email2/compare/v7.0.5...v7.0.6) (2025-02-14)
 
 
