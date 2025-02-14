@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.3](https://github.com/micke/valid_email2/compare/v7.0.2...v7.0.3) (2025-02-13)
+
+
+### Bug Fixes
+
+* Class level DNS cache ([#271](https://github.com/micke/valid_email2/issues/271)) ([50aad15](https://github.com/micke/valid_email2/commit/50aad153270287ee19fbd23c190758a55ad00920))
+
 ## [7.0.2](https://github.com/micke/valid_email2/compare/v7.0.1...v7.0.2) (2025-01-23)
 
 
