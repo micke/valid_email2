@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.9](https://github.com/micke/valid_email2/compare/v7.0.8...v7.0.9) (2025-02-14)
+
+
+### Bug Fixes
+
+* just trigger a release build ([3a3f0e0](https://github.com/micke/valid_email2/commit/3a3f0e045df1938121cfa47f5a538f09a2b89d81))
+
 ## [7.0.8](https://github.com/micke/valid_email2/compare/v7.0.7...v7.0.8) (2025-02-14)
 
 
