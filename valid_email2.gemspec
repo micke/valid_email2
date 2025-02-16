@@ -1,5 +1,4 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "valid_email2/version"
 
@@ -8,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = ValidEmail2::VERSION
   spec.authors       = ["Micke Lisinge"]
   spec.email         = ["hi@micke.me"]
-  spec.description   = %q{ActiveModel validation for email. Including MX lookup and disposable email deny list}
-  spec.summary       = %q{ActiveModel validation for email. Including MX lookup and disposable email deny list}
+  spec.description   = 'ActiveModel validation for email. Including MX lookup and disposable email deny list'
+  spec.summary       = 'ActiveModel validation for email. Including MX lookup and disposable email deny list'
   spec.homepage      = "https://github.com/micke/valid_email2"
   spec.license       = "MIT"
 
@@ -27,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-benchmark", "~> 0.6"
   spec.add_development_dependency "net-smtp"
   spec.add_development_dependency "debug"
+  spec.add_development_dependency "rubocop"
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 6.0"
 end

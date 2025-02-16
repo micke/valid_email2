@@ -55,7 +55,52 @@ describe ValidEmail2::Address do
 
       it "is valid if it contains special scandinavian characters" do
         address = described_class.new("jørgen@email.dk")
-        expect(address.valid?).to eq true
+        expect(address.valid?).to be_truthy
+      end
+    end
+  end
+
+  describe "#disposable_domain?" do
+    context "when the disposable domain does not have subdomains" do
+      let(:disposable_domain) { ValidEmail2.disposable_emails.select { |domain| domain.count(".") == 1 }.sample }
+
+      it "is true if the domain is in the disposable_emails list" do
+        address = described_class.new("foo@#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
+      end
+
+      it "is true if the domain is a subdomain of a disposable domain" do
+        address = described_class.new("foo@sub.#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
+      end
+
+      it "is true if the domain is a deeply nested subdomain of a disposable domain" do
+        address = described_class.new("foo@sub3.sub2.sub1.#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
+      end
+
+      it "is false if the domain is not in the disposable_emails list" do
+        address = described_class.new("foo@example.com")
+        expect(address.disposable_domain?).to eq false
+      end
+    end
+
+    context "when the disposable domain has subdomains" do
+      let(:disposable_domain) { ValidEmail2.disposable_emails.select { |domain| domain.count(".") > 1 }.sample }
+
+      it "is true if the domain is in the disposable_emails list" do
+        address = described_class.new("foo@#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
+      end
+
+      it "is true if the domain is a subdomain of a disposable domain" do
+        address = described_class.new("foo@sub.#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
+      end
+
+      it "is true if the domain is a deeply nested subdomain of a disposable domain" do
+        address = described_class.new("foo@sub3.sub2.sub1.#{disposable_domain}")
+        expect(address.disposable_domain?).to be_truthy
       end
     end
   end
