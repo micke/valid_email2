@@ -3,6 +3,7 @@
 require "valid_email2"
 require "mail"
 require "valid_email2/dns"
+require "digest"
 
 module ValidEmail2
   class Address
@@ -11,6 +12,7 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
+    @cache_mx_server_is_in = {}
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -130,15 +132,24 @@ module ValidEmail2
     end
 
     def mx_server_is_in?(domain_list)
-      @dns.mx_servers(address.domain).any? { |mx_server|
+      mx_servers = @dns.mx_servers(address.domain)
+
+      cache_key = generate_mx_cache_key(domain_list, mx_servers)
+
+      return self.class.cache_mx_server_is_in[cache_key] if !cache_key.nil? && self.class.cache_mx_server_is_in.key?(cache_key)
+
+      result = mx_servers.any? do |mx_server|
         return false unless mx_server.respond_to?(:exchange)
 
         mx_server = mx_server.exchange.to_s
 
-        domain_list.any? { |domain|
+        domain_list.any? do |domain|
           mx_server.end_with?(domain) && mx_server =~ /\A(?:.+\.)*?#{domain}\z/
-        }
-      }
+        end
+      end
+
+      self.class.cache_mx_server_is_in[cache_key] = result unless cache_key.nil?
+      result
     end
 
     def address_contain_multibyte_characters?
@@ -152,6 +163,19 @@ module ValidEmail2
     def null_mx?
       mx_servers = @dns.mx_servers(address.domain)
       mx_servers.length == 1 && mx_servers.first.preference == 0 && mx_servers.first.exchange.length == 0
+    end
+
+    def generate_mx_cache_key(domain_list, mx_servers)
+      return nil if mx_servers.length == 0 || domain_list.length == 0
+
+      mx_servers_str = mx_servers.map(&:exchange).map(&:to_s).sort.join
+      return address.domain if mx_servers_str == ""
+
+      "#{domain_list.object_id}_#{domain_list.length}_#{mx_servers_str.downcase}"
+    end
+
+    def self.cache_mx_server_is_in
+      @cache_mx_server_is_in
     end
   end
 end
