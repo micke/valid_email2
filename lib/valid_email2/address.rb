@@ -3,7 +3,6 @@
 require "valid_email2"
 require "mail"
 require "valid_email2/dns"
-require "digest"
 
 module ValidEmail2
   class Address
@@ -12,7 +11,6 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
-    @cache_mx_server_is_in = {}
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
