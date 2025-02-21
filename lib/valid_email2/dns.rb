@@ -37,7 +37,7 @@ module ValidEmail2
         mx_server = mx_server.exchange.to_s
 
         domain_list.any? do |disposable_domain|
-          mx_server.end_with?(disposable_domain) && mx_server =~ /\A(?:.+\.)*?#{disposable_domain}\z/
+          mx_server.end_with?(disposable_domain) && mx_server.match?(/\A(?:.+\.)*?#{disposable_domain}\z/)
         end
       end
 
@@ -89,10 +89,10 @@ module ValidEmail2
     end
 
     def generate_mx_cache_key(domain, domain_list, mx_servers)
-      return nil if mx_servers.empty? || domain_list.empty?
+      return if mx_servers.empty? || domain_list.empty?
 
       mx_servers_str = mx_servers.map(&:exchange).map(&:to_s).sort.join
-      return domain if mx_servers_str == ""
+      return domain if mx_servers_str.empty?
 
       "#{domain_list.object_id}_#{domain_list.length}_#{mx_servers_str.downcase}"
     end
