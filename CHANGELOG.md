@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.10](https://github.com/micke/valid_email2/compare/v7.0.9...v7.0.10) (2025-02-25)
+
+
+### Bug Fixes
+
+* remove buildingradar.com ([7c86044](https://github.com/micke/valid_email2/commit/7c860448804638f12b484d20e5973e8a8acc5e1d))
+
 ## [7.0.9](https://github.com/micke/valid_email2/compare/v7.0.8...v7.0.9) (2025-02-14)
 
 
