@@ -130,15 +130,7 @@ module ValidEmail2
     end
 
     def mx_server_is_in?(domain_list)
-      @dns.mx_servers(address.domain).any? { |mx_server|
-        return false unless mx_server.respond_to?(:exchange)
-
-        mx_server = mx_server.exchange.to_s
-
-        domain_list.any? { |domain|
-          mx_server.end_with?(domain) && mx_server =~ /\A(?:.+\.)*?#{domain}\z/
-        }
-      }
+      @dns.mx_servers_disposable?(address.domain, domain_list)
     end
 
     def address_contain_multibyte_characters?

@@ -111,12 +111,53 @@ describe ValidEmail2::Address do
     let(:email_instance) { described_class.new(email_address, dns_instance) }
     let(:ttl) { 1_000 }
     let(:mock_resolv_dns) { instance_double(Resolv::DNS) }
-    let(:mock_mx_records) { [double("MX", exchange: "mx.ymail.com", preference: 10, ttl: ttl)] }
+    let(:mock_mx_records) { [double("MX", exchange: "mx.ymail.com", preference: 10, ttl:)] }
 
     before do
       allow(email_instance).to receive(:null_mx?).and_return(false)
       allow(Resolv::DNS).to receive(:open).and_yield(mock_resolv_dns)
       allow(mock_resolv_dns).to receive(:timeouts=)
+    end
+
+    describe "#disposable_mx_server?" do
+      let(:disposable_email_address) { "example@10minutemail.com" }
+      let(:disposable_mx_server) { ValidEmail2.disposable_emails.select { |domain| domain.count(".") == 1 }.sample }
+      let(:disposable_email_instance) { described_class.new(disposable_email_address, dns_instance) }
+      let(:mock_disposable_mx_records) { [double("MX", exchange: "mx.#{disposable_mx_server}", preference: 10, ttl:)] }
+
+      before do
+        allow(mock_resolv_dns).to receive(:getresources)
+          .with(disposable_email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
+          .and_return(mock_disposable_mx_records)
+
+        allow(mock_resolv_dns).to receive(:getresources)
+          .with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
+          .and_return(mock_mx_records)
+      end
+
+      it "is false if the MX server is not in the disposable_emails list" do
+        expect(email_instance).not_to be_disposable_mx_server
+      end
+
+      it "is true if the MX server is in the disposable_emails list" do
+        expect(disposable_email_instance).to be_disposable_mx_server
+      end
+
+      it "is false and then true when the MX record changes from non-disposable to disposable" do
+        allow(mock_resolv_dns).to receive(:getresources)
+          .with(disposable_email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
+          .and_return(mock_mx_records) # non-disposable MX records
+
+        expect(disposable_email_instance).not_to be_disposable_mx_server
+
+        ValidEmail2::Dns.clear_cache
+
+        allow(mock_resolv_dns).to receive(:getresources)
+          .with(disposable_email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
+          .and_return(mock_disposable_mx_records) # disposable MX records
+
+        expect(disposable_email_instance).to be_disposable_mx_server
+      end
     end
 
     describe "#valid_strict_mx?" do
@@ -251,7 +292,7 @@ describe ValidEmail2::Address do
     describe "#valid_mx?" do
       let(:cached_at) { Time.now }
       let(:mock_cache_data) { { [email_instance.address.domain, Resolv::DNS::Resource::IN::MX] => ValidEmail2::Dns::CacheEntry.new(mock_a_records, cached_at, ttl) } }
-      let(:mock_a_records) { [double("A", address: "192.168.1.1", ttl: ttl)] }
+      let(:mock_a_records) { [double("A", address: "192.168.1.1", ttl:)] }
 
       before do
         allow(email_instance).to receive(:mx_servers).and_return(mock_mx_records)
