@@ -24,6 +24,6 @@ describe "Performance testing" do
     expect(ValidEmail2.disposable_emails.count).to be > 30000
 
     # check lookup timing
-    expect { address.send(:disposable_mx_server?) }.to perform_under(0.0001).sec.warmup(1).times.sample(10).times
+    expect { address.send(:disposable_mx_server?) }.to perform_under(0.0001).sec.sample(10).times
   end
 end
