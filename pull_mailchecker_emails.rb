@@ -29,6 +29,16 @@ remote_emails = [
   resp.body.split("\n").flatten
 end
 
-result_emails = (existing_emails + remote_emails).map(&:strip).uniq.sort - allow_listed_emails
+deny_listed_tlds = %w[me ml id]
 
-File.write("config/disposable_email_domains.txt", result_emails.join("\n"))
+result_emails = (existing_emails + remote_emails).map(&:strip) - allow_listed_emails
+result_emails = result_emails.map do |line|
+  ts = line.chomp.split(".")
+  if ts.last.size == 2 && !deny_listed_tlds.include?(ts.last)
+    ts.last(3).join(".")
+  else
+    ts.last(2).join(".")
+  end
+end.uniq.sort
+
+File.open("config/disposable_email_domains.txt", "w") { |f| f.puts(result_emails) }
