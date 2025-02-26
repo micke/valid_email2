@@ -4,7 +4,7 @@ module ValidEmail2
   class Dns
     MAX_CACHE_SIZE = 1_000
     CACHE = {}
-
+    MX_SERVERS_CACHE = {}
     CacheEntry = Struct.new(:records, :cached_at, :ttl)
 
     def self.prune_cache
@@ -24,6 +24,26 @@ module ValidEmail2
 
     def mx_servers(domain)
       fetch(domain, Resolv::DNS::Resource::IN::MX)
+    end
+
+    def mx_servers_disposable?(domain, domain_list)
+      servers = mx_servers(domain)
+      cache_key = generate_mx_cache_key(domain, domain_list, servers)
+      return MX_SERVERS_CACHE[cache_key] if !cache_key.nil? && MX_SERVERS_CACHE.key?(cache_key)
+
+      result = servers.any? do |mx_server|
+        return false unless mx_server.respond_to?(:exchange)
+
+        mx_server = mx_server.exchange.to_s
+
+        domain_list.any? do |disposable_domain|
+          mx_server.end_with?(disposable_domain) && mx_server.match?(/\A(?:.+\.)*?#{disposable_domain}\z/)
+        end
+      end
+
+      MX_SERVERS_CACHE[cache_key] = result unless cache_key.nil?
+
+      result
     end
 
     def a_servers(domain)
@@ -66,6 +86,15 @@ module ValidEmail2
       config = Resolv::DNS::Config.default_config_hash
       config[:nameserver] = @dns_nameserver if @dns_nameserver
       config
+    end
+
+    def generate_mx_cache_key(domain, domain_list, mx_servers)
+      return if mx_servers.empty? || domain_list.empty?
+
+      mx_servers_str = mx_servers.map(&:exchange).map(&:to_s).sort.join
+      return domain if mx_servers_str.empty?
+
+      "#{domain_list.object_id}_#{domain_list.length}_#{mx_servers_str.downcase}"
     end
   end
 end
