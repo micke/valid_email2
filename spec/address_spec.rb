@@ -10,47 +10,49 @@ describe ValidEmail2::Address do
   describe "#valid?" do
     it "is valid" do
       address = described_class.new("foo@bar123.com")
-      expect(address.valid?).to be true
+      expect(address.valid?).to be_truthy
     end
 
     it "is valid for friendly emails" do
       address = described_class.new("Friendly Name <foo@gmail.com>")
-      expect(address.valid?).to be true
+      expect(address.valid?).to be_truthy
     end
 
     it "is invalid if email is nil" do
       address = described_class.new(nil)
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
     end
 
     it "is invalid if email is empty" do
       address = described_class.new(" ")
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
     end
 
     it "is invalid if domain is missing" do
       address = described_class.new("foo")
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
     end
 
     it "is invalid if email cannot be parsed" do
       address = described_class.new("<>")
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
+      expect(address.parse_error).to eql("Mail::AddressList can not parse |<>|: Only able to parse up to \"<\"")
     end
 
     it "is invalid if email contains emoticons" do
       address = described_class.new("foo🙈@gmail.com")
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
     end
 
     it "is invalid if it contains Japanese characters" do
       address = described_class.new("あいうえお@example.com")
-      expect(address.valid?).to be false
+      expect(address.valid?).to be_falsey
     end
 
     it "is invalid if it contains special scandinavian characters" do
       address = described_class.new("jørgen@email.dk")
-      expect(address.valid?).to eq false
+      expect(address.valid?).to be_falsey
+      expect(address.parse_error).to eq("invalid characters in jørgen")
     end
 
     context "permitted_multibyte_characters_regex is set" do
@@ -86,7 +88,7 @@ describe ValidEmail2::Address do
 
       it "is false if the domain is not in the disposable_emails list" do
         address = described_class.new("foo@example.com")
-        expect(address.disposable_domain?).to eq false
+        expect(address.disposable_domain?).to be_falsey
       end
     end
 
@@ -138,7 +140,7 @@ describe ValidEmail2::Address do
         result = email_instance.valid_strict_mx?
 
         expect(Resolv::DNS).to have_received(:open).once
-        expect(result).to be true
+        expect(result).to be_truthy
       end
 
       it "does not call the MX servers lookup when the email is cached" do
@@ -150,14 +152,14 @@ describe ValidEmail2::Address do
 
       it "returns the cached result for subsequent calls" do
         first_result = email_instance.valid_strict_mx?
-        expect(first_result).to be true
+        expect(first_result).to be_truthy
 
         allow(mock_resolv_dns).to receive(:getresources)
           .with(email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
           .and_return([])
 
         second_result = email_instance.valid_strict_mx?
-        expect(second_result).to be true
+        expect(second_result).to be_truthy
       end
 
       describe "ttl" do
@@ -269,7 +271,7 @@ describe ValidEmail2::Address do
         result = email_instance.valid_mx?
 
         expect(Resolv::DNS).to have_received(:open).once
-        expect(result).to be true
+        expect(result).to be_truthy
       end
 
       it "does not call the MX or A servers lookup when the email is cached" do
@@ -281,14 +283,14 @@ describe ValidEmail2::Address do
 
       it "returns the cached result for subsequent calls" do
         first_result = email_instance.valid_mx?
-        expect(first_result).to be true
+        expect(first_result).to be_truthy
 
         allow(mock_resolv_dns).to receive(:getresources)
           .with(email_instance.address.domain, Resolv::DNS::Resource::IN::A)
           .and_return([])
 
         second_result = email_instance.valid_mx?
-        expect(second_result).to be true
+        expect(second_result).to be_truthy
       end
 
       describe "ttl" do

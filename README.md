@@ -110,7 +110,7 @@ validates :email, 'valid_email_2/email': { disallow_dotted: true }
 To validate that the email is not a friendly address, does not include a username:
 ```ruby
 # 'John Doe <john@doe.net>' is invalid
-validates :email, 'valid_email_2/email': { friendly: true }
+validates :email, 'valid_email_2/email': { disallow_friendly: true }
 ```
 
 To validate create your own custom message:
