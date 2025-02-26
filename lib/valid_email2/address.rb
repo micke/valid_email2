@@ -82,19 +82,15 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      domain_is_in?(ValidEmail2.disposable_emails)
-    end
-
-    def disposable_mx_server?
-      valid? && mx_server_is_in?(ValidEmail2.disposable_emails)
+      domain_is_in?(address.domain, ValidEmail2.disposable_emails)
     end
 
     def allow_listed?
-      domain_is_in?(ValidEmail2.allow_list)
+      domain_is_in?(address.domain, ValidEmail2.allow_list)
     end
 
     def deny_listed?
-      valid? && domain_is_in?(ValidEmail2.deny_list)
+      valid? && domain_is_in?(address.domain, ValidEmail2.deny_list)
     end
 
     def valid_mx?
@@ -113,8 +109,12 @@ module ValidEmail2
 
     private
 
-    def domain_is_in?(domain_list)
-      address_domain = address.domain.downcase
+    def disposable_mx_server?
+      mx_server_is_in?(ValidEmail2.disposable_emails)
+    end
+
+    def domain_is_in?(address_domain, domain_list)
+      address_domain = address_domain.downcase
       return true if domain_list.include?(address_domain)
 
       tokens = address_domain.split('.')
@@ -130,7 +130,13 @@ module ValidEmail2
     end
 
     def mx_server_is_in?(domain_list)
-      @dns.mx_servers_disposable?(address.domain, domain_list)
+      @dns.mx_servers(address.domain).any? { |mx_server|
+        return false unless mx_server.respond_to?(:exchange)
+
+        mx_server = mx_server.exchange.to_s
+
+        domain_is_in?(mx_server, domain_list)
+      }
     end
 
     def address_contain_multibyte_characters?

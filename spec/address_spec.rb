@@ -136,11 +136,11 @@ describe ValidEmail2::Address do
       end
 
       it "is false if the MX server is not in the disposable_emails list" do
-        expect(email_instance).not_to be_disposable_mx_server
+        expect(email_instance.send(:disposable_mx_server?)).not_to be_truthy
       end
 
       it "is true if the MX server is in the disposable_emails list" do
-        expect(disposable_email_instance).to be_disposable_mx_server
+        expect(disposable_email_instance.send(:disposable_mx_server?)).to be_truthy
       end
 
       it "is false and then true when the MX record changes from non-disposable to disposable" do
@@ -148,7 +148,7 @@ describe ValidEmail2::Address do
           .with(disposable_email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
           .and_return(mock_mx_records) # non-disposable MX records
 
-        expect(disposable_email_instance).not_to be_disposable_mx_server
+        expect(disposable_email_instance.send(:disposable_mx_server?)).not_to be_truthy
 
         ValidEmail2::Dns.clear_cache
 
@@ -156,7 +156,7 @@ describe ValidEmail2::Address do
           .with(disposable_email_instance.address.domain, Resolv::DNS::Resource::IN::MX)
           .and_return(mock_disposable_mx_records) # disposable MX records
 
-        expect(disposable_email_instance).to be_disposable_mx_server
+        expect(disposable_email_instance.send(:disposable_mx_server?)).to be_truthy
       end
     end
 
