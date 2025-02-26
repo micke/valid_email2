@@ -18,6 +18,10 @@ module ValidEmail2
 
       error(record, attribute) && return unless addresses.all?(&:valid?)
 
+      if options[:disallow_friendly]
+        error(record, attribute) && return if addresses.any?(&:friendly?)
+      end
+
       if options[:disallow_dotted]
         error(record, attribute) && return if addresses.any?(&:dotted?)
       end

@@ -13,6 +13,11 @@ describe ValidEmail2::Address do
       expect(address.valid?).to be true
     end
 
+    it "is valid for friendly emails" do
+      address = described_class.new("Friendly Name <foo@gmail.com>")
+      expect(address.valid?).to be true
+    end
+
     it "is invalid if email is nil" do
       address = described_class.new(nil)
       expect(address.valid?).to be false

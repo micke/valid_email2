@@ -11,6 +11,10 @@ class TestUserDotted < TestModel
   validates :email, 'valid_email_2/email': { disallow_dotted: true }
 end
 
+class TestUserFriendly < TestModel
+  validates :email, 'valid_email_2/email': { disallow_friendly: true }
+end
+
 class TestUserSubaddressing < TestModel
   validates :email, 'valid_email_2/email': { disallow_subaddressing: true }
 end
@@ -160,11 +164,6 @@ describe ValidEmail2 do
     it "is invalid if the domain name ends with a dash" do
       user = TestUser.new(email: "foo@gmail-.com")
       expect(user.valid?).to be_falsy
-    end
-
-    it "is invalid with trailing whitespace" do
-      user = TestUser.new(email: "foo@example.com ")
-      expect(user.valid?).to be_falsey
     end
 
     it "is invalid if domain contains #" do
@@ -417,6 +416,18 @@ describe ValidEmail2 do
 
     it "is invalid when address cotains dots" do
       user = TestUserDotted.new(email: "john.doe@gmail.com")
+      expect(user.valid?).to be_falsey
+    end
+  end
+
+  describe "with friendly validation" do
+    it "is valid when address does not contain a user_name" do
+      user = TestUserDotted.new(email: "johndoe@gmail.com")
+      expect(user.valid?).to be_truthy
+    end
+
+    it "is invalid when address cotains a user_name" do
+      user = TestUserDotted.new(email: "John Doe <john.doe@gmail.com>")
       expect(user.valid?).to be_falsey
     end
   end

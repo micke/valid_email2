@@ -62,11 +62,13 @@ module ValidEmail2
     end
 
     def valid_address?
-      return false if address.address != @raw_address
-
       !address.local.include?('..') &&
         !address.local.end_with?('.') &&
         !address.local.start_with?('.')
+    end
+
+    def friendly?
+      valid? && address.display_name.present?
     end
 
     def dotted?

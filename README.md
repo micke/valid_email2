@@ -51,13 +51,13 @@ To validate strictly that the domain has an MX record:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true }
 ```
-`strict_mx` and `mx` both default to a 5 second timeout for DNS lookups.  
+`strict_mx` and `mx` both default to a 5 second timeout for DNS lookups.
 To override this timeout, specify a `dns_timeout` option:
 ```ruby
 validates :email, 'valid_email_2/email': { strict_mx: true, dns_timeout: 10 }
 ```
 
-Any checks that require DNS resolution will use the default `Resolv::DNS` nameservers for DNS lookups.  
+Any checks that require DNS resolution will use the default `Resolv::DNS` nameservers for DNS lookups.
 To override these, specify a `dns_nameserver` option:
 ```ruby
 validates :email, 'valid_email_2/email': { mx: true, dns_nameserver: ['8.8.8.8', '8.8.4.4'] }
@@ -107,6 +107,12 @@ To validate that email does not contain a dot anywhere before the @:
 validates :email, 'valid_email_2/email': { disallow_dotted: true }
 ```
 
+To validate that the email is not a friendly address, does not include a username:
+```ruby
+# 'John Doe <john@doe.net>' is invalid
+validates :email, 'valid_email_2/email': { friendly: true }
+```
+
 To validate create your own custom message:
 ```ruby
 validates :email, 'valid_email_2/email': { message: "is not a valid email" }
@@ -148,7 +154,7 @@ ValidEmail2::Address.permitted_multibyte_characters_regex = /[ÆæØøÅåÄäÖ
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
-It is a good idea to stub out that validation in your test environment.  
+It is a good idea to stub out that validation in your test environment.
 Do so by adding this in your `spec_helper`:
 ```ruby
 config.before(:each) do
@@ -168,7 +174,7 @@ This gem is tested against currently supported Ruby and Rails versions. For an u
 
 In version v5.3.0 the config directory files were renamed as follows:
 
-`config/blacklisted_email_domains.yml` -> `config/deny_listed_email_domains.yml`  
+`config/blacklisted_email_domains.yml` -> `config/deny_listed_email_domains.yml`
 `config/whitelisted_email_domains.yml` -> `config/allow_listed_email_domains.yml`
 
 You won't need to make any changes yourself if you're installing this version for the first time. For individuals updating from earlier versions, make sure to update the file namings as per the above. In future versions this will be a breaking change.
@@ -178,7 +184,7 @@ You won't need to make any changes yourself if you're installing this version fo
 In version v3.0.0 I decided to move __and__ rename the config files from the
 vendor directory to the config directory. That means:
 
-`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`  
+`vendor/blacklist.yml` -> `config/blacklisted_email_domains.yml`
 `vendor/whitelist.yml` -> `config/whitelisted_email_domains.yml`
 
 The `disposable` validation has been improved with a `mx` check. Apply the
@@ -187,7 +193,7 @@ down or if they do not work without an internet connection.
 
 ## Upgrading to v2.0.0
 
-In version 1.0 of valid_email2 we only defined the `email` validator.  
+In version 1.0 of valid_email2 we only defined the `email` validator.
 But since other gems also define a `email` validator this can cause some unintended
 behaviours and emails that shouldn't be valid are regarded valid because the
 wrong validator is used by rails.
