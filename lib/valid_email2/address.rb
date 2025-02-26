@@ -82,19 +82,15 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      domain_is_in?(ValidEmail2.disposable_emails)
-    end
-
-    def disposable_mx_server?
-      valid? && mx_server_is_in?(ValidEmail2.disposable_emails)
+      domain_is_in?(address.domain, ValidEmail2.disposable_emails)
     end
 
     def allow_listed?
-      domain_is_in?(ValidEmail2.allow_list)
+      domain_is_in?(address.domain, ValidEmail2.allow_list)
     end
 
     def deny_listed?
-      valid? && domain_is_in?(ValidEmail2.deny_list)
+      valid? && domain_is_in?(address.domain, ValidEmail2.deny_list)
     end
 
     def valid_mx?
@@ -113,32 +109,27 @@ module ValidEmail2
 
     private
 
-    def domain_is_in?(domain_list)
-      address_domain = address.domain.downcase
-      return true if domain_list.include?(address_domain)
-
-      tokens = address_domain.split('.')
-      return false if tokens.length < 3
-
-      # check only 6 elements deep
-      2.upto(6).each do |depth|
-        limited_sub_domain_part = tokens.reverse.first(depth).reverse.join('.')
-        return true if domain_list.include?(limited_sub_domain_part)
-      end
-
-      false
+    def disposable_mx_server?
+      address_domains = @dns.mx_servers(address.domain).map(&:exchange).map(&:to_s)
+      domain_is_in?(address_domains, ValidEmail2.disposable_emails)
     end
 
-    def mx_server_is_in?(domain_list)
-      @dns.mx_servers(address.domain).any? { |mx_server|
-        return false unless mx_server.respond_to?(:exchange)
+    def domain_is_in?(address_domains, domain_list)
+      Array(address_domains).any? do |address_domain|
+        address_domain = address_domain.downcase
+        return true if domain_list.include?(address_domain)
 
-        mx_server = mx_server.exchange.to_s
+        tokens = address_domain.split('.')
+        return false if tokens.length < 3
 
-        domain_list.any? { |domain|
-          mx_server.end_with?(domain) && mx_server =~ /\A(?:.+\.)*?#{domain}\z/
-        }
-      }
+        # check only 6 elements deep
+        2.upto(6).each do |depth|
+          limited_sub_domain_part = tokens.reverse.first(depth).reverse.join('.')
+          return true if domain_list.include?(limited_sub_domain_part)
+        end
+
+        false
+      end
     end
 
     def address_contain_multibyte_characters?
