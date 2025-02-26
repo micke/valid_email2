@@ -8,16 +8,24 @@ module ValidEmail2
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
   class << self
+    attr_accessor :disposable_proc, :deny_proc, :allow_proc
+
+    def reset_lists
+      @disposable_emails = nil
+      @deny_list = nil
+      @allow_list = nil
+    end
+
     def disposable_emails
-      @disposable_emails ||= load_file(DISPOSABLE_FILE)
+      @disposable_emails ||= disposable_proc&.call || load_file(DISPOSABLE_FILE)
     end
 
     def deny_list
-      @deny_list ||= load_if_exists(DENY_LIST_FILE) || Set.new
+      @deny_list ||= deny_proc&.call || load_if_exists(DENY_LIST_FILE) || Set.new
     end
 
     def allow_list
-      @allow_list ||= load_if_exists(ALLOW_LIST_FILE) || Set.new
+      @allow_list ||= allow_proc&.call || load_if_exists(ALLOW_LIST_FILE) || Set.new
     end
 
     private
@@ -27,8 +35,7 @@ module ValidEmail2
     end
 
     def load_file(path)
-      # This method MUST return a Set, otherwise the
-      # performance will suffer!
+      # This method MUST return a Set, otherwise the performance will suffer!
       if path.end_with?(".yml")
         Set.new(YAML.load_file(path))
       else
