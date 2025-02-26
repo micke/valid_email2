@@ -110,33 +110,26 @@ module ValidEmail2
     private
 
     def disposable_mx_server?
-      mx_server_is_in?(ValidEmail2.disposable_emails)
+      address_domains = @dns.mx_servers(address.domain).map(&:exchange).map(&:to_s)
+      domain_is_in?(address_domains, ValidEmail2.disposable_emails)
     end
 
-    def domain_is_in?(address_domain, domain_list)
-      address_domain = address_domain.downcase
-      return true if domain_list.include?(address_domain)
+    def domain_is_in?(address_domains, domain_list)
+      Array(address_domains).any? do |address_domain|
+        address_domain = address_domain.downcase
+        return true if domain_list.include?(address_domain)
 
-      tokens = address_domain.split('.')
-      return false if tokens.length < 3
+        tokens = address_domain.split('.')
+        return false if tokens.length < 3
 
-      # check only 6 elements deep
-      2.upto(6).each do |depth|
-        limited_sub_domain_part = tokens.reverse.first(depth).reverse.join('.')
-        return true if domain_list.include?(limited_sub_domain_part)
+        # check only 6 elements deep
+        2.upto(6).each do |depth|
+          limited_sub_domain_part = tokens.reverse.first(depth).reverse.join('.')
+          return true if domain_list.include?(limited_sub_domain_part)
+        end
+
+        false
       end
-
-      false
-    end
-
-    def mx_server_is_in?(domain_list)
-      @dns.mx_servers(address.domain).any? { |mx_server|
-        return false unless mx_server.respond_to?(:exchange)
-
-        mx_server = mx_server.exchange.to_s
-
-        domain_is_in?(mx_server, domain_list)
-      }
     end
 
     def address_contain_multibyte_characters?
