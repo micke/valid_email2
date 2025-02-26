@@ -275,6 +275,13 @@ describe ValidEmail2 do
       user = TestUserDisallowDenyListed.new(email: "foo@deny-listed-test.com")
       expect(user.valid?).to be_falsey
     end
+
+    it "is invalid if the domain is deny-listed from a proc" do
+      ValidEmail2.deny_proc = -> { Set.new(['dubbi.com']) }
+      ValidEmail2.reset_lists
+      user = TestUserDisallowDenyListed.new(email: "foo@dubbi.com")
+      expect(user.valid?).to be_falsey
+    end
   end
 
   describe "with mx validation" do
