@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.11](https://github.com/micke/valid_email2/compare/v7.0.10...v7.0.11) (2025-02-28)
+
+
+### Bug Fixes
+
+* check if this actually fetches the tags ([be13649](https://github.com/micke/valid_email2/commit/be136494407c0731ef38e9ef958795f9aec0bcaa))
+
 ## [7.0.10](https://github.com/micke/valid_email2/compare/v7.0.9...v7.0.10) (2025-02-25)
 
 
