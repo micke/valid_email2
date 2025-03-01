@@ -110,8 +110,13 @@ module ValidEmail2
     private
 
     def disposable_mx_server?
+      mx_server_is_in?(ValidEmail2.disposable_emails)
+    end
+
+    # TODO: (PS) keep this for backward compatibility with the test setup described in the reamde
+    def mx_server_is_in?(domain_list)
       address_domains = @dns.mx_servers(address.domain).map(&:exchange).map(&:to_s)
-      domain_is_in?(address_domains, ValidEmail2.disposable_emails)
+      domain_is_in?(address_domains, domain_list)
     end
 
     def domain_is_in?(address_domains, domain_list)
