@@ -6,7 +6,7 @@ require "valid_email2/dns"
 
 module ValidEmail2
   class Address
-    attr_accessor :address
+    attr_accessor :address, :parse_error
 
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
@@ -35,11 +35,12 @@ module ValidEmail2
 
       begin
         @address = Mail::Address.new(address)
-      rescue Mail::Field::ParseError
-        @parse_error = true
+        if !@raw_address.nil? && !@raw_address.ascii_only? && @address.local.each_char.any? { |char| char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex }
+          @parse_error = "invalid characters in #{@address.local}"
+        end
+      rescue Mail::Field::ParseError => e
+        @parse_error = e.message
       end
-
-      @parse_error ||= address_contain_multibyte_characters?
     end
 
     def valid?
@@ -62,11 +63,13 @@ module ValidEmail2
     end
 
     def valid_address?
-      return false if address.address != @raw_address
-
       !address.local.include?('..') &&
         !address.local.end_with?('.') &&
         !address.local.start_with?('.')
+    end
+
+    def friendly?
+      valid? && address.display_name.present?
     end
 
     def dotted?
@@ -135,14 +138,6 @@ module ValidEmail2
 
         false
       end
-    end
-
-    def address_contain_multibyte_characters?
-      return false if @raw_address.nil?
-
-      return false if @raw_address.ascii_only?
-
-      @raw_address.each_char.any? { |char| char.bytesize > 1 && char !~ self.class.permitted_multibyte_characters_regex }
     end
 
     def null_mx?
