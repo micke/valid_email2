@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.12](https://github.com/micke/valid_email2/compare/v7.0.11...v7.0.12) (2025-03-01)
+
+
+### Bug Fixes
+
+* re-add mx_server_is_in?(domain_list) for backwards compatibility ([#291](https://github.com/micke/valid_email2/issues/291)) ([5b0f979](https://github.com/micke/valid_email2/commit/5b0f9798e733456d885d4ee05c6b74de5d3d79e1))
+
 ## [7.0.11](https://github.com/micke/valid_email2/compare/v7.0.10...v7.0.11) (2025-02-28)
 
 
