@@ -145,14 +145,13 @@ If you want to allow multibyte characters, set it explicitly.
 ValidEmail2::Address.permitted_multibyte_characters_regex = /[ÆæØøÅåÄäÖöÞþÐð]/
 ```
 
-If you want to allow load any of the lists dynamically
+If you want to load any of the lists dynamically:
 
 ```ruby
-ValidEmail2.reset_lists # reset the content
-# make sure to use a Set for speedy access
-ValidEmail2.disposable_emails = -> { Set.new(['your.com']) }
-ValidEmail2.deny_list = -> { Set.new(['data.com']) }
-ValidEmail2.allow_list = -> { Set.new(['provided.com']) }
+# make sure to use a Set for speedy access and cache the result
+ValidEmail2.disposable_proc = -> { Set.new(['your.com']) }
+ValidEmail2.deny_proc = -> { Set.new(['data.com']) }
+ValidEmail2.allow_proc = -> { Set.new(['provided.com']) }
 ```
 
 ### Test environment
