@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.13](https://github.com/micke/valid_email2/compare/v7.0.12...v7.0.13) (2025-05-08)
+
+
+### Bug Fixes
+
+* .co domains ([2a6c63c](https://github.com/micke/valid_email2/commit/2a6c63c4ee510fd230d820f6859fc9752f7bd372))
+
 ## [7.0.12](https://github.com/micke/valid_email2/compare/v7.0.11...v7.0.12) (2025-03-01)
 
 
