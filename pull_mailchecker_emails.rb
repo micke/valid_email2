@@ -26,7 +26,7 @@ remote_emails = [
 ].flat_map do |url|
   resp = Net::HTTP.get_response(URI.parse(url))
 
-  resp.body.split("\n").flatten
+  resp.body.split("\n").flatten.map(&:downcase)
 end
 
 deny_listed_tlds = %w[me ml id]
