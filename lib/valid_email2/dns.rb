@@ -63,7 +63,7 @@ module ValidEmail2
     end
 
     def resolv_config
-      config = Resolv::DNS::Config.default_config_hash
+      config = Resolv::DNS::Config.default_config_hash.to_h
       config[:nameserver] = @dns_nameserver if @dns_nameserver
       config
     end
