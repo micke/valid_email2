@@ -27,6 +27,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "net-smtp"
   spec.add_development_dependency "debug"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "mutex_m" # For Ruby 3.4.3 compatibility
+  spec.add_development_dependency "base64" # For Ruby 3.4.3 compatibility
+  spec.add_development_dependency "bigdecimal" # For Ruby 3.4.3 compatibility
+
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 6.0"
 end
