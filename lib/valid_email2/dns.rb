@@ -64,7 +64,7 @@ module ValidEmail2
 
     def resolv_config
       config = Resolv::DNS::Config.default_config_hash
-      config[:nameserver] = @dns_nameserver if @dns_nameserver
+      config = config.merge(nameserver: @dns_nameserver) if @dns_nameserver
       config
     end
   end
