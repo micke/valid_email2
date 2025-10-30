@@ -15,3 +15,5 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 Gemspec/OrderedDependencies:
   Enabled: no
+Metrics/BlockLength:
+  Enabled: no
