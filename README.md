@@ -112,6 +112,26 @@ To validate create your own custom message:
 validates :email, 'valid_email_2/email': { message: "is not a valid email" }
 ```
 
+To validate create your dedicated validation error-message:
+```yaml
+# set custom validation messages for each type of check in translations ie en.yml
+errors:
+  messages:
+    disallow_dotted: "contains a dot"
+    disallow_subaddressing: "..."
+    disposable: "..."
+    disposable_domain: "..."
+    disposable_with_allow_list: "..."
+    disposable_domain_with_allow_list: "..."
+    deny_list: "..."
+    mx: "..."
+    strict_mx: "..."
+```
+
+```ruby
+validates :email, 'valid_email_2/email': { disallow_dotted: true, specific_error_messages: true }
+```
+
 To allow multiple addresses separated by comma:
 ```ruby
 validates :email, 'valid_email_2/email': { multiple: true }
