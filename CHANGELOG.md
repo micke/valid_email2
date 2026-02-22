@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.15](https://github.com/micke/valid_email2/compare/v7.0.14...v7.0.15) (2026-02-22)
+
+
+### Bug Fixes
+
+* release-please bundler ([e891bc9](https://github.com/micke/valid_email2/commit/e891bc90d51610bc05c9c6c1343d5fe7d5a0be8a))
+
 ## [7.0.14](https://github.com/micke/valid_email2/compare/v7.0.13...v7.0.14) (2026-02-22)
 
 
