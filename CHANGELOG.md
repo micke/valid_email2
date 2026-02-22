@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.14](https://github.com/micke/valid_email2/compare/v7.0.13...v7.0.14) (2026-02-22)
+
+
+### Bug Fixes
+
+* don't modify resolv config ([654888b](https://github.com/micke/valid_email2/commit/654888b8c0c01b972ed3b9ad5c01a3a525524403))
+
 ## [7.0.13](https://github.com/micke/valid_email2/compare/v7.0.12...v7.0.13) (2025-05-08)
 
 
