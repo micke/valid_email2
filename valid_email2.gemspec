@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.1.0"
 
-  spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "bundler", "> 2.0"
+  spec.add_development_dependency "rake", "> 12.3"
   spec.add_development_dependency "securerandom", "0.3.1" # https://github.com/micke/valid_email2/actions/runs/13325070756/job/37216488894
   spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "rspec-benchmark", "~> 0.6"
