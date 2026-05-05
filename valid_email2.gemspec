@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "net-smtp"
   spec.add_development_dependency "debug"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "public_suffix", ">= 4.0" # used by pull_mailchecker_emails.rb
   spec.add_runtime_dependency "mail", "~> 2.5"
   spec.add_runtime_dependency "activemodel", ">= 6.0"
 end
