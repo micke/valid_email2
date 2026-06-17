@@ -83,6 +83,11 @@ describe ValidEmail2::Address do
         address = described_class.new("foo@example.com")
         expect(address.disposable_domain?).to eq false
       end
+
+      it "is false if the email cannot be parsed" do
+        address = described_class.new('"><test>')
+        expect(address.disposable_domain?).to eq false
+      end
     end
 
     context "when the disposable domain has subdomains" do
