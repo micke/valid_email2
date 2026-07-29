@@ -171,6 +171,48 @@ describe ValidEmail2 do
       user = TestUser.new(email: "foo@example.com#")
       expect(user.valid?).to be_falsey
     end
+
+    describe "domain label structure" do
+      # A domain label may not begin or end with a hyphen and is limited to 63
+      # octets; the whole domain is limited to 253. These rules apply to every
+      # label, not only the first/last position of the domain string.
+      long_label = "a" * 64
+      long_domain = (["aa"] + ["a"] * 126).join(".") # 254 chars, all-valid labels
+
+      {
+        "a leading hyphen on the first label" => "foo@-example.com",
+        "a leading hyphen on a later label" => "foo@sub.-example.com",
+        "a leading hyphen on a deeply nested label" => "foo@a.b.-c.example.com",
+        "a trailing hyphen on a non-final label" => "foo@example-.com",
+        "a trailing hyphen on the final label" => "foo@example.com-",
+        "a bare hyphen label" => "foo@example.-.com",
+        "a label longer than 63 octets" => "foo@#{long_label}.com",
+        "a later label longer than 63 octets" => "foo@example.#{long_label}.com",
+        "a domain longer than 253 octets" => "foo@#{long_domain}"
+      }.each do |description, email|
+        it "is invalid with #{description}" do
+          expect(TestUser.new(email: email).valid?).to be_falsey
+        end
+      end
+
+      full_label = "a" * 63
+      max_domain = (["a"] * 127).join(".") # exactly 253 chars
+
+      {
+        "an internal hyphen" => "foo@ex-ample.com",
+        "hyphens on several internal labels" => "foo@f-o-o.example.com",
+        "a double internal hyphen" => "foo@a--b.example.com",
+        "a punycode (IDNA ACE) label" => "foo@xn--bcher-kva.com",
+        "a label beginning with a digit" => "foo@3m.com",
+        "a 63 octet label at the limit" => "foo@#{full_label}.com",
+        "a later 63 octet label" => "foo@example.#{full_label}.com",
+        "a domain at the 253 octet limit" => "foo@#{max_domain}"
+      }.each do |description, email|
+        it "is valid with #{description}" do
+          expect(TestUser.new(email: email).valid?).to be_truthy
+        end
+      end
+    end
   end
 
   describe "with disposable validation" do

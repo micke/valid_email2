@@ -11,6 +11,9 @@ module ValidEmail2
     PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
+    HYPHEN_DELIMITER = '-'
+    MAX_DOMAIN_LENGTH = 253
+    MAX_LABEL_LENGTH = 63
 
     def self.prohibited_domain_characters_regex
       @prohibited_domain_characters_regex ||= PROHIBITED_DOMAIN_CHARACTERS_REGEX
@@ -52,13 +55,13 @@ module ValidEmail2
     def valid_domain?
       domain = address.domain
       return false if domain.nil?
+      return false if domain =~ self.class.prohibited_domain_characters_regex
+      return false if domain.length > MAX_DOMAIN_LENGTH
 
-      domain !~ self.class.prohibited_domain_characters_regex &&
-        domain.include?('.') &&
-        !domain.include?('..') &&
-        !domain.start_with?('.') &&
-        !domain.start_with?('-') &&
-        !domain.include?('-.')
+      labels = domain.split(DOT_DELIMITER, -1)
+      return false if labels.length < 2
+
+      labels.all? { |label| valid_domain_label?(label) }
     end
 
     def valid_address?
@@ -108,6 +111,14 @@ module ValidEmail2
     end
 
     private
+
+    # An RFC 1035 label: 1-63 octets, and it may not begin or end with a hyphen.
+    def valid_domain_label?(label)
+      !label.empty? &&
+        label.length <= MAX_LABEL_LENGTH &&
+        !label.start_with?(HYPHEN_DELIMITER) &&
+        !label.end_with?(HYPHEN_DELIMITER)
+    end
 
     def disposable_mx_server?
       mx_server_is_in?(ValidEmail2.disposable_emails)
