@@ -1,4 +1,6 @@
 $:.unshift File.expand_path("../lib",__FILE__)
+require "bundler/setup"
+require "rspec"
 require "valid_email2"
 require "debug"
 
