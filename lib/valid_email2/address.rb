@@ -8,7 +8,7 @@ module ValidEmail2
   class Address
     attr_accessor :address
 
-    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`]/
+    PROHIBITED_DOMAIN_CHARACTERS_REGEX = /[+!_\/\s'#`|]/
     DEFAULT_RECIPIENT_DELIMITER = '+'
     DOT_DELIMITER = '.'
     HYPHEN_DELIMITER = '-'

@@ -38,6 +38,11 @@ describe ValidEmail2::Address do
       expect(address.valid?).to be false
     end
 
+    it "is invalid if email contains a pipe" do
+      address = described_class.new("foo@gmai|.com")
+      expect(address.valid?).to be false
+    end
+
     it "is invalid if it contains Japanese characters" do
       address = described_class.new("あいうえお@example.com")
       expect(address.valid?).to be false
