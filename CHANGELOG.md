@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.1.0](https://github.com/micke/valid_email2/compare/v7.0.15...v7.1.0) (2026-08-23)
+
+### Features
+
+* add custom error-messages for validation purposes https://github.com/micke/valid_email2/pull/313
+
+### Bug Fixes
+
+* validate domain hostname rules per label ([d4b80b4](https://github.com/micke/valid_email2/commit/d4b80b42ecb3c262237035fa7454d7e1881d9db6))
+* add pipe | to hostname forbidden characters
+* update the list of deny-listed domains
+
 ## [7.0.15](https://github.com/micke/valid_email2/compare/v7.0.14...v7.0.15) (2026-02-22)
 
 
