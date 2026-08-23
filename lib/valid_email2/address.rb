@@ -82,11 +82,11 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      domain_is_in?(address.domain, ValidEmail2.disposable_emails)
+      valid? && domain_is_in?(address.domain, ValidEmail2.disposable_emails)
     end
 
     def allow_listed?
-      domain_is_in?(address.domain, ValidEmail2.allow_list)
+      valid? && domain_is_in?(address.domain, ValidEmail2.allow_list)
     end
 
     def deny_listed?
