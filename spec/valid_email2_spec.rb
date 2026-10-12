@@ -311,6 +311,26 @@ describe ValidEmail2 do
     end
   end
 
+  describe ".disposable_domains" do
+    around do |example|
+      loaded = ValidEmail2.instance_variable_get(:@disposable_emails)
+      ValidEmail2.instance_variable_set(:@disposable_emails, nil)
+      example.run
+      ValidEmail2.instance_variable_set(:@disposable_emails, loaded)
+    end
+
+    it "checks a disposable domain without loading the Set of disposable_emails" do
+      expect(ValidEmail2::Address.new("foo@mailinator.com").disposable_domain?).to be(true)
+      expect(ValidEmail2.instance_variable_get(:@disposable_emails)).to be_nil
+    end
+
+    it "uses the Set of disposable_emails once it is loaded, with the domains added to it" do
+      ValidEmail2.disposable_emails << "not-yet-listed.example"
+
+      expect(ValidEmail2::Address.new("foo@not-yet-listed.example").disposable_domain?).to be(true)
+    end
+  end
+
   describe "with deny list validation" do
     it "is valid if the domain is not deny-listed" do
       user = TestUserDisallowDenyListed.new(email: "foo@gmail.com")

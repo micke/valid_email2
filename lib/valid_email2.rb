@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "valid_email2/email_validator"
+require "valid_email2/sorted_domain_list"
 
 module ValidEmail2
   DENY_LIST_FILE  = "config/deny_listed_email_domains.yml"
@@ -8,8 +9,16 @@ module ValidEmail2
   DISPOSABLE_FILE = File.expand_path('../config/disposable_email_domains.txt', __dir__)
 
   class << self
+    # The disposable domains as a Set, which takes about 14 MB. Lookups use disposable_domains, which
+    # returns this Set once it is loaded, so domains added to it or removed from it still count.
     def disposable_emails
       @disposable_emails ||= load_file(DISPOSABLE_FILE)
+    end
+
+    # The disposable domains lookups use: the Set of disposable_emails if it was loaded, otherwise
+    # the sorted file searched by bisection, which takes about 3 MB.
+    def disposable_domains
+      @disposable_emails || (@sorted_disposable_domains ||= SortedDomainList.new(DISPOSABLE_FILE))
     end
 
     def deny_list

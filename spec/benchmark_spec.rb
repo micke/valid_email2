@@ -16,6 +16,14 @@ describe "Performance testing" do
     expect { address.disposable_domain? }.to perform_under(0.0001).sec.sample(10).times
   end
 
+  it "disposable_domain? has acceptable lookup performance without the Set" do
+    address = ValidEmail2::Address.new("test@example.com")
+    list = ValidEmail2::SortedDomainList.new(ValidEmail2::DISPOSABLE_FILE)
+    allow(ValidEmail2).to receive(:disposable_domains).and_return(list)
+
+    expect { address.disposable_domain? }.to perform_under(0.0001).sec.sample(10).times
+  end
+
   it "disposable_mx_server? has acceptable lookup performance" do
     address = ValidEmail2::Address.new("test@gmail.com")
 
