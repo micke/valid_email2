@@ -297,6 +297,14 @@ describe ValidEmail2 do
         expect(user.valid?).to be_truthy
       end
 
+      it "does not look up MX servers if the domain is in the allow list" do
+        File.open(allow_list_file_path, "w") { |f| f.write ["gmail.com"].to_yaml }
+        set_allow_list
+        expect_any_instance_of(ValidEmail2::Dns).not_to receive(:mx_servers)
+        user = TestUserDisallowDisposableWithAllowList.new(email: "foo@gmail.com")
+        expect(user.valid?).to be_truthy
+      end
+
       it "is invalid if the domain is a disposable_domain and not in the allow list" do
         user = TestUserDisallowDisposableDomainWithAllowList.new(email: "foo@#{allow_list_domain}")
         expect(user.valid?).to be_falsey
