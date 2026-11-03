@@ -136,7 +136,7 @@ module ValidEmail2
         return true if domain_list.include?(address_domain)
 
         tokens = address_domain.split('.')
-        return false if tokens.length < 3
+        next false if tokens.length < 3
 
         # check only 6 elements deep
         2.upto(6).each do |depth|

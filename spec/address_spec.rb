@@ -168,6 +168,29 @@ describe ValidEmail2::Address do
 
         expect(disposable_email_instance.send(:disposable_mx_server?)).to be_truthy
       end
+
+      context "when the domain has several MX servers" do
+        let(:ordinary_mx_record) { double("MX", exchange: "ordinary.example", preference: 10, ttl:) }
+        let(:disposable_mx_record) { double("MX", exchange: "emailfake.com", preference: 20, ttl:) }
+
+        def address_with_mx_records(domain, mx_records)
+          allow(mock_resolv_dns).to receive(:getresources)
+            .with(domain, Resolv::DNS::Resource::IN::MX)
+            .and_return(mx_records)
+
+          described_class.new("example@#{domain}", dns_instance)
+        end
+
+        it "is disposable when an ordinary MX host with one dot is listed before a disposable one" do
+          address = address_with_mx_records("ordinary-first.example", [ordinary_mx_record, disposable_mx_record])
+          expect(address.disposable?).to be_truthy
+        end
+
+        it "is disposable when a disposable MX host is listed before an ordinary one with one dot" do
+          address = address_with_mx_records("disposable-first.example", [disposable_mx_record, ordinary_mx_record])
+          expect(address.disposable?).to be_truthy
+        end
+      end
     end
 
     describe "#valid_strict_mx?" do
