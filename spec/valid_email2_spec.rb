@@ -312,22 +312,37 @@ describe ValidEmail2 do
   end
 
   describe ".disposable_domains" do
-    around do |example|
-      loaded = ValidEmail2.instance_variable_get(:@disposable_emails)
-      ValidEmail2.instance_variable_set(:@disposable_emails, nil)
-      example.run
-      ValidEmail2.instance_variable_set(:@disposable_emails, loaded)
+    it "uses the Set of disposable_emails by default" do
+      expect(ValidEmail2.disposable_domains).to be(ValidEmail2.disposable_emails)
     end
 
-    it "checks a disposable domain without loading the Set of disposable_emails" do
-      expect(ValidEmail2::Address.new("foo@mailinator.com").disposable_domain?).to be(true)
-      expect(ValidEmail2.instance_variable_get(:@disposable_emails)).to be_nil
+    it "rejects an unknown lookup" do
+      expect { ValidEmail2.disposable_domains_lookup = :array }.to raise_error(ArgumentError, /:array/)
     end
 
-    it "uses the Set of disposable_emails once it is loaded, with the domains added to it" do
-      ValidEmail2.disposable_emails << "not-yet-listed.example"
+    context "with the sorted_list lookup" do
+      around do |example|
+        loaded = ValidEmail2.instance_variable_get(:@disposable_emails)
+        ValidEmail2.instance_variable_set(:@disposable_emails, nil)
+        ValidEmail2.disposable_domains_lookup = :sorted_list
+        example.run
+      ensure
+        ValidEmail2.disposable_domains_lookup = :set
+        ValidEmail2.instance_variable_set(:@disposable_emails, loaded)
+      end
 
-      expect(ValidEmail2::Address.new("foo@not-yet-listed.example").disposable_domain?).to be(true)
+      it "checks a disposable domain without loading the Set of disposable_emails" do
+        expect(ValidEmail2::Address.new("foo@mailinator.com").disposable_domain?).to be(true)
+        expect(ValidEmail2.instance_variable_get(:@disposable_emails)).to be_nil
+      end
+
+      it "has all entries from the other list" do
+        disposable_domains = ValidEmail2.disposable_domains
+        disposable_emails = ValidEmail2.disposable_emails
+        expect(disposable_domains).to be_a(ValidEmail2::SortedDomainList)
+        expect(disposable_emails).to be_a(Set)
+        expect(disposable_emails.reject { |domain| disposable_domains.include?(domain) }).to be_empty
+      end
     end
   end
 

@@ -165,6 +165,18 @@ If you want to allow multibyte characters, set it explicitly.
 ValidEmail2::Address.permitted_multibyte_characters_regex = /[ÆæØøÅåÄäÖöÞþÐð]/
 ```
 
+### Memory usage of the disposable domains list
+
+By default, the disposable domains are loaded into a `Set` (`ValidEmail2.disposable_emails`), which adds about 35 MB to the process for the fastest lookups.
+To trade lookup speed for memory, look them up in the sorted list file instead: it takes about 3 MB, and a lookup takes a few microseconds.
+
+```ruby
+# config/initializers/valid_email2.rb
+ValidEmail2.disposable_domains_lookup = :sorted_list
+```
+
+With this option, domains added to or removed from `ValidEmail2.disposable_emails` are ignored by the validations.
+
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
