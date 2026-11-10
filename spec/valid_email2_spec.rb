@@ -317,7 +317,7 @@ describe ValidEmail2 do
     end
 
     it "rejects an unknown lookup" do
-      expect { ValidEmail2.disposable_domains_lookup = :array }.to raise_error(ArgumentError, /:array/)
+      expect { ValidEmail2.disposable_domains_lookup = :array }.to raise_error(ArgumentError, /got array/)
     end
 
     context "with the sorted_list lookup" do

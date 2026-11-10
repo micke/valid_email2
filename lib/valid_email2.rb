@@ -19,8 +19,8 @@ module ValidEmail2
 
     def disposable_domains_lookup=(lookup)
       unless DISPOSABLE_DOMAINS_LOOKUPS.include?(lookup)
-        raise ArgumentError, "disposable_domains_lookup must be one of #{DISPOSABLE_DOMAINS_LOOKUPS.inspect}, " \
-                             "got #{lookup.inspect}"
+        raise ArgumentError, "disposable_domains_lookup must be one of #{DISPOSABLE_DOMAINS_LOOKUPS}, " \
+                             "got #{lookup}"
       end
 
       @disposable_domains_lookup = lookup
