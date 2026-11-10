@@ -85,7 +85,7 @@ module ValidEmail2
     end
 
     def disposable_domain?
-      valid? && domain_is_in?(address.domain, ValidEmail2.disposable_emails)
+      valid? && domain_is_in?(address.domain, ValidEmail2.disposable_domains)
     end
 
     def allow_listed?
@@ -121,7 +121,7 @@ module ValidEmail2
     end
 
     def disposable_mx_server?
-      mx_server_is_in?(ValidEmail2.disposable_emails)
+      mx_server_is_in?(ValidEmail2.disposable_domains)
     end
 
     # TODO: (PS) keep this for backward compatibility with the test setup described in the reamde

@@ -319,6 +319,41 @@ describe ValidEmail2 do
     end
   end
 
+  describe ".disposable_domains" do
+    it "uses the Set of disposable_emails by default" do
+      expect(ValidEmail2.disposable_domains).to be(ValidEmail2.disposable_emails)
+    end
+
+    it "rejects an unknown lookup" do
+      expect { ValidEmail2.disposable_domains_lookup = :array }.to raise_error(ArgumentError, /got array/)
+    end
+
+    context "with the sorted_list lookup" do
+      around do |example|
+        loaded = ValidEmail2.instance_variable_get(:@disposable_emails)
+        ValidEmail2.instance_variable_set(:@disposable_emails, nil)
+        ValidEmail2.disposable_domains_lookup = :sorted_list
+        example.run
+      ensure
+        ValidEmail2.disposable_domains_lookup = :set
+        ValidEmail2.instance_variable_set(:@disposable_emails, loaded)
+      end
+
+      it "checks a disposable domain without loading the Set of disposable_emails" do
+        expect(ValidEmail2::Address.new("foo@mailinator.com").disposable_domain?).to be(true)
+        expect(ValidEmail2.instance_variable_get(:@disposable_emails)).to be_nil
+      end
+
+      it "has all entries from the other list" do
+        disposable_domains = ValidEmail2.disposable_domains
+        disposable_emails = ValidEmail2.disposable_emails
+        expect(disposable_domains).to be_a(ValidEmail2::SortedDomainList)
+        expect(disposable_emails).to be_a(Set)
+        expect(disposable_emails.reject { |domain| disposable_domains.include?(domain) }).to be_empty
+      end
+    end
+  end
+
   describe "with deny list validation" do
     it "is valid if the domain is not deny-listed" do
       user = TestUserDisallowDenyListed.new(email: "foo@gmail.com")

@@ -16,6 +16,16 @@ describe "Performance testing" do
     expect { address.disposable_domain? }.to perform_under(0.0001).sec.sample(10).times
   end
 
+  it "disposable_domain? has acceptable lookup performance with the sorted_list lookup" do
+    address = ValidEmail2::Address.new("test@example.com")
+    ValidEmail2.disposable_domains_lookup = :sorted_list
+    ValidEmail2.disposable_domains
+
+    expect { address.disposable_domain? }.to perform_under(0.0001).sec.sample(10).times
+  ensure
+    ValidEmail2.disposable_domains_lookup = :set
+  end
+
   it "disposable_mx_server? has acceptable lookup performance" do
     address = ValidEmail2::Address.new("test@gmail.com")
 
