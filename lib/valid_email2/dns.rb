@@ -39,8 +39,7 @@ module ValidEmail2
     private
 
     def fetch(domain, type)
-      domain = domain.downcase
-      cache_key = [domain, type]
+      cache_key = "#{domain.downcase}/#{type}"
       cached_records = self.class.cache.read(cache_key)
       return cached_records if cached_records
 
