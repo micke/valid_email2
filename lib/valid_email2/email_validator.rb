@@ -44,7 +44,7 @@ module ValidEmail2
       end
 
       if options[:disposable_with_allow_list]
-        error(record, attribute, :disposable_with_allow_list) && return if addresses.any? { |address| address.disposable? && !address.allow_listed? }
+        error(record, attribute, :disposable_with_allow_list) && return if addresses.any? { |address| !address.allow_listed? && address.disposable? }
       end
 
       if options[:disposable_domain_with_allow_list]
