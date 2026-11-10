@@ -177,6 +177,20 @@ ValidEmail2.disposable_domains_lookup = :sorted_list
 
 With this option, domains added to or removed from `ValidEmail2.disposable_emails` are ignored by the validations.
 
+### DNS cache
+
+MX and A lookups are cached in memory for the TTL of their DNS records, and the cache is shared by all threads.
+It is an `ActiveSupport::Cache::MemoryStore` capped at 1 MB by default, which holds roughly a thousand domains.
+Once it is full, the least recently used lookups are evicted, and ActiveSupport instruments a `cache_prune.active_support` event.
+
+To change the cap, set it in bytes, e.g. in an initializer:
+
+```ruby
+ValidEmail2::Dns.cache_size = 8 * 1024 * 1024 # 8 MB
+```
+
+To empty the cache, e.g. between tests, call `ValidEmail2::Dns.clear_cache`.
+
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
