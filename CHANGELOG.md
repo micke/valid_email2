@@ -1,5 +1,23 @@
 # Changelog
 
+## [7.2.0](https://github.com/micke/valid_email2/compare/v7.1.0...v7.2.0) (2026-11-11)
+
+
+### Features
+
+* optionally look up disposable domains without building a Set of them ([#326](https://github.com/micke/valid_email2/issues/326)) ([edb46ea](https://github.com/micke/valid_email2/commit/edb46eae949fa25ad635697570968b4bc2550a07))
+
+
+### Bug Fixes
+
+* keep checking MX hosts after an unlisted host with one dot ([#330](https://github.com/micke/valid_email2/issues/330)) ([a90d66c](https://github.com/micke/valid_email2/commit/a90d66cb0adb693c08b8ba797a9725505904a4ec))
+* make the DNS cache thread-safe with ActiveSupport::Cache::MemoryStore ([#335](https://github.com/micke/valid_email2/issues/335)) ([96ef31b](https://github.com/micke/valid_email2/commit/96ef31bc9e89737f43904f21e57399dad6a62ad1))
+
+
+### Performance Improvements
+
+* check the allow list before disposable? in disposable_with_allow_list ([#331](https://github.com/micke/valid_email2/issues/331)) ([6f023d8](https://github.com/micke/valid_email2/commit/6f023d8644caaf2773fad511db439406776f3b4a))
+
 ## [7.1.0](https://github.com/micke/valid_email2/compare/v7.0.15...v7.1.0) (2026-08-23)
 
 ### Features
