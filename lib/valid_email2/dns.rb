@@ -1,21 +1,27 @@
 require "resolv"
+require "logger" # Fix concurrent-ruby removing logger dependency which Rails itself does not have
+require "active_support"
+require "active_support/cache"
 
 module ValidEmail2
   class Dns
-    MAX_CACHE_SIZE = 1_000
-    CACHE = {}
+    DEFAULT_CACHE_SIZE_BYTES = 1024 * 1024
 
-    CacheEntry = Struct.new(:records, :cached_at, :ttl)
+    class << self
+      attr_reader :cache, :cache_size
 
-    def self.prune_cache
-      entries_sorted_by_cached_at_asc = CACHE.sort_by { |key, data| data.cached_at }
-      entries_to_remove = entries_sorted_by_cached_at_asc.first(CACHE.size - MAX_CACHE_SIZE)
-      entries_to_remove.each { |key, _value| CACHE.delete(key) }
+      def cache_size=(bytes)
+        @cache_size = bytes
+        # Cached records are never mutated, so they don't need MemoryStore's defensive copies.
+        @cache = ActiveSupport::Cache::MemoryStore.new(size: bytes, coder: nil)
+      end
+
+      def clear_cache
+        cache.clear
+      end
     end
 
-    def self.clear_cache
-      CACHE.clear
-    end
+    self.cache_size = DEFAULT_CACHE_SIZE_BYTES
 
     def initialize(dns_timeout = 5, dns_nameserver = nil)
       @dns_timeout = dns_timeout
@@ -32,22 +38,10 @@ module ValidEmail2
 
     private
 
-    def prune_cache
-      self.class.prune_cache
-    end
-
     def fetch(domain, type)
-      prune_cache if CACHE.size > MAX_CACHE_SIZE
-
-      domain = domain.downcase
-      cache_key = [domain, type]
-      cache_entry = CACHE[cache_key]
-
-      if cache_entry && Time.now - cache_entry.cached_at < cache_entry.ttl
-        return cache_entry.records
-      else
-        CACHE.delete(cache_key)
-      end
+      cache_key = "#{domain.downcase}/#{type}"
+      cached_records = self.class.cache.read(cache_key)
+      return cached_records if cached_records
 
       records = Resolv::DNS.open(resolv_config) do |dns|
         dns.timeouts = @dns_timeout
@@ -56,10 +50,16 @@ module ValidEmail2
 
       if records.any?
         ttl = records.map(&:ttl).min
-        CACHE[cache_key] = CacheEntry.new(records, Time.now, ttl)
+        cache_records(cache_key, records, ttl)
       end
 
       records
+    end
+
+    def cache_records(cache_key, records, ttl)
+      self.class.cache.write(cache_key, records, expires_in: ttl)
+    rescue TypeError
+      # MemoryStore sizes entries with Marshal, which can't dump test doubles
     end
 
     def resolv_config
