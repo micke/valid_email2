@@ -4,6 +4,7 @@
 .bundle
 .config
 .yardoc
+.byebug_history
 Gemfile.lock
 gemfiles/*.gemfile.lock
 InstalledFiles

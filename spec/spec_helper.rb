@@ -3,6 +3,7 @@ require "bundler/setup"
 require "rspec"
 require "valid_email2"
 require "debug"
+require "byebug"
 
 # Include and configure  benchmark
 require 'rspec-benchmark'
