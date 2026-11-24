@@ -61,5 +61,16 @@ describe ValidEmail2::Dns do
       expect(results).to eq([[mx_double], [mx_double]])
       expect(Resolv::DNS).to have_received(:open).twice
     end
+
+    it "shares the cache with subclasses" do
+      subclass = Class.new(described_class)
+
+      described_class.new.mx_servers("example.com")
+      subclass.new.mx_servers("example.com")
+      subclass.clear_cache
+      described_class.new.mx_servers("example.com")
+
+      expect(Resolv::DNS).to have_received(:open).twice
+    end
   end
 end

@@ -7,19 +7,28 @@ module ValidEmail2
   class Dns
     DEFAULT_CACHE_SIZE_BYTES = 1024 * 1024
 
+    # Class variables, so that subclasses share the one cache; a class's instance variables aren't inherited.
+    # rubocop:disable Style/ClassVars
     class << self
-      attr_reader :cache, :cache_size
+      def cache
+        @@cache
+      end
+
+      def cache_size
+        @@cache_size
+      end
 
       def cache_size=(bytes)
-        @cache_size = bytes
+        @@cache_size = bytes
         # Cached records are never mutated, so they don't need MemoryStore's defensive copies.
-        @cache = ActiveSupport::Cache::MemoryStore.new(size: bytes, coder: nil)
+        @@cache = ActiveSupport::Cache::MemoryStore.new(size: bytes, coder: nil)
       end
 
       def clear_cache
         cache.clear
       end
     end
+    # rubocop:enable Style/ClassVars
 
     self.cache_size = DEFAULT_CACHE_SIZE_BYTES
 
