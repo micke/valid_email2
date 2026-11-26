@@ -1,5 +1,21 @@
 # Changelog
 
+## [8.0.0](https://github.com/micke/valid_email2/compare/v7.2.0...v8.0.0) (2026-11-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for Ruby 3.1 and 3.2 ([#338](https://github.com/micke/valid_email2/issues/338))
+
+### Bug Fixes
+
+* remove Indonesian ccSLDs from disposable email list ([#339](https://github.com/micke/valid_email2/issues/339)) ([680dc3b](https://github.com/micke/valid_email2/commit/680dc3bfdcf6e2c00ac2517b20affcb5132c3ba8))
+
+
+### Miscellaneous Chores
+
+* drop support for Ruby 3.1 and 3.2 ([#338](https://github.com/micke/valid_email2/issues/338)) ([b74f9e0](https://github.com/micke/valid_email2/commit/b74f9e0f7a971d692f6c01ba79107a5a9f8e6224))
+
 ## [7.2.0](https://github.com/micke/valid_email2/compare/v7.1.0...v7.2.0) (2026-11-11)
 
 
