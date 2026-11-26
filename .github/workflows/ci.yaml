@@ -6,7 +6,7 @@ jobs:
       fail-fast: false
       matrix:
         gemfile: [activemodel7, activemodel8]
-        ruby: [3.2, 3.3, 3.4, 4.0]
+        ruby: [3.3, 3.4, 4.0]
     runs-on: ubuntu-latest
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
