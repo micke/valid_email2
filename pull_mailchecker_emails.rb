@@ -15,7 +15,7 @@ allow_listed_emails = %w[
   passinbox.com passfwd.com passmail.com passmail.net
   duck.com mozmail.com dralias.com 8alias.com 8shield.net
   mailinblack.com anonaddy.com anonaddy.me addy.io privaterelay.appleid.com appleid.com
-  net.ua kommespaeter.de alpenjodel.de my.id web.id directbox.com embarqmail.com
+  net.ua kommespaeter.de alpenjodel.de ac.id biz.id co.id desa.id go.id mil.id my.id net.id or.id ponpes.id sch.id web.id directbox.com embarqmail.com
   unlimit.com reallyfast.info dreamhost.com ecmail.com google.com
 ]
 

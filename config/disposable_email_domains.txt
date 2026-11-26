@@ -11631,7 +11631,6 @@ ac-mail.store
 ac-malin.fr.nf
 ac-nation.club
 ac-shopify.top
-ac.id
 ac20mail.in
 ac3d64b9a4n07.cf
 ac3d64b9a4n07.ga
@@ -28510,7 +28509,6 @@ biz-art.biz
 biz-giant.com
 biz-king.com
 biz-monster.com
-biz.id
 biz.st
 biz.tm
 bizalem.com
@@ -40785,7 +40783,6 @@ co-uk-online.xyz
 co-uk.lat
 co.cc
 co.com
-co.id
 co.uk.to
 co1vgedispvpjbpugf.cf
 co1vgedispvpjbpugf.ga
@@ -72318,7 +72315,6 @@ go-trade.dev
 go-trade.org
 go-tu-new-cars-ok.live
 go-vegas.ru
-go.id
 go.irc.so
 go0glelemail.com
 go1.site
