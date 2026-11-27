@@ -121,7 +121,6 @@ describe ValidEmail2::Dns do
 
     context "when on" do
       before do
-        skip "needs the resolv gem 0.3.0 or later" unless Resolv.const_defined?(:VERSION)
         described_class.raise_on_failure = true
       end
 
@@ -144,12 +143,6 @@ describe ValidEmail2::Dns do
       it "is shared with subclasses" do
         expect(Class.new(described_class).raise_on_failure).to be(true)
       end
-    end
-
-    it "is rejected on a resolv that cannot raise a timeout" do
-      hide_const("Resolv::VERSION")
-
-      expect { described_class.raise_on_failure = true }.to raise_error(ArgumentError, /resolv gem 0.3.0/)
     end
   end
 end

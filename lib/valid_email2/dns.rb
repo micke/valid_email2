@@ -32,17 +32,8 @@ module ValidEmail2
         @@raise_on_failure
       end
 
-      # Resolv raises a timeout only from 0.3.0 (bundled with Ruby 3.3); an older one would answer it as "no records".
       def raise_on_failure=(value)
-        raise ArgumentError, "raise_on_failure needs the resolv gem 0.3.0 or later (Ruby 3.3)" if value && !resolv_raises_timeouts?
-
         @@raise_on_failure = value
-      end
-
-      private
-
-      def resolv_raises_timeouts?
-        Resolv.const_defined?(:VERSION) && Gem::Version.new(Resolv::VERSION) >= Gem::Version.new("0.3.0")
       end
     end
     # rubocop:enable Style/ClassVars
@@ -93,9 +84,7 @@ module ValidEmail2
       cached_records = self.class.cache.read(cache_key)
       return cached_records if cached_records
 
-      records = lookup(Resolv::DNS, domain, type)
-      # Only an empty answer can hide a failure, so only that one is asked again.
-      records = lookup(FailureRaisingResolver, domain, type) if records.empty? && self.class.raise_on_failure
+      records = lookup(domain, type)
 
       if records.any?
         ttl = records.map(&:ttl).min
@@ -105,7 +94,8 @@ module ValidEmail2
       records
     end
 
-    def lookup(resolver, domain, type)
+    def lookup(domain, type)
+      resolver = self.class.raise_on_failure ? FailureRaisingResolver : Resolv::DNS
       resolver.open(resolv_config) do |dns|
         dns.timeouts = @dns_timeout
         dns.getresources(domain, type)

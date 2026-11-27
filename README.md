@@ -213,8 +213,6 @@ rescue Resolv::ResolvError
 end
 ```
 
-This needs the resolv gem 0.3.0 or later, which Ruby 3.3 bundles; with an older one, setting it raises an `ArgumentError`.
-
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.
