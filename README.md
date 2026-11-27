@@ -191,6 +191,28 @@ ValidEmail2::Dns.cache_size = 8 * 1024 * 1024 # 8 MB
 
 To empty the cache, e.g. between tests, call `ValidEmail2::Dns.clear_cache`.
 
+### DNS failures
+
+By default a DNS lookup that times out, or that the nameserver answers with SERVFAIL or REFUSED, returns no records, the same as a domain that does not exist.
+So while DNS is slow or failing, `mx` and `strict_mx` reject correct addresses.
+
+To tell the two apart, make those lookups raise `Resolv::ResolvError` instead, e.g. in an initializer:
+
+```ruby
+ValidEmail2::Dns.raise_on_failure = true
+```
+
+A domain that does not exist (NXDOMAIN) still returns no records.
+The error reaches whatever ran the check, including `valid?` on a model validated with `mx` or `strict_mx`, so rescue it there and decide what an unanswered lookup means, e.g. accept the address:
+
+```ruby
+def deliverable?(email)
+  ValidEmail2::Address.new(email).valid_mx?
+rescue Resolv::ResolvError
+  true
+end
+```
+
 ### Test environment
 
 If you are validating `mx` then your specs will fail without an internet connection.

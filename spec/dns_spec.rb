@@ -61,5 +61,88 @@ describe ValidEmail2::Dns do
       expect(results).to eq([[mx_double], [mx_double]])
       expect(Resolv::DNS).to have_received(:open).twice
     end
+
+    it "shares the cache with subclasses" do
+      subclass = Class.new(described_class)
+
+      described_class.new.mx_servers("example.com")
+      subclass.new.mx_servers("example.com")
+      subclass.clear_cache
+      described_class.new.mx_servers("example.com")
+
+      expect(Resolv::DNS).to have_received(:open).twice
+    end
+  end
+
+  describe "raise_on_failure" do
+    # Answers every query with the given response code, or never answers when it is nil.
+    def start_dns_server(rcode)
+      socket = UDPSocket.new
+      socket.bind("127.0.0.1", 0)
+      thread = Thread.new do
+        loop do
+          data, (_, port, host) = socket.recvfrom(512)
+          next unless rcode
+
+          query = Resolv::DNS::Message.decode(data)
+          reply = Resolv::DNS::Message.new(query.id)
+          reply.qr = 1
+          reply.rcode = rcode
+          query.each_question { |name, typeclass| reply.add_question(name, typeclass) }
+          socket.send(reply.encode, 0, host, port)
+        end
+      end
+      @servers << [socket, thread]
+      socket.addr[1]
+    end
+
+    def mx_servers_from(rcode)
+      port = start_dns_server(rcode)
+      allow(Resolv::DNS::Config).to receive(:default_config_hash)
+        .and_return(nameserver_port: [["127.0.0.1", port]], search: [], ndots: 1)
+      described_class.new(0.2).mx_servers("example.com")
+    end
+
+    before { @servers = [] }
+
+    after do
+      @servers.each do |socket, thread|
+        thread.kill
+        socket.close
+      end
+      described_class.raise_on_failure = false
+      described_class.clear_cache
+    end
+
+    it "is off by default, so a failure answers no records" do
+      expect(described_class.raise_on_failure).to be(false)
+      expect(mx_servers_from(Resolv::DNS::RCode::ServFail)).to eq([])
+    end
+
+    context "when on" do
+      before do
+        described_class.raise_on_failure = true
+      end
+
+      it "raises on a SERVFAIL" do
+        expect { mx_servers_from(Resolv::DNS::RCode::ServFail) }.to raise_error(Resolv::ResolvError)
+      end
+
+      it "raises on a REFUSED" do
+        expect { mx_servers_from(Resolv::DNS::RCode::Refused) }.to raise_error(Resolv::ResolvError)
+      end
+
+      it "raises on a timeout" do
+        expect { mx_servers_from(nil) }.to raise_error(Resolv::ResolvError, /timeout/)
+      end
+
+      it "answers no records for a domain that does not exist" do
+        expect(mx_servers_from(Resolv::DNS::RCode::NXDomain)).to eq([])
+      end
+
+      it "is shared with subclasses" do
+        expect(Class.new(described_class).raise_on_failure).to be(true)
+      end
+    end
   end
 end

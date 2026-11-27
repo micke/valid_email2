@@ -7,21 +7,62 @@ module ValidEmail2
   class Dns
     DEFAULT_CACHE_SIZE_BYTES = 1024 * 1024
 
+    # Class variables, so that subclasses share the one cache; a class's instance variables aren't inherited.
+    # rubocop:disable Style/ClassVars
     class << self
-      attr_reader :cache, :cache_size
+      def cache
+        @@cache
+      end
+
+      def cache_size
+        @@cache_size
+      end
 
       def cache_size=(bytes)
-        @cache_size = bytes
+        @@cache_size = bytes
         # Cached records are never mutated, so they don't need MemoryStore's defensive copies.
-        @cache = ActiveSupport::Cache::MemoryStore.new(size: bytes, coder: nil)
+        @@cache = ActiveSupport::Cache::MemoryStore.new(size: bytes, coder: nil)
       end
 
       def clear_cache
         cache.clear
       end
+
+      def raise_on_failure
+        @@raise_on_failure
+      end
+
+      def raise_on_failure=(value)
+        @@raise_on_failure = value
+      end
     end
+    # rubocop:enable Style/ClassVars
+
+    # Resolv answers a SERVFAIL or REFUSED with no records, the same as NXDOMAIN, and has no option to raise instead:
+    # Config#resolv rescues the error the query raised. This notes the error before that and raises it after.
+    class FailureRaisingResolver < Resolv::DNS
+      module RaisingConfig
+        def resolv(name)
+          failure = nil
+          super(name) do |*query|
+            yield(*query)
+          rescue Resolv::DNS::Config::OtherResolvError => e
+            failure = e
+            raise
+          end
+          raise failure if failure
+        end
+      end
+
+      def initialize(config_info = nil)
+        super
+        @config.extend RaisingConfig
+      end
+    end
+    private_constant :FailureRaisingResolver
 
     self.cache_size = DEFAULT_CACHE_SIZE_BYTES
+    self.raise_on_failure = false
 
     def initialize(dns_timeout = 5, dns_nameserver = nil)
       @dns_timeout = dns_timeout
@@ -43,10 +84,7 @@ module ValidEmail2
       cached_records = self.class.cache.read(cache_key)
       return cached_records if cached_records
 
-      records = Resolv::DNS.open(resolv_config) do |dns|
-        dns.timeouts = @dns_timeout
-        dns.getresources(domain, type)
-      end
+      records = lookup(domain, type)
 
       if records.any?
         ttl = records.map(&:ttl).min
@@ -54,6 +92,14 @@ module ValidEmail2
       end
 
       records
+    end
+
+    def lookup(domain, type)
+      resolver = self.class.raise_on_failure ? FailureRaisingResolver : Resolv::DNS
+      resolver.open(resolv_config) do |dns|
+        dns.timeouts = @dns_timeout
+        dns.getresources(domain, type)
+      end
     end
 
     def cache_records(cache_key, records, ttl)
@@ -66,6 +112,7 @@ module ValidEmail2
       config = Resolv::DNS::Config.default_config_hash
       # REM: resolv gem 0.6.1 on linux can return frozen hash
       config = config.merge(nameserver: @dns_nameserver) if @dns_nameserver
+      config = config.merge(raise_timeout_errors: true) if self.class.raise_on_failure
       config
     end
   end
