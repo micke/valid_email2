@@ -17,6 +17,7 @@ allow_listed_emails = %w[
   mailinblack.com anonaddy.com anonaddy.me addy.io privaterelay.appleid.com appleid.com
   net.ua kommespaeter.de alpenjodel.de ac.id biz.id co.id desa.id go.id mil.id my.id net.id or.id ponpes.id sch.id web.id directbox.com embarqmail.com
   unlimit.com reallyfast.info dreamhost.com ecmail.com google.com
+  lilo.org
 ]
 
 existing_emails = File.open("config/disposable_email_domains.txt") { |f| f.read.split("\n") }
