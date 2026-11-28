@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.1.0](https://github.com/micke/valid_email2/compare/v8.0.0...v8.1.0) (2026-11-28)
+
+
+### Features
+
+* optionally raise on DNS lookup failures ([#337](https://github.com/micke/valid_email2/issues/337)) ([7a487f4](https://github.com/micke/valid_email2/commit/7a487f4e9f3a58b109abbefa110d3a68629d6579))
+
+
+### Bug Fixes
+
+* remove lilo.org from disposable email list ([#342](https://github.com/micke/valid_email2/issues/342)) ([e3b11a8](https://github.com/micke/valid_email2/commit/e3b11a88eed2fe103fb87cafd16f46281e5f4446))
+
 ## [8.0.0](https://github.com/micke/valid_email2/compare/v7.2.0...v8.0.0) (2026-11-26)
 
 
